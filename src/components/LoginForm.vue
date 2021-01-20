@@ -19,9 +19,11 @@
                   <b-form-input
                     v-model.trim="loginForm.email"
                     placeholder="Username"
+                    type="email"
+                    required
                   ></b-form-input>
                 </b-input-group>
-                <b-input-group class="mb-3">
+                <b-input-group>
                   <b-input-group-prepend>
                     <span class="input-group-text">
                       <b-icon icon="key"></b-icon>
@@ -31,10 +33,14 @@
                     v-model.trim="loginForm.password"
                     placeholder="Password"
                     type="password"
-                  >
-                  </b-form-input>
+                    autocomplete="on"
+                    required
+                  ></b-form-input>
                 </b-input-group>
               </b-form-group>
+              <b-row align-h="center" class="text-danger mb-2" v-show="error"
+                >Username or password is incorrect.</b-row
+              >
               <b-row align-h="center">
                 <b-overlay
                   :show="busy"
@@ -65,12 +71,13 @@ export default {
         password: "",
       },
       busy: false,
-      error: "",
+      error: false,
     };
   },
   methods: {
     login: function () {
       this.busy = true;
+      this.error = false;
       this.$store
         .dispatch("login", {
           email: this.loginForm.email,
@@ -82,6 +89,7 @@ export default {
           },
           (error) => {
             console.log(error);
+            this.error = true;
             this.busy = false;
           }
         );

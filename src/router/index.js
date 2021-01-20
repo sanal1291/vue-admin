@@ -4,8 +4,10 @@ import { auth } from '../firebase'
 import Dashboard from '../views/Dashboard.vue'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
+import Package from '../views/package.vue'
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
+import Sidebar from '../layouts/Sidebar.vue'
 
 
 Vue.use(VueRouter)
@@ -26,7 +28,15 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    components: { default: Dashboard, footer: Footer, header: NavigationBar },
+    components: { default: Dashboard, footer: Footer, header: NavigationBar, sidebar: Sidebar },
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/package',
+    name: 'Package',
+    components: { default: Package, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     }
@@ -34,7 +44,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    components: { default: About, footer: Footer, header: NavigationBar },
+    components: { default: About, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     }

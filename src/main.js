@@ -19,4 +19,7 @@ auth.onAuthStateChanged(() => {
         render: h => h(App)
       }).$mount('#app')
   }
+  if (auth.currentUser != null) {
+    store.dispatch("fetchUser")
+  }
 })

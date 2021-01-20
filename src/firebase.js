@@ -16,8 +16,20 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+//collections
+const categoryCollection = db.collection("Categories")
+const carouselCollection = db.collection("carousel")
+const indipendentItemCollection = db.collection("indipendentItems")
+const packageCollection = db.collection("packages")
+const userCollection = db.collection("users")
 export {
     db,
-    auth
+    auth,
+    categoryCollection,
+    carouselCollection,
+    indipendentItemCollection,
+    packageCollection,
+    userCollection,
+
 }
 
