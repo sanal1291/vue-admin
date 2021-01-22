@@ -8,9 +8,9 @@
     variant="light"
   >
     <!-- using vuex to toggle sidebar -->
-    <b-navbar-nav v-if="!sidebar">
+    <b-navbar-nav>
       <b-nav-item @click="toggleSidebar()">
-        <b-icon icon="justify"></b-icon>
+        <b-icon v-if="!sidebar" icon="justify"></b-icon>
       </b-nav-item>
     </b-navbar-nav>
     <!-- end-->

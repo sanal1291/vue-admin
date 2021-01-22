@@ -21,8 +21,18 @@
     <b-row>
       <b-col>
         <b-nav vertical justified>
-          <b-nav-item>hi</b-nav-item>
-          <b-nav-item>hi</b-nav-item>
+          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
+            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          </b-nav-item>
+          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
+            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          </b-nav-item>
+          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
+            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          </b-nav-item>
+          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
+            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          </b-nav-item>
         </b-nav>
       </b-col>
     </b-row>
