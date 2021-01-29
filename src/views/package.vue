@@ -1,19 +1,16 @@
 <template>
-  <div>
-    {{ this.$store.state.packages.packages }}
-    <div v-for="item in packages" :key="item.id">{{ item.name }}</div>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
-  name: "Package",
-  computed: {
-    ...mapState({ packages: (state) => state.packages.packages }),
-  },
   beforeCreate: function () {
-    this.$store.dispatch("setPackages");
+    if (this.$store.state.packages.length == 0) {
+      this.$store.dispatch("setPackages");
+    }
+    // if (this.$store.state.indiItems.length == 0) {
+    //   this.$store.dispatch("setIndiItems");
+    // }
   },
 };
 </script>

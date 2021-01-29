@@ -8,9 +8,9 @@
           </b-row>
         </div>
         <b-col>
-          <b-card-title title-tag="h5" class="text-center"
-            >Sign in to FreshGrown</b-card-title
-          >
+          <b-card-title title-tag="h5" class="text-center">
+            Sign in to FreshGrown
+          </b-card-title>
           <!-- form -->
           <b-form @submit.prevent="login">
             <b-form-group>

@@ -2,12 +2,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { auth } from '../firebase'
 import Dashboard from '../views/Dashboard.vue'
+// views
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Package from '../views/package.vue'
+// layouts
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
 import Sidebar from '../layouts/Sidebar.vue'
+// components
+import PackageHome from '../components/PackageHome'
+import PackageEdit from '../components/PackageEdit'
 
 
 Vue.use(VueRouter)
@@ -35,11 +40,27 @@ const routes = [
   },
   {
     path: '/package',
-    name: 'Package',
     components: { default: Package, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
-    }
+    },
+    children: [
+      {
+        name: 'Package',
+        path: '',
+        component: PackageHome,
+      },
+      {
+        name: "edit",
+        path: '/package/edit',
+        component: PackageEdit,
+      },
+      {
+        name: "add",
+        path: '/package/add',
+        component: PackageEdit,
+      }
+    ]
   },
   {
     path: '/about',

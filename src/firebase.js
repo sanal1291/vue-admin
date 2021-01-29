@@ -1,6 +1,7 @@
 import firebase from "firebase/app"
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 var firebaseConfig = {
     apiKey: "AIzaSyAtuhinmOSLwVS2Qi7EeuiELT1SjJfWBbI",
@@ -15,16 +16,18 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+var storage = firebase.storage().ref();
 
 //collections
 const categoryCollection = db.collection("Categories")
 const carouselCollection = db.collection("carousel")
-const indipendentItemCollection = db.collection("indipendentItems")
+const indipendentItemCollection = db.collection("independentItems")
 const packageCollection = db.collection("packages")
 const userCollection = db.collection("users")
 export {
     db,
     auth,
+    storage,
     categoryCollection,
     carouselCollection,
     indipendentItemCollection,

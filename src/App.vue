@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+
 <template>
-  <b-row no-gutters style="background-color: #dde4e7">
+  <b-row no-gutters style="background-color: #dde4e7" class="flex-nowrap">
     <router-view name="sidebar" style="position: sticky; top: 0"></router-view>
     <b-col>
       <router-view name="header"></router-view>
