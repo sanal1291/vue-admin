@@ -8,9 +8,6 @@ export default {
     if (this.$store.state.packages.length == 0) {
       this.$store.dispatch("setPackages");
     }
-    // if (this.$store.state.indiItems.length == 0) {
-    //   this.$store.dispatch("setIndiItems");
-    // }
   },
 };
 </script>

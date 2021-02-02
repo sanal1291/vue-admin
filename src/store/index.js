@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import sidebar from './modules/sidebar'
 import auth from './modules/auth'
 import packagez from './modules/packagez'
-import { packageCollection } from '../firebase'
+import { categoryCollection, packageCollection } from '../firebase'
 // import router from '../router/index'
 
 Vue.use(Vuex)
@@ -17,11 +17,15 @@ export default new Vuex.Store({
   state: {
     packages: [],
     indiItems: [],
+    categories: [],
 
   },
   mutations: {
     setPackages(state, packages) {
       state.packages = packages;
+    },
+    setCategories(state, categories) {
+      state.categories = categories;
     },
     setIndiItems(state, indiItems) {
       state.indiItems = indiItems;
@@ -36,6 +40,7 @@ export default new Vuex.Store({
             packages.push({
               id: doc.id,
               name: doc.get('name'),
+              displayNames: doc.get('displayNames'),
               img: doc.get('image'),
               items: doc.get('items'),
               price: doc.get('price'),
@@ -43,6 +48,23 @@ export default new Vuex.Store({
             })
           })
           commit("setPackages", packages)
+        })
+      }
+    },
+    setCategories({ commit, state }) {
+      if (state.categories.length === 0) {
+        categoryCollection.onSnapshot((snapshot) => {
+          let categories = []
+          snapshot.forEach((doc) => {
+            categories.push({
+              id: doc.id,
+              name: doc.get("name"),
+              displayNames: doc.get('displayNames'),
+              img: doc.get('imageUrl'),
+              priority: doc.get('priority'),
+            })
+          })
+          commit("setCategories", categories)
         })
       }
     },

@@ -11,12 +11,28 @@
       <b-row>
         <b-col md="6">
           <b-form-group label="Name of package:" label-for="input-1">
-            <b-form-input
+            <b-input-group prepend="EN">
+              <b-form-input
+                required
+                placeholder="In english"
+                v-model.trim="form.displayNames['en']"
+              >
+              </b-form-input>
+            </b-input-group>
+            <b-input-group prepend="ML" class="pt-3">
+              <b-form-input
+                required
+                placeholder="In Malayalam"
+                v-model.trim="form.displayNames['ml']"
+              >
+              </b-form-input>
+            </b-input-group>
+            <!-- <b-form-input
               required
               v-model="form.name"
               id="input-1"
               placeholder="Input name"
-            ></b-form-input>
+            ></b-form-input> -->
           </b-form-group>
           <b-row>
             <b-col sm="6">
@@ -121,9 +137,24 @@
       </b-row>
       <br />
       <b-row align-h="center">
-        <b-col cols="3"><b-button @click="cancel">cancel</b-button></b-col>
-        <b-col cols="1"><br /></b-col>
-        <b-col cols="3">
+        <b-col cols="auto">
+          <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
+        </b-col>
+        <b-col cols="auto" v-if="edit">
+          <b-overlay
+            :show="submitting"
+            rounded
+            opacity="0.6"
+            spinner-small
+            spinner-variant="primary"
+            class="d-inline-block"
+          >
+            <b-button @click="deletePack" variant="danger" type="delete">
+              Delete</b-button
+            >
+          </b-overlay>
+        </b-col>
+        <b-col cols="auto">
           <b-overlay
             :show="submitting"
             rounded
@@ -159,7 +190,7 @@ export default {
       imageURL: "",
       imageData: null,
       loading: true,
-      form: {},
+      form: { displayNames: {} },
       items: [],
       calculatedTotal: 0,
       submitting: false,
@@ -168,14 +199,13 @@ export default {
   },
   created: function () {
     this.init();
-    // this.storageRef = storage.ref('')
   },
   computed: {
     ...mapState({ packages: (state) => state.packages }),
   },
   methods: {
     cancel() {
-      this.$router.push({ name: "Package" });
+      this.$router.go(-1);
     },
     deleteItem(item) {
       this.items = this.items.filter((e) => e.id != item.id);
@@ -195,12 +225,12 @@ export default {
       // verification
       let needVerification = false;
       // items validation
-      if (this.items.length == 0) {
-        this.validation.items = false;
-        needVerification = true;
-      } else {
-        this.validation.items = true;
-      }
+      // if (this.items.length == 0) {
+      //   this.validation.items = false;
+      //   needVerification = true;
+      // } else {
+      //   this.validation.items = true;
+      // }
       // img validation
       if (!this.edit && !this.imageData) {
         this.validation.img = false;
@@ -230,20 +260,34 @@ export default {
       } else {
         packageRef = packageCollection.doc();
       }
+      var searchArray = this.createSearchArray(this.form.displayNames);
       await packageRef.set({
         items: this.form.items,
         image: this.form.img,
-        name: this.form.name,
+        name: this.form.displayNames["en"],
+        displayNames: this.form.displayNames,
         price: parseInt(this.form.price),
         total: parseInt(this.form.total),
+        searchArray: searchArray,
       });
       this.submitting = false;
-      this.$bvToast.toast(`upload done`, {
+      this.$root.$bvToast.toast(`upload done`, {
         title: "Package",
-        autoHideDelay: 2000,
+        autoHideDelay: 5000,
       });
-      this.$router.push({ name: "Package" });
+      this.$router.go(-1);
     },
+
+    createSearchArray(value) {
+      var arr = [];
+      Object.values(value).forEach((name) => {
+        for (var i = 1; i <= name.length; i++) {
+          arr.push(name.slice(0, i));
+        }
+      });
+      return arr;
+    },
+
     onFileChange(e) {
       var input = e.target;
       this.imageData = e.target.files[0];
@@ -255,8 +299,28 @@ export default {
         reader.readAsDataURL(input.files[0]);
       }
     },
-    async init() {
-      await this.$store.dispatch("setPackages").then(() => {
+    deletePack() {
+      console.log(this.selectedPackage.id);
+      var response = window.confirm("Are you sure?");
+      if (response) {
+        console.log(response);
+        packageCollection
+          .doc(this.selectedPackage.id)
+          .delete()
+          .then(() => {
+            this.$root.$bvToast.toast("Deleted", {
+              title: "Package",
+              autoHideDelay: 5000,
+            });
+          });
+        this.$router.go(-1);
+      } else {
+        console.log(response);
+      }
+    },
+
+    init() {
+      this.$store.dispatch("setPackages").then(() => {
         this.selectedPackage = this.packages.find(
           (item) => item.id == this.$route.query.package
         );
@@ -277,6 +341,7 @@ export default {
       if (this.edit) {
         this.form.id = this.selectedPackage.id;
         this.form.name = this.selectedPackage.name;
+        this.form.displayNames = this.selectedPackage.displayNames;
         this.form.img = this.selectedPackage.img;
         this.form.price = this.selectedPackage.price;
         this.form.total = this.selectedPackage.total;

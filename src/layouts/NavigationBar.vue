@@ -73,4 +73,9 @@ export default {
 .router-link-exact-active {
   color: #000 !important;
 }
+.navbar-item {
+  form {
+    flex-wrap: nowrap;
+  }
+}
 </style>

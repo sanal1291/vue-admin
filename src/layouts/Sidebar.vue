@@ -24,8 +24,8 @@
           <b-nav-item to="/package" class="text-nowrap overflow-hidden">
             <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
           </b-nav-item>
-          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
-            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          <b-nav-item to="/category" class="text-nowrap overflow-hidden">
+            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Category</span>
           </b-nav-item>
           <b-nav-item to="/package" class="text-nowrap overflow-hidden">
             <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>

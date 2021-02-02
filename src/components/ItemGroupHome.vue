@@ -1,6 +1,6 @@
 <template>
   <b-col>
-    <h3>Packages</h3>
+    <h3>Item Groups</h3>
     <b-row>
       <b-col md="5" class="pb-3">
         <b-row align-h="end" class="m-1">
@@ -123,15 +123,6 @@ export default {
               total: parseInt(element.quantity) * parseInt(doc.get("price")),
             })
           );
-
-        // item = this.indiItems.find((x) => x.id === element.item);
-        // item.quantity = element.quantity;
-        // try {
-        //   item.total = parseInt(item.quantity) * parseInt(item.price);
-        // } catch (error) {
-        //   item.total = "error";
-        // }
-        // arr.push(item);
       });
       this.items = arr;
     },
