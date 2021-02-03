@@ -8,6 +8,7 @@ import About from '../views/About.vue'
 import Package from '../views/Package.vue'
 import Category from '../views/Category'
 import ItemGroup from '../views/ItemGroup'
+import IndiItem from '../views/IndiItem'
 // layouts
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
@@ -16,7 +17,9 @@ import Sidebar from '../layouts/Sidebar.vue'
 import PackageHome from '../components/PackageHome'
 import PackageEdit from '../components/PackageEdit'
 import CategoryAdd from '../components/CategoryAdd'
+import IndiItemAdd from '../components/IndiItemAdd'
 import ItemGroupHome from '../components/ItemGroupHome'
+import ItemGroupAdd from '../components/ItemGroupAdd'
 
 
 Vue.use(VueRouter)
@@ -88,7 +91,27 @@ const routes = [
       name: "ItemGroup",
       path: '',
       component: ItemGroupHome,
+    },
+    {
+      name: "ItemGroupAdd",
+      path: '/itemGroups/add',
+      component: ItemGroupAdd,
     }]
+  },
+  {
+    path: '/indiItem',
+    name: 'IndiItem',
+    components: { default: IndiItem, footer: Footer, header: NavigationBar, sidebar: Sidebar },
+    children: [
+      {
+        path: '/indiItem/add',
+        name: 'addIndiItem',
+        component: IndiItemAdd,
+      }, {
+        path: '/indiItem/edit',
+        name: 'editIndiItem',
+        component: IndiItemAdd,
+      }]
   },
   {
     path: '/about',

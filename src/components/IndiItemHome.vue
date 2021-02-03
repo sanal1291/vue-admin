@@ -4,22 +4,30 @@
     <b-container fluid>
       <b-row class="flex-nowrap">
         <b-col sm="3">
-          <h5>Category</h5>
+          <h5>Indipendent Item</h5>
         </b-col>
-        <b-col cols="auto"
-          ><b-button size="sm" :to="{ name: 'addCategory' }">Add</b-button>
+        <b-col cols="auto">
+          <b-button size="sm" :to="{ name: 'addIndiItem' }">Add</b-button>
         </b-col>
       </b-row>
       <b-row class="pt-2">
         <b-col md="5" class="pb-3">
           <b-list-group class="list-group" flush>
             <b-list-group-item
-              v-for="item in this.$store.state.categories"
+              v-for="item in indiItems"
               :key="item.id"
               button
               @click="viewDetails(item.id)"
             >
-              {{ item.displayNames["ml"] }} : {{ item.displayNames["en"] }}
+              <b-row>
+                <b-col>
+                  {{ item.displayNames["ml"] }} : {{ item.displayNames["en"] }}
+                </b-col>
+                <b-col> {{ item.price }}.Rs per {{ item.unitMeasured }}</b-col>
+              </b-row>
+            </b-list-group-item>
+            <b-list-group-item class="text-center">
+              <b-button @click="loadMore">Load more</b-button>
             </b-list-group-item>
           </b-list-group>
         </b-col>
@@ -29,17 +37,18 @@
               pill
               class="text-nowrap"
               size="sm"
-              :disabled="selectedCategory == null ? true : false"
+              :disabled="selectedIndiItem == null ? true : false"
               :to="{
-                name: 'editCategory',
+                name: 'editIndiItem',
                 query: {
                   edit: true,
-                  category:
-                    selectedCategory != null ? selectedCategory.id : null,
+                  indiItem: selectedIndiItem != null ? selectedIndiItem : null,
+                  indiItemId:
+                    selectedIndiItem != null ? selectedIndiItem.id : null,
                 },
               }"
             >
-              Edit Category
+              Edit Indipendent Item
             </b-button>
           </b-row>
           <div class="package-details">
@@ -49,20 +58,30 @@
                   <b-row>
                     <b-col sm="6">
                       <h4>
-                        {{ selectedCategory.displayNames["ml"] }}:
-                        {{ selectedCategory.displayNames["en"] }}
+                        {{ selectedIndiItem.id }}
+                        {{ selectedIndiItem.displayNames["ml"] }}:
+                        {{ selectedIndiItem.displayNames["en"] }}
                       </h4>
                       <br />
-                      <div>priority: {{ selectedCategory.priority }}</div>
+                      <div>
+                        Price: {{ selectedIndiItem.price }}rs per
+                        {{ selectedIndiItem.unitMeasured }}
+                      </div>
+                      <div>In stock: {{ selectedIndiItem.inStock }}</div>
+                      <div>Rank : {{ selectedIndiItem.rank }}</div>
                     </b-col>
                     <b-col sm="6">
-                      <b-img-lazy :src="selectedCategory.img" fluid rounded>
+                      <b-img-lazy
+                        :src="selectedIndiItem.imageUrl"
+                        fluid
+                        rounded
+                      >
                       </b-img-lazy>
                     </b-col>
                   </b-row>
                   <b-row>
                     <p class="text-center">
-                      Items in {{ selectedCategory.name }}.
+                      Items in {{ selectedIndiItem.name }}.
                     </p>
                   </b-row>
                 </b-card-body>
@@ -82,20 +101,23 @@
 import { mapState } from "vuex";
 export default {
   data: function () {
-    return { selectedCategory: null };
+    return { selectedIndiItem: null };
   },
   computed: {
-    ...mapState({ categories: (state) => state.categories }),
+    ...mapState({ indiItems: (state) => state.indiItems }),
     selected() {
-      return this.selectedCategory ? true : false;
+      return this.selectedIndiItem ? true : false;
     },
   },
   beforeMount() {
-    this.$store.dispatch("setCategories");
+    this.$store.dispatch("setIndiItems");
   },
   methods: {
     viewDetails(id) {
-      this.selectedCategory = this.categories.find((item) => item.id == id);
+      this.selectedIndiItem = this.indiItems.find((item) => item.id == id);
+    },
+    loadMore() {
+      this.$store.dispatch("setIndiItems");
     },
   },
 };

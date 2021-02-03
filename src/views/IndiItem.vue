@@ -1,9 +1,14 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <indi-item-home />
+  </div>
 </template>
 
 <script>
-export default {};
+import IndiItemHome from "../components/IndiItemHome";
+export default {
+  components: { IndiItemHome },
+};
 </script>
 
 <style lang="scss" scoped>

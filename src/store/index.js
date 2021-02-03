@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import sidebar from './modules/sidebar'
 import auth from './modules/auth'
 import packagez from './modules/packagez'
-import { categoryCollection, packageCollection } from '../firebase'
+import { categoryCollection, indipendentItemCollection, ItemCollection, packageCollection } from '../firebase'
 // import router from '../router/index'
 
 Vue.use(Vuex)
@@ -18,6 +18,9 @@ export default new Vuex.Store({
     packages: [],
     indiItems: [],
     categories: [],
+    items: [],
+    lastItemDoc: null,
+    lastIndiItemDoc: null,
 
   },
   mutations: {
@@ -28,8 +31,17 @@ export default new Vuex.Store({
       state.categories = categories;
     },
     setIndiItems(state, indiItems) {
-      state.indiItems = indiItems;
+      state.indiItems = [...state.indiItems, ...indiItems];
     },
+    setLastIndiItemDoc(state, item) {
+      state.lastIndiItemDoc = item;
+    },
+    setItems(state, items) {
+      state.items = [...state.items, ...items];
+    },
+    setLastItemDoc(state, item) {
+      state.lastItemDoc = item;
+    }
   },
   actions: {
     setPackages({ commit, state }) {
@@ -68,23 +80,57 @@ export default new Vuex.Store({
         })
       }
     },
-    // setIndiItems({ commit }) {
-    //   indipendentItemCollection.onSnapshot((snapshot) => {
-    //     let indiItems = []
-    //     snapshot.forEach((doc) => {
-    //       indiItems.push({
-    //         id: doc.id,
-    //         displayName: doc.get('displayName'),
-    //         img: doc.get('imageUrl'),
-    //         category: doc.get('category'),
-    //         price: doc.get('price'),
-    //         unit: doc.get('unitMeasured'),
-    //         inStock: doc.get('inStock')
-    //       })
-    //     })
-    //     commit("setIndiItems", indiItems)
+    setItems({ commit, state }) {
+      var itemColl;
+      if (state.items.length === 0) {
+        itemColl = ItemCollection.orderBy('name').limit(25);
+      } else {
+        itemColl = ItemCollection.orderBy('name').startAfter(state.lastItemDoc).limit(25)
+      }
+      itemColl.get().then((querySnapshot) => {
+        var items = [];
+        querySnapshot.forEach((doc) => {
+          items.push({
+            id: doc.id,
+            name: doc.get('name'),
+            displayNames: doc.get('displayName'),
+            img: doc.get('imageUrl'),
+            varieties: doc.get('varieties'),
+          })
+        })
+        var item = querySnapshot.docs[querySnapshot.docs.length - 1]
+        commit("setLastItemDoc", item)
+        commit("setItems", items)
 
-    //   })
-    // }
+      })
+
+    },
+    setIndiItems({ commit, state }) {
+      var itemColl;
+      if (state.indiItems.length === 0) {
+        itemColl = indipendentItemCollection.orderBy('name').limit(25)
+      } else {
+        itemColl = indipendentItemCollection.orderBy('name').startAfter(state.lastIndiItemDoc).limit(25)
+      }
+      itemColl.get().then((querySnapshot) => {
+        var items = [];
+        querySnapshot.forEach(doc => {
+          items.push({
+            id: doc.id,
+            name: doc.get('name'),
+            displayNames: doc.get('displayName'),
+            category: doc.get('category'),
+            imageUrl: doc.get('imageUrl'),
+            inStock: doc.get('inStock'),
+            price: doc.get('price'),
+            rank: doc.get('rank'),
+            unitMeasured: doc.get('unitMeasured')
+          })
+        })
+        var item = querySnapshot.docs[querySnapshot.docs.length - 1]
+        commit("setLastIndiItemDoc", item)
+        commit("setIndiItems", items)
+      })
+    }
   }
 })

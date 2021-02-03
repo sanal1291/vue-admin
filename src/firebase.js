@@ -22,6 +22,7 @@ var storage = firebase.storage().ref();
 const categoryCollection = db.collection("Categories")
 const carouselCollection = db.collection("carousel")
 const indipendentItemCollection = db.collection("independentItems")
+const ItemCollection = db.collection("items")
 const packageCollection = db.collection("packages")
 const userCollection = db.collection("users")
 export {
@@ -33,6 +34,7 @@ export {
     indipendentItemCollection,
     packageCollection,
     userCollection,
+    ItemCollection,
 
 }
 
