@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import sidebar from './modules/sidebar'
 import auth from './modules/auth'
 import packagez from './modules/packagez'
+import indiItem from './modules/indiItem'
 import { categoryCollection, indipendentItemCollection, ItemCollection, packageCollection } from '../firebase'
 // import router from '../router/index'
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     sidebar,
     auth,
     packagez,
+    indiItem,
   },
   state: {
     packages: [],
@@ -70,7 +72,6 @@ export default new Vuex.Store({
           snapshot.forEach((doc) => {
             categories.push({
               id: doc.id,
-              name: doc.get("name"),
               displayNames: doc.get('displayNames'),
               img: doc.get('imageUrl'),
               priority: doc.get('priority'),
@@ -93,9 +94,10 @@ export default new Vuex.Store({
           items.push({
             id: doc.id,
             name: doc.get('name'),
-            displayNames: doc.get('displayName'),
-            img: doc.get('imageUrl'),
+            displayName: doc.get('displayName'),
+            imageUrl: doc.get('imageUrl'),
             varieties: doc.get('varieties'),
+            category: doc.get('category')
           })
         })
         var item = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -103,7 +105,6 @@ export default new Vuex.Store({
         commit("setItems", items)
 
       })
-
     },
     setIndiItems({ commit, state }) {
       var itemColl;

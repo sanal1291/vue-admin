@@ -19,7 +19,8 @@
               button
               @click="viewDetails(item.id)"
             >
-              {{ item.displayNames["ml"] }} : {{ item.displayNames["en"] }}
+              {{ item.displayNames["en"] }} :
+              {{ item.displayNames["ml"] || "ml not provided" }}
             </b-list-group-item>
           </b-list-group>
         </b-col>
@@ -49,8 +50,11 @@
                   <b-row>
                     <b-col sm="6">
                       <h4>
-                        {{ selectedCategory.displayNames["ml"] }}:
-                        {{ selectedCategory.displayNames["en"] }}
+                        {{ selectedCategory.displayNames["en"] }} :
+                        {{
+                          selectedCategory.displayNames["ml"] ||
+                          "ml not provided"
+                        }}
                       </h4>
                       <br />
                       <div>priority: {{ selectedCategory.priority }}</div>

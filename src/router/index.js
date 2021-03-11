@@ -58,7 +58,10 @@ const routes = [
         path: '/category/edit',
         name: 'editCategory',
         component: CategoryAdd,
-      }]
+      }],
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/package',
@@ -96,7 +99,15 @@ const routes = [
       name: "ItemGroupAdd",
       path: '/itemGroups/add',
       component: ItemGroupAdd,
-    }]
+    },
+    {
+      name: "ItemGroupEdit",
+      path: '/itemGroups/edit',
+      component: ItemGroupAdd,
+    }],
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/indiItem',
@@ -111,7 +122,10 @@ const routes = [
         path: '/indiItem/edit',
         name: 'editIndiItem',
         component: IndiItemAdd,
-      }]
+      }],
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/about',

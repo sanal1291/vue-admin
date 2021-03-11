@@ -1,7 +1,6 @@
 <template>
   <div>
-    <b-row v-if="loading && !packages.length">loading</b-row>
-    <b-row v-else-if="!loading" no-gutters class="text-center">
+    <b-row no-gutters class="text-center">
       <b-col md="6">
         <h4 v-if="edit">Edit {{ selectedItem.name }}</h4>
         <h4 v-else>Create new Item Group.</h4>
@@ -11,28 +10,41 @@
       <b-row>
         <b-col md="6">
           <b-form-group label="Name of Item Group:" label-for="input-1">
-            <b-input-group prepend="EN">
-              <b-form-input
-                required
-                placeholder="In english"
-                v-model.trim="form.displayNames['en']"
-              >
-              </b-form-input>
-            </b-input-group>
-            <b-input-group prepend="ML" class="pt-3">
-              <b-form-input
-                required
-                placeholder="In Malayalam"
-                v-model.trim="form.displayNames['ml']"
-              >
-              </b-form-input>
-            </b-input-group>
-            <!-- <b-form-input
-              required
-              v-model="form.name"
-              id="input-1"
-              placeholder="Input name"
-            ></b-form-input> -->
+            <b-row no-gutters>
+              <b-col>
+                <b-input-group prepend="EN">
+                  <b-form-input
+                    required
+                    placeholder="In english"
+                    v-model.trim="form.displayName['en']"
+                  >
+                  </b-form-input>
+                </b-input-group>
+              </b-col>
+              <b-col>
+                <b-input-group prepend="ML">
+                  <b-form-input
+                    required
+                    placeholder="In Malayalam"
+                    v-model.trim="form.displayName['ml']"
+                  >
+                  </b-form-input>
+                </b-input-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+          <b-form-group label="Select categories:" v-slot="{ ariaDescribedby }">
+            <div class="text-danger" v-if="!validation.category">
+              Select atleast 1 catergory
+            </div>
+            <b-form-checkbox-group
+              size="md"
+              id="checkbox-group-1"
+              v-model="selectedCategories"
+              :options="categories"
+              :aria-describedby="ariaDescribedby"
+              name="flavour-1"
+            ></b-form-checkbox-group>
           </b-form-group>
         </b-col>
         <b-col class="flex-nowrap">
@@ -52,46 +64,51 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <h6>Items in Item Group</h6>
       <b-row no-gutters>
-        <b-col lg="6">
-          <b-list-group v-if="items.length">
-            <b-list-group-item
-              v-for="item in items"
-              :key="item.id"
-              class="py-1"
+        <b-col lg="6" class="pr-2">
+          <b-card no-body>
+            <b-card-header style="background-color: #6c757d"
+              >Items in this group</b-card-header
             >
-              <b-row align-v="center" align-h="between" class="m-0">
-                <b-col>
-                  <b-row>
-                    <div>
-                      {{ item.displayNames["en"] }}:
-                      {{ item.displaynames["ml"] }}
-                    </div>
-                    <div class="pl-4">
-                      {{ item.price }}Rs per {{ item.unit }}
-                    </div>
-                  </b-row>
-                </b-col>
-                <b-col sm="1">
-                  <b-button size="sm" @click="deleteItem(item)">
-                    <b-icon icon="trash"></b-icon
-                  ></b-button>
-                </b-col>
-              </b-row>
-            </b-list-group-item>
-          </b-list-group>
-          <b-list-group v-else>
-            <b-list-group-item>
-              <h6>Add items to this package.</h6>
-              <h6 class="text-danger" v-if="!validation.items">
-                Add atleast 1 item
-              </h6>
-            </b-list-group-item>
-          </b-list-group>
+            <b-list-group v-if="items.length" flush>
+              <b-list-group-item
+                v-for="item in items"
+                :key="item.id"
+                class="py-1"
+              >
+                <b-row align-v="center" align-h="between" class="m-0">
+                  <b-col>
+                    <b-row>
+                      <div>
+                        {{ item.displayName["en"] }}:
+                        {{ item.displayName["ml"] }}
+                      </div>
+                      <div class="pl-4">
+                        {{ item.price }}Rs per {{ item.unitMeasured }}
+                      </div>
+                    </b-row>
+                  </b-col>
+                  <b-col sm="1">
+                    <b-button size="sm" @click="deleteItem(item)">
+                      <b-icon icon="trash"></b-icon
+                    ></b-button>
+                  </b-col>
+                </b-row>
+              </b-list-group-item>
+            </b-list-group>
+            <b-list-group v-else>
+              <b-list-group-item>
+                <h6>Add items to this package.</h6>
+                <h6 class="text-danger" v-if="!validation.items">
+                  Add atleast 1 item
+                </h6>
+              </b-list-group-item>
+            </b-list-group>
+          </b-card>
         </b-col>
-        <b-col>All items:</b-col>
-        <b-col lg="6"> </b-col>
+        <b-col lg="6">
+          <indi-item-select :selectedItems="items" :edit="edit" />
+        </b-col>
       </b-row>
       <br />
       <b-row align-h="center">
@@ -133,33 +150,43 @@
 
 
 <script>
-import { mapState } from "vuex";
-import { indipendentItemCollection, packageCollection } from "../firebase";
+import {
+  categoryCollection,
+  indipendentItemCollection,
+  ItemCollection,
+  packageCollection,
+} from "../firebase";
 import { storage } from "../firebase";
+import IndiItemSelect from "./IndiItemSelect.vue";
 export default {
+  components: { IndiItemSelect },
   data: function () {
     return {
       validation: {
         img: true,
         items: true,
+        category: true,
       },
       edit: null,
-      selectedPackage: undefined,
+      selectedItem: undefined,
       imageURL: "",
       imageData: null,
-      loading: true,
-      form: { displayNames: {} },
+      form: { displayName: [] },
       items: [],
-      calculatedTotal: 0,
       submitting: false,
-      test: true,
+      categories: [],
+      selectedCategories: [],
     };
   },
   created: function () {
     this.init();
   },
   computed: {
-    ...mapState({ packages: (state) => state.packages }),
+    availableOptions() {
+      return this.categories.filter(
+        (opt) => this.selectedCategories.indexOf(opt) === -1
+      );
+    },
   },
   methods: {
     cancel() {
@@ -176,7 +203,7 @@ export default {
         var snapshot = await storageRef.put(this.imageData);
         return await snapshot.ref.getDownloadURL();
       } else {
-        return this.form.img;
+        return this.form.imageUrl;
       }
     },
     async createItem() {
@@ -196,37 +223,50 @@ export default {
       } else {
         this.validation.img = true;
       }
+      // category validation
+      if (!this.selectedCategories.length) {
+        this.validation.category = false;
+        needVerification = true;
+      } else {
+        this.validation.category = true;
+      }
       if (needVerification) {
         return true;
       }
       // after verification
       this.submitting = true;
-      var packageRef;
-      this.form.img = await this.uploadImage();
-
+      var itemRef;
+      this.form.imageUrl = await this.uploadImage();
+      // setting items
       this.form.items = [];
       if (this.items) {
         this.items.forEach((item) => {
           this.form.items.push({
-            item: item.id,
-            quantity: parseInt(item.quantity),
+            itemId: item.id,
           });
         });
       }
+      // setting categories
+      this.form.categories = [];
+      var cat;
+      this.selectedCategories.forEach((category) => {
+        cat = this.categories.find((e) => e.value == category);
+        this.form.categories.push({ id: cat.value, name: cat.text });
+      });
+      // uploading
       if (this.form.id && this.edit) {
-        packageRef = packageCollection.doc(this.form.id);
+        itemRef = ItemCollection.doc(this.form.id);
       } else {
-        packageRef = packageCollection.doc();
+        itemRef = ItemCollection.doc();
       }
-      var searchArray = this.createSearchArray(this.form.displayNames);
-      await packageRef.set({
-        items: this.form.items,
-        image: this.form.img,
-        name: this.form.displayNames["en"],
-        displayName: this.form.displayNames,
-        price: parseInt(this.form.price),
-        total: parseInt(this.form.total),
+      var searchArray = this.createSearchArray(this.form.displayName);
+      await itemRef.set({
+        varieties: this.form.items,
+        imageUrl: this.form.imageUrl,
+        name: this.form.displayName["en"],
+        displayName: this.form.displayName,
         searchArray: searchArray,
+        category: this.form.categories,
       });
       this.submitting = false;
       this.$root.$bvToast.toast(`upload done`, {
@@ -258,12 +298,12 @@ export default {
       }
     },
     deletePack() {
-      console.log(this.selectedPackage.id);
+      console.log(this.selectedItem.id);
       var response = window.confirm("Are you sure?");
       if (response) {
         console.log(response);
         packageCollection
-          .doc(this.selectedPackage.id)
+          .doc(this.selectedItem.id)
           .delete()
           .then(() => {
             this.$root.$bvToast.toast("Deleted", {
@@ -277,47 +317,69 @@ export default {
       }
     },
 
-    init() {
-      // if (this.selectedPackage != undefined) {
-      //   this.fetchData();
-      // }
-      // this.loading = false;
+    async init() {
+      categoryCollection.get().then((categories) => {
+        this.categories = [];
+        categories.forEach((doc) => {
+          this.categories.push({
+            value: doc.id,
+            text: doc.get("displayNames")["en"],
+          });
+        });
+      });
+      if (this.$route.query.edit) {
+        if (this.$route.query.groupItem.id != undefined) {
+          // if indiitem is passes
+          this.fetchData(this.$route.query.groupItem);
+        } else {
+          // fetch indiItem
+          var item = await ItemCollection.doc(this.$route.query.groupItemId)
+            .get()
+            .then((doc) => {
+              return {
+                id: doc.id,
+                name: doc.get("name"),
+                displayName: doc.get("displayName"),
+                category: doc.get("category"),
+                varieties: doc.get("varieties"),
+                imageUrl: doc.get("imageUrl"),
+                rank: doc.get("rank"),
+              };
+            });
+          this.fetchData(item);
+        }
+      }
     },
-    fetchData() {
+    fetchData(item) {
       let arr = [];
       this.edit = this.$route.query.edit;
-
-      this.selectedItem = this.packages.find(
-        (item) => item.id == this.$route.query.package
-      );
+      this.selectedItem = item;
       if (this.edit) {
-        this.form.id = this.selectedPackage.id;
-        this.form.name = this.selectedPackage.name;
-        this.form.displayNames = this.selectedPackage.displayNames;
-        this.form.img = this.selectedPackage.img;
-        this.form.price = this.selectedPackage.price;
-        this.form.total = this.selectedPackage.total;
-        this.imageURL = this.selectedPackage.img;
+        this.form.id = this.selectedItem.id;
+        this.form.name = this.selectedItem.name;
+        this.form.displayName = this.selectedItem.displayName;
+        this.form.imageUrl = this.selectedItem.imageUrl;
+        this.imageURL = this.selectedItem.imageUrl;
         // fetching items
-        this.selectedPackage.items.forEach((e) => {
+        this.selectedItem.varieties.forEach((e) => {
           arr = [];
           indipendentItemCollection
-            .doc(e.item)
+            .doc(e.itemId)
             .get()
             .then((doc) => {
               arr.push({
                 id: doc.id,
-                displayNames: doc.get("displayName"),
-                img: doc.get("imageUrl"),
-                category: doc.get("category"),
+                name: doc.get("name"),
                 price: doc.get("price"),
-                unit: doc.get("unitMeasured"),
-                inStock: doc.get("inStock"),
-                quantity: e.quantity,
+                stock_quantity: doc.get("stock_quantity"),
               });
             });
         });
         this.items = arr;
+        this.selectedCategories = [];
+        this.selectedItem.category.forEach((e) => {
+          this.selectedCategories.push(e.id);
+        });
       }
     },
   },

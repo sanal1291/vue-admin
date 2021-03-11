@@ -251,7 +251,6 @@ export default {
               };
             });
           this.fetchData(item);
-          return;
         }
       }
     },

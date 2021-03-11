@@ -141,7 +141,6 @@ export default {
           en: this.form.displayNames["en"],
           ml: this.form.displayNames["ml"],
         },
-        name: this.form.displayNames["en"],
         imageUrl: this.form.img,
         priority: this.form.priority,
         searchArray: searchArray,

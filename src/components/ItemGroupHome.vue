@@ -20,9 +20,9 @@
             button
             @click="viewDetails(item.id)"
           >
-            {{ item.displayNames["en"] }} <br />
-            {{ item.displayNames["ml"] }} <br />
-            {{ item.id }}
+            {{ item.displayName["en"] }} <br />
+            {{ item.displayName["ml"] }} <br />
+            {{ item.varieties.length }}
           </b-list-group-item>
           <b-list-group-item class="text-center">
             <b-button @click="loadMore">Load more</b-button>
@@ -37,32 +37,34 @@
             size="sm"
             :disabled="groupItem == null ? true : false"
             :to="{
-              name: 'edit',
+              name: 'ItemGroupEdit',
               query: {
                 edit: true,
-                itemGroup: groupItem != null ? groupItem.id : null,
+                groupItem: groupItem != null ? groupItem : null,
+                groupItemId: groupItem != null ? groupItem.id : null,
               },
             }"
           >
             Edit Item Group
           </b-button>
         </b-row>
+        {{ groupItem }}
         <div class="package-details">
           <div>
             <b-card>
               <b-card-body v-if="groupItem" class="p-0">
                 <b-row>
                   <b-col sm="6">
-                    <h4>{{ groupItem.displayNames["en"] }}</h4>
-                    <h6>{{ groupItem.displayNames["ml"] }}</h6>
+                    <h4>{{ groupItem.displayName["en"] }}</h4>
+                    <h6>{{ groupItem.displayName["ml"] }}</h6>
+                    <div>Items: {{ groupItem.varieties.length }}</div>
                   </b-col>
                   <b-col sm="6">
-                    <b-img-lazy :src="groupItem.img" fluid rounded>
+                    <b-img-lazy :src="groupItem.imageUrl" fluid rounded>
                     </b-img-lazy>
                   </b-col>
                 </b-row>
                 <p class="text-center">Items in Item groups.</p>
-                {{ groupItem.varieties }}
                 <b-row>
                   <div class="table-responsive">
                     <b-table-lite
