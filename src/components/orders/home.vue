@@ -47,10 +47,13 @@
         >
       </div>
     </b-form>
-    <div class="flex-grow-1">
+    <div class="flex-grow-1 p-1">
       <b-row no-gutters>
         <b-col cols="12" md="8">
           <b-table
+            show-empty
+            empty-text="No orders in given time period or id"
+            empty-filtered-text="No orders in given time period or id"
             @row-selected="rowSelected"
             selectable
             select-mode="single"
@@ -63,7 +66,14 @@
             :items="orders"
             :per-page="perPage"
             :current-page="currentPage"
-          ></b-table>
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+          </b-table>
           <b-pagination
             v-model="currentPage"
             align="center"
@@ -115,6 +125,11 @@ export default {
   mounted() {
     const now = new Date();
     this.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (this.$route.params.today) {
+      this.fromDate = this.$route.params.today;
+      this.toDate = this.$route.params.today;
+      this.submit();
+    }
   },
   methods: {
     rowSelected(order) {
@@ -137,6 +152,9 @@ export default {
       // 15th in two months
       this.maxDate = new Date(this.fromDate);
       this.maxDate.setMonth(this.maxDate.getMonth() + 1);
+      if (this.maxDate > this.today) {
+        this.maxDate = this.today;
+      }
       this.queryChange = true;
     },
     toDate() {

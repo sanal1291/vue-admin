@@ -19,6 +19,8 @@ import {
     ToastPlugin,
     FormDatepickerPlugin,
     PaginationPlugin,
+    SpinnerPlugin,
+    LinkPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -35,6 +37,7 @@ import {
     BIconBasket,
     BIconGrid,
     BIconLayersHalf,
+    BIconArrowRight,
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -51,6 +54,8 @@ Vue.use(FormGroupPlugin)
 Vue.use(OverlayPlugin)
 Vue.use(FormFilePlugin)
 Vue.use(ImagePlugin)
+Vue.use(SpinnerPlugin)
+Vue.use(LinkPlugin)
 Vue.component('b-table', BTable)
 Vue.use(FormCheckboxPlugin)
 Vue.use(ToastPlugin)
@@ -71,3 +76,4 @@ Vue.component('BIconBoxSeam', BIconBoxSeam)
 Vue.component('BIconBasket', BIconBasket)
 Vue.component('BIconGrid', BIconGrid)
 Vue.component('BIconLayersHalf', BIconLayersHalf)
+Vue.component('BIconArrowRight', BIconArrowRight)

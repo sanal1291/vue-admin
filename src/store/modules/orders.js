@@ -2,7 +2,7 @@ import { orders } from "../../firebase";
 
 export default {
     state: {
-        ordersList: null,
+        ordersList: [],
         loading: false,
     },
 
@@ -22,20 +22,22 @@ export default {
                 .get().then(querySnapshot => {
                     var arr = [];
                     querySnapshot.forEach(item => {
-                        for (let index = 0; index < 100; index++) {
-                            arr.push({
-                                id: index,
-                                dateTime: item.get('dateTime'),
-                                orderId: item.get('orderId'),
-                                orderKey: item.get('orderKey'),
-                                status: item.get('status'),
-                                total: item.get('totalCost')
-                            })
-                        }
+                        var time = new Date(item.get('dateTime').seconds * 1000);
+                        arr.push({
+                            id: item.id,
+                            dateTime: `${("0" + time.getHours()).slice(-2)}:${("0" + time.getMinutes()).slice(-2)} 
+                                        /${("0" + time.getDate()).slice(-2)}-${("0" + (time.getMonth() + 1)).slice(-2)}-${time.getFullYear()}`,
+                            orderId: item.get('orderId'),
+                            orderKey: item.get('orderKey'),
+                            status: item.get('status'),
+                            total: item.get('totalCost')
+                        })
+
                     })
                     commit("setOrders", arr)
+                    state.loading = false;
+
                 })
-            state.loading = false;
 
         },
     },

@@ -11,27 +11,75 @@
         </b-col>
       </b-row>
       <b-row class="pt-2">
-        <b-col md="5" class="pb-3">
-          <b-list-group class="list-group" flush>
+        <b-col md="7" class="pb-3">
+          <b-nav-form class="navbar-item py-1" @submit.prevent="searchFn">
+            <b-form-input
+              v-model.trim="searchValue"
+              size="sm"
+              class="mr-sm-2"
+              placeholder="Search"
+            >
+            </b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">
+              Search
+            </b-button>
+          </b-nav-form>
+          <b-list-group
+            class="list-group"
+            v-if="!search && indiItems.length"
+            flush
+          >
             <b-list-group-item
               v-for="item in indiItems"
               :key="item.id"
               button
               @click="viewDetails(item.id)"
             >
-              <b-row>
-                <b-col>
-                  {{ item.displayNames["ml"] }} : {{ item.displayNames["en"] }}
-                </b-col>
-                <b-col> {{ item.price }}.Rs per {{ item.unitMeasured }}</b-col>
-              </b-row>
+              <div class="d-flex justify-content-between">
+                <div>
+                  {{ item.name }}
+                </div>
+                <div>{{ item.price }}.Rs</div>
+              </div>
             </b-list-group-item>
-            <b-list-group-item class="text-center">
-              <b-button @click="loadMore">Load more</b-button>
+            <b-list-group-item
+              class="text-center"
+              v-if="itemLast"
+              @click="loadMore"
+              action
+            >
+              Load more
+            </b-list-group-item>
+          </b-list-group>
+          <b-list-group
+            class="list-group"
+            v-if="search && searchItems.length"
+            flush
+          >
+            <b-list-group-item
+              v-for="item in searchItems"
+              :key="item.id"
+              button
+              @click="viewDetails(item.id)"
+            >
+              <div class="d-flex justify-content-between">
+                <div>
+                  {{ item.name }}
+                </div>
+                <div>{{ item.price }}.Rs</div>
+              </div>
+            </b-list-group-item>
+            <b-list-group-item
+              class="text-center"
+              v-if="searchLast"
+              @click="loadMoreSearch"
+              action
+            >
+              Load more
             </b-list-group-item>
           </b-list-group>
         </b-col>
-        <b-col md="7" class="pb-3">
+        <b-col md="5" class="pb-3">
           <b-row align-h="end" class="m-1">
             <b-button
               pill
@@ -55,38 +103,15 @@
             <div>
               <b-card>
                 <b-card-body v-if="selected" class="p-0">
-                  <b-row>
-                    <b-col sm="6">
-                      <h4>
-                        {{ selectedIndiItem.id }}
-                        {{ selectedIndiItem.displayNames["ml"] }}:
-                        {{ selectedIndiItem.displayNames["en"] }}
-                      </h4>
-                      <br />
-                      <div>
-                        Price: {{ selectedIndiItem.price }}rs per
-                        {{ selectedIndiItem.unitMeasured }}
-                      </div>
-                      <div>In stock: {{ selectedIndiItem.inStock }}</div>
-                      <div>Rank : {{ selectedIndiItem.rank }}</div>
-                    </b-col>
-                    <b-col sm="6">
-                      <b-img-lazy
-                        :src="selectedIndiItem.imageUrl"
-                        fluid
-                        rounded
-                      >
-                      </b-img-lazy>
-                    </b-col>
-                  </b-row>
-                  <b-row>
-                    <p class="text-center">
-                      Items in {{ selectedIndiItem.name }}.
-                    </p>
-                  </b-row>
+                  <h4>
+                    {{ selectedIndiItem.name }}
+                  </h4>
+                  <br />
+                  <div>Price: {{ selectedIndiItem.price }}Rs</div>
+                  <div>stock: {{ selectedIndiItem.stock_quantity }}</div>
                 </b-card-body>
                 <b-card-body v-else>
-                  Select a package to see details.
+                  Select a Item to see details.
                 </b-card-body>
               </b-card>
             </div>
@@ -101,23 +126,47 @@
 import { mapState } from "vuex";
 export default {
   data: function () {
-    return { selectedIndiItem: null };
+    return {
+      searchValue: "",
+      search: false,
+      selectedIndiItem: null,
+    };
   },
   computed: {
-    ...mapState({ indiItems: (state) => state.indiItems }),
+    ...mapState({ indiItems: (state) => state.indiItem.indiItems }),
+    ...mapState({ searchItems: (state) => state.indiItem.searchIndiItems }),
+    ...mapState({ searchLast: (state) => state.indiItem.searchIndiLast }),
+    ...mapState({ itemLast: (state) => state.indiItem.itemIndiLast }),
     selected() {
       return this.selectedIndiItem ? true : false;
     },
   },
   beforeMount() {
-    this.$store.dispatch("setIndiItems");
+    this.$store.dispatch("getIndiItems");
   },
   methods: {
     viewDetails(id) {
       this.selectedIndiItem = this.indiItems.find((item) => item.id == id);
     },
+    searchFn() {
+      if (this.searchValue.trim()) {
+        this.search = true;
+        this.$store.dispatch("getSearchIndiItems", {
+          more: false,
+          value: this.searchValue.trim().toLowerCase(),
+        });
+      } else {
+        this.search = false;
+      }
+    },
+    loadMoreSearch() {
+      this.$store.dispatch("getSearchIndiItems", {
+        more: true,
+        value: this.searchValue.trim().toLowerCase(),
+      });
+    },
     loadMore() {
-      this.$store.dispatch("setIndiItems");
+      this.$store.dispatch("getIndiItems");
     },
   },
 };
