@@ -9,7 +9,6 @@
       <b-navbar class="p-1 w-100 h-100" variant="light" type="light">
         <b-navbar-brand class="h-100 m-0" to="/" style="color: #808080">
           <img src="@/assets/logo.png" class="d-inline-block align-top" />
-          <span v-if="sidebar">UE</span>
         </b-navbar-brand>
         <b-navbar-nav v-if="sidebar" class="w-100" align="end" fill>
           <b-nav-item @click="toggleSidebar()">
@@ -21,22 +20,48 @@
     <b-row>
       <b-col>
         <b-nav vertical justified>
-          <b-nav-item to="/package" class="text-nowrap overflow-hidden">
-            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Packages</span>
+          <b-nav-item
+            active-class="selectedBorder"
+            to="/package"
+            class="text-nowrap overflow-hidden"
+          >
+            <b-icon icon="box-seam"></b-icon
+            ><span v-if="sidebar"> Packages</span>
           </b-nav-item>
-          <b-nav-item to="/category" class="text-nowrap overflow-hidden">
-            <b-icon icon="layers"></b-icon><span v-if="sidebar"> Category</span>
+          <b-nav-item
+            active-class="selectedBorder"
+            to="/category"
+            class="text-nowrap overflow-hidden"
+          >
+            <b-icon icon="grid"></b-icon><span v-if="sidebar"> Category</span>
           </b-nav-item>
-          <b-nav-item to="/itemgroups" class="text-nowrap overflow-hidden">
+          <b-nav-item
+            active-class="selectedBorder"
+            to="/itemgroups"
+            class="text-nowrap overflow-hidden"
+          >
             <b-icon icon="layers"></b-icon
             ><span v-if="sidebar"> Group items</span>
           </b-nav-item>
-          <b-nav-item to="/indiItem" class="text-nowrap overflow-hidden">
-            <b-icon icon="layers"></b-icon
-            ><span v-if="sidebar">
-              IndiPendent <br />
-              Items</span
-            >
+          <b-nav-item
+            active-class="selectedBorder"
+            to="/indiItem"
+            class="text-nowrap overflow-hidden w-100"
+          >
+            <div class="d-flex align-items-center">
+              <b-icon icon="layers-half"></b-icon>
+              <div class="pl-1" v-if="sidebar">
+                Independent <br />
+                Items
+              </div>
+            </div>
+          </b-nav-item>
+          <b-nav-item
+            active-class="selectedBorder"
+            to="/orders"
+            class="text-nowrap overflow-hidden"
+          >
+            <b-icon icon="basket"></b-icon><span v-if="sidebar"> Orders</span>
           </b-nav-item>
         </b-nav>
       </b-col>
@@ -83,5 +108,11 @@ export default {
 }
 a {
   color: rgba($color: #000000, $alpha: 0.5) !important;
+}
+.selectedBorder {
+  border-left: 5px solid green;
+  transition: 0.2s border ease-in;
+  transition: 0.2s all ease-in;
+  background-color: rgba($color: #c9c9c9, $alpha: 0.5);
 }
 </style>

@@ -2,36 +2,42 @@ import { indipendentItemCollection } from "../../firebase";
 
 export default {
     state: {
-        searchItems: null,
-        items: null,
-        searchLast: null,
-        itemLast: null,
+        searchIndiItems: [],
+        indiItems: [],
+        searchIndiLast: null,
+        itemIndiLast: null,
     },
 
     //  mutations
     mutations: {
-        setSearchItems(state, value) {
-            state.searchItems = [...state.searchArray, ...value];
+        setSearchIndiItems(state, value) {
+            state.searchIndiItems = [...state.searchIndiItems, ...value];
         },
-        setsearchLast(state, value) {
-            state.searchLast = value;
+        setsearchIndiLast(state, value) {
+            state.searchIndiLast = value;
         },
-        setItems(state, value) {
-            state.items = [...state.items, ...value];
+        setIndiItems(state, value) {
+            state.indiItems = [...state.indiItems, ...value];
         },
-        setItemLast(state, value) {
-            state.itemLast = value;
+        setItemIndiLast(state, value) {
+            state.itemIndiLast = value;
         },
     },
 
     // actions 
     actions: {
-        getItems({ commit, state }) {
+        getIndiItems({ commit, state }) {
             var itemColl;
-            if (state.items.length === 0) {
+            if (state.indiItems && state.indiItems.length === 0) {
+                state.itemIndiLast = null
                 itemColl = indipendentItemCollection.orderBy('name').limit(25)
             } else {
-                itemColl = indipendentItemCollection.orderBy('name').startAfter(state.itemLast).limit(25)
+                if (state.itemIndiLast) {
+                    itemColl = indipendentItemCollection.orderBy('name').startAfter(state.itemIndiLast).limit(25)
+                }
+                else {
+                    return
+                }
             }
             itemColl.get().then((querySnapshot) => {
                 var items = [];
@@ -45,16 +51,19 @@ export default {
                     })
                 })
                 var item = querySnapshot.docs[querySnapshot.docs.length - 1]
-                commit("setItemLast", item)
-                commit("setItems", items)
+                commit("setItemIndiLast", item)
+                commit("setIndiItems", items)
             })
         },
-        getSearchItems({ commit, state }) {
+        getSearchIndiItems({ commit, state }, query) {
+            console.log(query)
             var itemColl;
-            if (state.searchItems.length === 0) {
-                itemColl = indipendentItemCollection.orderBy('name').limit(25)
+            if (!query.more) {
+                state.searchIndiItems = []
+                state.searchIndiLast = null;
+                itemColl = indipendentItemCollection.orderBy('name').where('searchArray', 'array-contains', query.value).limit(25)
             } else {
-                itemColl = indipendentItemCollection.orderBy('name').startAfter(state.searchLast).limit(25)
+                itemColl = indipendentItemCollection.orderBy('name').where('searchArray', 'array-contains', query.value).startAfter(state.searchIndiLast).limit(25)
             }
             itemColl.get().then(querySnapshot => {
                 var items = [];
@@ -67,9 +76,10 @@ export default {
                         price: doc.get('price'),
                     })
                 })
+                console.log(items)
                 var item = querySnapshot.docs[querySnapshot.docs.length - 1]
-                commit("setsearchLast", item)
-                commit("setSearchItems", items)
+                commit("setsearchIndiLast", item)
+                commit("setSearchIndiItems", items)
             })
         },
     },

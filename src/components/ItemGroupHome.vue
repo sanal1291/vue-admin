@@ -20,11 +20,10 @@
             button
             @click="viewDetails(item.id)"
           >
-            {{ item.displayName["en"] }} <br />
-            {{ item.displayName["ml"] }} <br />
-            {{ item.varieties.length }}
+            {{ item.displayName["en"] }} : {{ item.displayName["ml"] }} <br />
+            {{ item.varieties.length }} items
           </b-list-group-item>
-          <b-list-group-item class="text-center">
+          <b-list-group-item v-if="lastItemGroup" class="text-center">
             <b-button @click="loadMore">Load more</b-button>
           </b-list-group-item>
         </b-list-group>
@@ -48,7 +47,6 @@
             Edit Item Group
           </b-button>
         </b-row>
-        {{ groupItem }}
         <div class="package-details">
           <div>
             <b-card>
@@ -67,12 +65,12 @@
                 <p class="text-center">Items in Item groups.</p>
                 <b-row>
                   <div class="table-responsive">
-                    <b-table-lite
+                    <b-table
                       :fields="fields"
                       :items="indiItems"
                       responsive
                       small
-                    ></b-table-lite>
+                    ></b-table>
                   </div>
                 </b-row>
               </b-card-body>
@@ -95,11 +93,12 @@ export default {
     return {
       groupItem: null,
       indiItems: [],
-      fields: ["displayName", "price", "unit", "inStock"],
+      fields: ["name", "price", "stock_quantity"],
     };
   },
   computed: {
-    ...mapState({ itemGroups: (state) => state.items }),
+    ...mapState({ itemGroups: (state) => state.item.itemGroups }),
+    ...mapState({ lastItemGroup: (state) => state.item.lastItemGroup }),
   },
 
   methods: {
@@ -113,20 +112,21 @@ export default {
           .then((doc) =>
             arr.push({
               id: doc.id,
-              displayName: doc.get("displayName"),
-              img: doc.get("imageUrl"),
+              name: doc.get("name"),
               category: doc.get("category"),
               price: doc.get("price"),
-              unit: doc.get("unitMeasured"),
-              inStock: doc.get("inStock"),
+              stock_quantity: doc.get("stock_quantity"),
             })
           );
       });
       this.indiItems = arr;
     },
     loadMore() {
-      this.$store.dispatch("setItems");
+      this.$store.dispatch("getItemsGroups");
     },
+  },
+  mounted() {
+    this.$store.dispatch("getItemsGroups", true);
   },
 };
 </script>

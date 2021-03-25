@@ -1,10 +1,15 @@
 <template>
   <b-container class="bg-color vh-100" align-v="center" fluid>
-    <b-row align-v="center" align-h="center" class="h-100">
-      <b-card class="form-card">
+    <b-row align-v="center" align-h="center" class="h-100" no-gutters>
+      <b-card class="form-card pb-4 px-2" no-body>
         <div class="form-logo-place">
-          <b-row class="form-logo w-100">
-            <img src="@/assets/logo.png" alt="" srcset="" />
+          <b-row class="form-logo m-0">
+            <b-img
+              width="200px"
+              src="@/assets/logo.png"
+              alt="freshgrown logo"
+              srcset=""
+            />
           </b-row>
         </div>
         <b-col>
@@ -106,12 +111,12 @@ export default {
   background-color: #60a3bc;
   .form-card {
     .form-logo-place {
-      height: 70px;
+      height: 90px;
     }
     .form-logo {
       justify-content: center;
-      position: absolute;
-      top: -110px;
+      position: relative;
+      top: -120px;
     }
   }
 }

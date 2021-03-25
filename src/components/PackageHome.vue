@@ -61,12 +61,12 @@
                 </b-row>
                 <b-row>
                   <div class="table-responsive">
-                    <b-table-lite
+                    <b-table
                       :fields="fields"
                       :items="items"
                       responsive
                       small
-                    ></b-table-lite>
+                    ></b-table>
                   </div>
                 </b-row>
               </b-card-body>
@@ -90,7 +90,7 @@ export default {
       selected: null,
       selectedPackage: null,
       items: [],
-      fields: ["displayName", "quantity", "price", "total", "unit", "inStock"],
+      fields: ["name", "quantity", "price", "total"],
     };
   },
   computed: {
@@ -113,12 +113,8 @@ export default {
           .then((doc) =>
             arr.push({
               id: doc.id,
-              displayName: doc.get("displayName"),
-              img: doc.get("imageUrl"),
-              category: doc.get("category"),
+              name: doc.get("name"),
               price: doc.get("price"),
-              unit: doc.get("unitMeasured"),
-              inStock: doc.get("inStock"),
               quantity: element.quantity,
               total: parseInt(element.quantity) * parseInt(doc.get("price")),
             })

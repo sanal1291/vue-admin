@@ -9,6 +9,7 @@ import Package from '../views/Package.vue'
 import Category from '../views/Category'
 import ItemGroup from '../views/ItemGroup'
 import IndiItem from '../views/IndiItem'
+import orders from '../views/orders'
 // layouts
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
@@ -20,6 +21,8 @@ import CategoryAdd from '../components/CategoryAdd'
 import IndiItemAdd from '../components/IndiItemAdd'
 import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
+import { ordersHome } from '../components/orders'
+import Store from '../store/index'
 
 
 Vue.use(VueRouter)
@@ -128,6 +131,18 @@ const routes = [
     }
   },
   {
+    path: '/orders',
+    components: { default: orders, footer: Footer, header: NavigationBar, sidebar: Sidebar },
+    children: [{
+      path: '',
+      name: "orderHome",
+      component: ordersHome,
+    },],
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/about',
     name: 'About',
     components: { default: About, footer: Footer, header: NavigationBar, sidebar: Sidebar },
@@ -149,6 +164,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !auth.currentUser) {
     next('')
   } else {
+    Store.state.sidebar.sidebar = false;
     next()
   }
 })

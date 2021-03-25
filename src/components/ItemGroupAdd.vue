@@ -66,11 +66,11 @@
       </b-row>
       <b-row no-gutters>
         <b-col lg="6" class="pr-2">
-          <b-card no-body>
-            <b-card-header style="background-color: #6c757d"
-              >Items in this group</b-card-header
-            >
-            <b-list-group v-if="items.length" flush>
+          <b-card no-body style="max-height: 500px">
+            <b-card-header style="background-color: #6c757d">
+              Items in this group
+            </b-card-header>
+            <b-list-group v-if="items.length" flush style="overflow: auto">
               <b-list-group-item
                 v-for="item in items"
                 :key="item.id"
@@ -80,12 +80,9 @@
                   <b-col>
                     <b-row>
                       <div>
-                        {{ item.displayName["en"] }}:
-                        {{ item.displayName["ml"] }}
+                        {{ item.name }}
                       </div>
-                      <div class="pl-4">
-                        {{ item.price }}Rs per {{ item.unitMeasured }}
-                      </div>
+                      <div class="pl-4">{{ item.price }}Rs</div>
                     </b-row>
                   </b-col>
                   <b-col sm="1">
@@ -107,7 +104,7 @@
           </b-card>
         </b-col>
         <b-col lg="6">
-          <indi-item-select :selectedItems="items" :edit="edit" />
+          <indi-item-select :selectedItems="items" @addedItem="addItem" />
         </b-col>
       </b-row>
       <br />
@@ -124,7 +121,7 @@
             spinner-variant="primary"
             class="d-inline-block"
           >
-            <b-button @click="deletePack" variant="danger" type="delete">
+            <b-button type="button" @click="deletePack" variant="danger">
               Delete</b-button
             >
           </b-overlay>
@@ -171,7 +168,7 @@ export default {
       selectedItem: undefined,
       imageURL: "",
       imageData: null,
-      form: { displayName: [] },
+      form: { displayName: {} },
       items: [],
       submitting: false,
       categories: [],
@@ -195,6 +192,12 @@ export default {
     deleteItem(item) {
       this.items = this.items.filter((e) => e.id != item.id);
     },
+    addItem(item) {
+      let obj = this.items.find((x) => x.id == item.id);
+      if (!obj) {
+        this.items.push(item);
+      }
+    },
     async uploadImage() {
       if (this.imageData) {
         var storageRef = storage.child(
@@ -207,15 +210,16 @@ export default {
       }
     },
     async createItem() {
+      console.log("create");
       // verification
       let needVerification = false;
       // items validation
-      // if (this.items.length == 0) {
-      //   this.validation.items = false;
-      //   needVerification = true;
-      // } else {
-      //   this.validation.items = true;
-      // }
+      if (this.items.length == 0) {
+        this.validation.items = false;
+        needVerification = true;
+      } else {
+        this.validation.items = true;
+      }
       // img validation
       if (!this.edit && !this.imageData) {
         this.validation.img = false;
@@ -247,12 +251,7 @@ export default {
         });
       }
       // setting categories
-      this.form.categories = [];
-      var cat;
-      this.selectedCategories.forEach((category) => {
-        cat = this.categories.find((e) => e.value == category);
-        this.form.categories.push({ id: cat.value, name: cat.text });
-      });
+      this.form.categories = this.selectedCategories;
       // uploading
       if (this.form.id && this.edit) {
         itemRef = ItemCollection.doc(this.form.id);
@@ -302,8 +301,7 @@ export default {
       var response = window.confirm("Are you sure?");
       if (response) {
         console.log(response);
-        packageCollection
-          .doc(this.selectedItem.id)
+        ItemCollection.doc(this.selectedItem.id)
           .delete()
           .then(() => {
             this.$root.$bvToast.toast("Deleted", {
@@ -360,6 +358,7 @@ export default {
         this.form.displayName = this.selectedItem.displayName;
         this.form.imageUrl = this.selectedItem.imageUrl;
         this.imageURL = this.selectedItem.imageUrl;
+        this.selectedCategories = this.selectedItem.category;
         // fetching items
         this.selectedItem.varieties.forEach((e) => {
           arr = [];
@@ -376,10 +375,6 @@ export default {
             });
         });
         this.items = arr;
-        this.selectedCategories = [];
-        this.selectedItem.category.forEach((e) => {
-          this.selectedCategories.push(e.id);
-        });
       }
     },
   },

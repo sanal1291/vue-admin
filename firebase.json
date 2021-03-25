@@ -1,0 +1,40 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/products/categories",
+        "function": "categories"
+      },
+      {
+        "source": "/api/products/tags",
+        "function": "manufacturer"
+      },
+      {
+        "source": "/api/products",
+        "function": "additems"
+      },
+      {
+        "source": "/api/update",
+        "function": "update"
+      },
+      {
+        "source": "/api/orders/:id",
+        "function": "order"
+      },
+      {
+        "source": "/api/orders",
+        "function": "orders"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

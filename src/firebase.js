@@ -17,6 +17,18 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 var storage = firebase.storage().ref();
+db.enablePersistence().catch(err => {
+    console.log(err.code)
+    if (err.code == 'failed-precondition') {
+        // Multiple tabs open, persistence can only be enabled
+        // in one tab at a a time.
+        // ...
+    } else if (err.code == 'unimplemented') {
+        // The current browser does not support all of the
+        // features required to enable persistence
+        // ...
+    }
+})
 
 //collections
 const categoryCollection = db.collection("Categories")
@@ -25,6 +37,7 @@ const indipendentItemCollection = db.collection("independentItems")
 const ItemCollection = db.collection("items")
 const packageCollection = db.collection("packages")
 const userCollection = db.collection("users")
+const orders = db.collection("orders")
 export {
     db,
     auth,
@@ -35,6 +48,6 @@ export {
     packageCollection,
     userCollection,
     ItemCollection,
-
+    orders,
 }
 
