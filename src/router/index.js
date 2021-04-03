@@ -10,6 +10,7 @@ import Category from '../views/Category'
 import ItemGroup from '../views/ItemGroup'
 import IndiItem from '../views/IndiItem'
 import orders from '../views/orders'
+import Carousel from '../views/carousel'
 // layouts
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
@@ -22,6 +23,7 @@ import IndiItemAdd from '../components/IndiItemAdd'
 import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
 import { ordersHome } from '../components/orders'
+import { carouselHome, carouselAdd } from '../components/carousel'
 import Store from '../store/index'
 
 
@@ -91,6 +93,30 @@ const routes = [
     ]
   },
   {
+    path: '/carousel',
+    components: { default: Carousel, footer: Footer, header: NavigationBar, sidebar: Sidebar },
+    meta: {
+      requiresAuth: true
+    },
+    children: [
+      {
+        name: 'Carousel',
+        path: '',
+        component: carouselHome,
+      },
+      {
+        name: 'CarouselAdd',
+        path: 'add',
+        component: carouselAdd,
+      },
+      {
+        name: 'CarouselEdit',
+        path: 'edit',
+        component: carouselAdd,
+      },
+    ]
+  },
+  {
     path: '/itemgroups',
     components: { default: ItemGroup, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     children: [{
@@ -100,7 +126,7 @@ const routes = [
     },
     {
       name: "ItemGroupAdd",
-      path: '/itemGroups/add',
+      path: '/itemgroups/add',
       component: ItemGroupAdd,
     },
     {

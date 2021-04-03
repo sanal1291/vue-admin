@@ -156,7 +156,7 @@ export default {
       var arr = [];
       Object.values(value).forEach((name) => {
         for (var i = 1; i <= name.length; i++) {
-          arr.push(name.slice(0, i));
+          arr.push(name.trim().slice(0, i).toLowerCase());
         }
       });
       return arr;
@@ -242,5 +242,6 @@ export default {
   width: 100%;
   z-index: 10;
   background-color: rgba($color: #fff, $alpha: 0.5);
+  height: 100%;
 }
 </style>

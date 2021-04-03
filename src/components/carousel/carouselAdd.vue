@@ -1,16 +1,13 @@
 <template>
   <div>
-    <div v-if="loading && !packages.length">loading</div>
-    <div v-else-if="!loading" class="pl-3">
-      <div>
-        <h4 v-if="edit">Edit {{ selectedPackage.name }}</h4>
-        <h4 v-else>Create new package.</h4>
-      </div>
+    <div class="pl-3">
+      <h4 v-if="edit">Edit {{ selectedCarousel.displayNames["en"] }}</h4>
+      <h4 v-else>Create new carousel.</h4>
     </div>
-    <b-form @submit.prevent="createPackage" class="p-3">
+    <b-form @submit.prevent="createCarousel" class="p-3">
       <b-row>
         <b-col md="6">
-          <b-form-group label="Name of package:" label-for="input-1">
+          <b-form-group label="Name of carousel:" label-for="input-1">
             <b-input-group prepend="EN">
               <b-form-input
                 required
@@ -27,38 +24,20 @@
               >
               </b-form-input>
             </b-input-group>
-            <!-- <b-form-input
-              required
-              v-model="form.name"
-              id="input-1"
-              placeholder="Input name"
-            ></b-form-input> -->
           </b-form-group>
-          <b-row>
-            <b-col sm="6">
-              <b-form-group label="Price:" label-for="input-2">
-                <b-form-input
-                  type="number"
-                  min="0"
-                  required
-                  v-model.number="form.price"
-                  id="input-2"
-                  placeholder="Type price"
-                ></b-form-input> </b-form-group
-            ></b-col>
-            <b-col sm="6">
-              <b-form-group label="Total:">
-                <b-form-input
-                  type="number"
-                  min="0"
-                  :value="calculatedTotal"
-                  disabled
-                ></b-form-input
-              ></b-form-group> </b-col
-          ></b-row>
+          <b-form-group label="Select to where the carousel points to.">
+            <b-form-radio-group
+              v-model="form.isPackage"
+              button-variant="outline-success"
+              buttons
+              :options="options"
+              @change="targetChange"
+            >
+            </b-form-radio-group>
+          </b-form-group>
         </b-col>
         <b-col class="flex-nowrap">
-          <b-form-group label="Package image:" label-for="input-3">
+          <b-form-group label="carousel image:" label-for="input-3">
             <div class="text-danger" v-if="!validation.img">Select image.</div>
             <img style="max-height: 200px" class="pb-2" :src="imageURL" />
             <div class="w-100">
@@ -74,7 +53,8 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <h6>Items in package</h6>
+      <h6 v-if="form.isPackage">Carousel target packages</h6>
+      <h6 v-if="!form.isPackage">Carousel target Items</h6>
       <b-row no-gutters>
         <b-col lg="6">
           <b-card no-body style="max-height: 500px">
@@ -91,17 +71,7 @@
                   <b-col>
                     <b-row>
                       <div>{{ item.name }}</div>
-                      <div class="pl-4">{{ item.price }}Rs</div>
                     </b-row>
-                  </b-col>
-                  <b-col sm="auto">
-                    <b-form-input
-                      class="w-50"
-                      type="number"
-                      min="1"
-                      v-model="item.quantity"
-                      style="width: 60px; text-align: center"
-                    ></b-form-input>
                   </b-col>
                   <b-col sm="1">
                     <b-button size="sm" @click="deleteItem(item)">
@@ -122,7 +92,16 @@
           </b-card>
         </b-col>
         <b-col lg="6">
-          <indi-item-select :selectedItems="items" @addedItem="addItem" />
+          <package-select
+            v-show="form.isPackage"
+            :selectedItems="items"
+            @addedItem="addItem"
+          />
+          <item-select
+            v-show="!form.isPackage"
+            :selectedItems="items"
+            @addedItem="addItem"
+          />
         </b-col>
       </b-row>
       <br />
@@ -139,7 +118,9 @@
             spinner-variant="primary"
             class="d-inline-block"
           >
-            <b-button @click="deletePack" variant="danger"> Delete</b-button>
+            <b-button @click="deleteCarousel" variant="danger">
+              Delete</b-button
+            >
           </b-overlay>
         </b-col>
         <b-col cols="auto">
@@ -159,55 +140,72 @@
   </div>
 </template>
 
-
-
-
 <script>
 import { mapState } from "vuex";
-import { indipendentItemCollection, packageCollection } from "../firebase";
-import { storage } from "../firebase";
-import IndiItemSelect from "./IndiItemSelect.vue";
+import {
+  carouselCollection,
+  ItemCollection,
+  packageCollection,
+  storage,
+} from "../../firebase";
+import itemSelect from "./itemSelect.vue";
+import PackageSelect from "./packageSelect.vue";
 export default {
-  components: {
-    IndiItemSelect,
-  },
-  data: function () {
+  components: { itemSelect, PackageSelect },
+  computed: { ...mapState({ carousels: (state) => state.carousel.carousels }) },
+  data() {
     return {
+      edit: false,
+      imageURL: "",
+      items: [],
+      submitting: false,
+      selectedCarousel: null,
+      options: [
+        { text: "Item", value: false },
+        { text: "Package", value: true },
+      ],
+      form: {
+        displayNames: {},
+        isPackage: false,
+      },
       validation: {
         img: true,
+        target: true,
         items: true,
       },
-      edit: null,
-      selectedPackage: undefined,
-      imageURL: "",
-      imageData: null,
-      loading: true,
-      form: { displayNames: {} },
-      items: [],
-      calculatedTotal: 0,
-      submitting: false,
-      test: true,
     };
   },
-  created: function () {
-    this.init();
-  },
-  computed: {
-    ...mapState({ packages: (state) => state.packages }),
+  mounted() {
+    this.fetchData();
   },
   methods: {
-    cancel() {
-      this.$router.go(-1);
-    },
-    deleteItem(item) {
-      this.items = this.items.filter((e) => e.id != item.id);
-    },
     addItem(item) {
-      item.quantity = 1;
+      console.log(item);
       let obj = this.items.find((x) => x.id == item.id);
       if (!obj) {
         this.items.push(item);
       }
+    },
+    deleteItem(item) {
+      this.items = this.items.filter((e) => e.id != item.id);
+    },
+    deleteCarousel() {},
+    cancel() {
+      this.$router.go(-1);
+    },
+    onFileChange(e) {
+      var input = e.target;
+      this.imageData = e.target.files[0];
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageURL = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
+    targetChange(e) {
+      this.items = [];
     },
     async uploadImage() {
       if (this.imageData) {
@@ -220,7 +218,7 @@ export default {
         return this.form.img;
       }
     },
-    async createPackage() {
+    async createCarousel() {
       // verification
       let needVerification = false;
       // items validation
@@ -242,138 +240,84 @@ export default {
       }
       // after verification
       this.submitting = true;
-      var packageRef;
+      var carouselRef;
       this.form.img = await this.uploadImage();
-
       this.form.items = [];
       if (this.items) {
         this.items.forEach((item) => {
-          this.form.items.push({
-            item: item.id,
-            quantity: parseInt(item.quantity),
-          });
+          this.form.items.push(item.id);
         });
       }
       if (this.form.id && this.edit) {
-        packageRef = packageCollection.doc(this.form.id);
+        carouselRef = carouselCollection.doc(this.form.id);
       } else {
-        packageRef = packageCollection.doc();
+        carouselRef = carouselCollection.doc();
       }
       var searchArray = this.createSearchArray(this.form.displayNames);
-      await packageRef.set({
+      await carouselRef.set({
         items: this.form.items,
         image: this.form.img,
-        name: this.form.displayNames["en"],
         displayNames: this.form.displayNames,
-        price: parseInt(this.form.price),
-        total: parseInt(this.form.total),
+        isPackage: this.form.isPackage,
         searchArray: searchArray,
       });
+
       this.submitting = false;
       this.$root.$bvToast.toast(`upload done`, {
-        title: "Package",
+        title: "Carousel",
         autoHideDelay: 5000,
       });
       this.$router.go(-1);
     },
-
     createSearchArray(value) {
       var arr = [];
       Object.values(value).forEach((name) => {
         for (var i = 1; i <= name.length; i++) {
-          arr.push(name.trim().slice(0, i).toLowerCase());
+          arr.push(name.slice(0, i).toLowerCase());
         }
       });
       return arr;
     },
-
-    onFileChange(e) {
-      var input = e.target;
-      this.imageData = e.target.files[0];
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = (e) => {
-          this.imageURL = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    },
-    deletePack() {
-      console.log(this.selectedPackage.id);
-      var response = window.confirm("Are you sure?");
-      if (response) {
-        console.log(response);
-        packageCollection
-          .doc(this.selectedPackage.id)
-          .delete()
-          .then(() => {
-            this.$root.$bvToast.toast("Deleted", {
-              title: "Package",
-              autoHideDelay: 5000,
-            });
-          });
-        this.$router.go(-1);
-      } else {
-        console.log(response);
-      }
-    },
-
-    init() {
-      this.$store.dispatch("setPackages").then(() => {
-        this.selectedPackage = this.packages.find(
-          (item) => item.id == this.$route.query.package
-        );
-
-        if (this.selectedPackage != undefined) {
-          this.fetchData();
-        }
-        this.loading = false;
-      });
-    },
     fetchData() {
-      let arr = [];
       this.edit = this.$route.query.edit;
-
-      this.selectedPackage = this.packages.find(
-        (item) => item.id == this.$route.query.package
-      );
       if (this.edit) {
-        this.form.id = this.selectedPackage.id;
-        this.form.name = this.selectedPackage.name;
-        this.form.displayNames = this.selectedPackage.displayNames;
-        this.form.img = this.selectedPackage.img;
-        this.form.price = this.selectedPackage.price;
-        this.form.total = this.selectedPackage.total;
-        this.imageURL = this.selectedPackage.img;
-        // fetching items
-        this.selectedPackage.items.forEach((e) => {
-          arr = [];
-          indipendentItemCollection
-            .doc(e.item)
-            .get()
-            .then((doc) => {
-              arr.push({
-                id: doc.id,
-                quantity: e.quantity,
-                name: doc.get("name"),
-                price: doc.get("price"),
-                stock_quantity: doc.get("stock_quantity"),
+        let arr = [];
+        this.selectedCarousel = this.carousels.find(
+          (item) => item.id == this.$route.query.carousel
+        );
+        this.form.id = this.selectedCarousel.id;
+        this.form.displayNames = this.selectedCarousel.displayNames;
+        this.form.isPackage = this.selectedCarousel.isPackage;
+        this.imageURL = this.selectedCarousel.image;
+        this.form.img = this.selectedCarousel.image;
+        arr = [];
+        this.selectedCarousel.items.forEach((element) => {
+          if (this.selectedCarousel.isPackage) {
+            packageCollection
+              .doc(element)
+              .get()
+              .then((doc) => {
+                arr.push({ id: doc.id, name: doc.get("displayNames")["en"] });
               });
-            });
+          } else {
+            ItemCollection.doc(element)
+              .get()
+              .then((doc) => {
+                arr.push({ id: doc.id, name: doc.get("displayName")["en"] });
+              });
+          }
         });
         this.items = arr;
+      } else {
+        return;
       }
     },
   },
   watch: {
-    packages: function () {
-      this.fetchData();
-    },
-    items: function () {
-      this.calculatedTotal = 0;
-      this.items.forEach((item) => {
-        this.calculatedTotal += parseInt(item.quantity) * parseInt(item.price);
-      });
+    carousels() {
+      if (!this.selectedCarousel) {
+        this.fetchData();
+      }
     },
   },
 };

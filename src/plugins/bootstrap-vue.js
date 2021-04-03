@@ -21,6 +21,7 @@ import {
     PaginationPlugin,
     SpinnerPlugin,
     LinkPlugin,
+    FormRadioPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -38,6 +39,7 @@ import {
     BIconGrid,
     BIconLayersHalf,
     BIconArrowRight,
+    BIconCardImage
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -61,6 +63,7 @@ Vue.use(FormCheckboxPlugin)
 Vue.use(ToastPlugin)
 Vue.use(FormDatepickerPlugin)
 Vue.use(PaginationPlugin)
+Vue.use(FormRadioPlugin)
 Vue.component('BIcon', BIcon)
 Vue.component('BIconPerson', BIconPerson)
 Vue.component('BIconKey', BIconKey)
@@ -77,3 +80,4 @@ Vue.component('BIconBasket', BIconBasket)
 Vue.component('BIconGrid', BIconGrid)
 Vue.component('BIconLayersHalf', BIconLayersHalf)
 Vue.component('BIconArrowRight', BIconArrowRight)
+Vue.component('BIconCardImage', BIconCardImage)

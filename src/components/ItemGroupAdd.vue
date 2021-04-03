@@ -279,7 +279,7 @@ export default {
       var arr = [];
       Object.values(value).forEach((name) => {
         for (var i = 1; i <= name.length; i++) {
-          arr.push(name.slice(0, i));
+          arr.push(name.trim().slice(0, i).toLowerCase());
         }
       });
       return arr;

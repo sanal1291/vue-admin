@@ -6,6 +6,7 @@ import packagez from './modules/packagez'
 import indiItem from './modules/indiItem'
 import item from './modules/item'
 import orders from './modules/orders'
+import carousel from './modules/carousel'
 import { categoryCollection, indipendentItemCollection, ItemCollection, packageCollection } from '../firebase'
 // import router from '../router/index'
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     indiItem,
     item,
     orders,
+    carousel,
   },
   state: {
     packages: [],

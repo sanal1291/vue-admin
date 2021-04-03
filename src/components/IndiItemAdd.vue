@@ -18,18 +18,12 @@
             <b-form @submit.prevent="create">
               <b-row>
                 <b-col>
-                  <b-form-group label="Name of Category:" label-for="input-1">
-                    <b-input-group id="input-1" prepend="EN">
+                  <b-form-group label="Name of Item:" label-for="input-1">
+                    <b-input-group id="input-1">
                       <b-form-input
                         required
                         placeholder="In English"
-                        v-model.trim="form.displayNames['en']"
-                      ></b-form-input>
-                    </b-input-group>
-                    <b-input-group class="pt-3" id="input-1" prepend="ML">
-                      <b-form-input
-                        placeholder="In malayalam"
-                        v-model.trim="form.displayNames['ml']"
+                        v-model.trim="form.name"
                       ></b-form-input>
                     </b-input-group>
                   </b-form-group>
@@ -56,44 +50,7 @@
                     </b-form-input>
                   </b-form-group>
                 </b-col>
-                <b-col>
-                  <b-form-group label="Unit :" input-for="input-3">
-                    <b-form-input
-                      required
-                      v-model="form.unitMeasured"
-                      id="input-3"
-                      placeholder="Input Unit"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-                <b-col>
-                  <b-form-group label="Priority :" label-for="input-5">
-                    <b-form-input
-                      type="number"
-                      v-model="form.rank"
-                      id="input-5"
-                      placeholder="Input priority"
-                    >
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
               </b-row>
-              <b-form-group label="Category image:" label-for="input-3">
-                <!-- <div class="text-danger" v-if="!validation.img">
-                  Select image.
-                </div> -->
-                <img style="max-height: 200px" class="pb-2" :src="imageURL" />
-                <div class="w-100">
-                  <b-form-file
-                    style="width: auto"
-                    type="file"
-                    accept="image/*"
-                    placeholder="Select image"
-                    @change="onFileChange"
-                  ></b-form-file>
-                </div>
-              </b-form-group>
               <b-row align-h="around">
                 <b-col cols="auto" v-if="edit">
                   <b-overlay
@@ -138,7 +95,7 @@ import { indipendentItemCollection, storage } from "../firebase";
 export default {
   data: () => {
     return {
-      form: { displayNames: {}, inStock: true, rank: 2 },
+      form: { inStock: true },
       // validation: { img: true },
       imageData: null,
       imageURL: null,
@@ -147,12 +104,20 @@ export default {
     };
   },
   computed: {
-    ...mapState({ indiItems: (state) => state.indiItems }),
+    ...mapState({ indiItems: (state) => state.indiItem.indiItems }),
   },
   mounted() {
     this.init();
   },
   methods: {
+    createSearchArray(item) {
+      const name = item.toLowerCase().trim();
+      var arr = [];
+      for (var i = 1; i <= name.length; i++) {
+        arr.push(name.slice(0, i));
+      }
+      return arr;
+    },
     async create() {
       this.submitting = true;
       // if (!this.imageData && !this.edit) {
@@ -164,24 +129,24 @@ export default {
       // }
       // this.submitting = true;
       var indiRef;
-      this.form.imageUrl = await this.uploadImage();
       if (this.form.id && this.edit) {
         indiRef = indipendentItemCollection.doc(this.form.id);
       } else {
         indiRef = indipendentItemCollection.doc();
       }
+      var searchArray = this.createSearchArray(this.form.name);
       var item = {
-        displayName: {
-          en: this.form.displayNames["en"],
-          ml: this.form.displayNames["ml"],
-        },
-        name: this.form.displayNames["en"],
-        imageUrl: this.form.imageUrl,
-        rank: this.form.rank,
+        name: this.form.name,
         price: this.form.price,
-        inStock: this.form.inStock,
-        unitMeasured: this.form.unitMeasured,
+        stock_quantity: this.form.inStock ? this.form.stock_quantity || 1 : 0,
+        categories: this.form.categories || [],
+        reqularPrice: this.form.price.toString(),
+        salePrice: this.form.price.toString(),
+        slug: this.form.name,
+        searchArray: searchArray,
+        tags: this.form.tags || [],
       };
+      console.log(item);
       try {
         await indiRef.set(item);
       } catch (error) {
@@ -195,7 +160,6 @@ export default {
       }
       // adding the updated value to state
       item.id = indiRef.id;
-      item.displayNames = item.displayName;
       this.setUpdatedIndiItem(item);
       //
       this.submitting = false;
@@ -204,28 +168,6 @@ export default {
         autoHideDelay: 5000,
       });
       this.$router.go(-1);
-    },
-    async uploadImage() {
-      if (this.imageData) {
-        var storageRef = storage.child(
-          "indiItem_images/" + +new Date() + this.imageData["name"]
-        );
-        var snapshot = await storageRef.put(this.imageData);
-        return await snapshot.ref.getDownloadURL();
-      } else {
-        return this.form.img;
-      }
-    },
-    onFileChange(e) {
-      var input = e.target;
-      this.imageData = e.target.files[0];
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = (e) => {
-          this.imageURL = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
     },
     async init() {
       if (this.$route.query.edit) {
@@ -241,13 +183,13 @@ export default {
               return {
                 id: doc.id,
                 name: doc.get("name"),
-                displayNames: doc.get("displayName"),
-                category: doc.get("category"),
-                imageUrl: doc.get("imageUrl"),
-                inStock: doc.get("inStock"),
+                slug: doc.get("slug"),
+                categories: doc.get("categories"),
+                stock_quantity: doc.get("stock_quantity"),
                 price: doc.get("price"),
-                rank: doc.get("rank"),
-                unitMeasured: doc.get("unitMeasured"),
+                regularPrice: doc.get("reqularPrice"),
+                salePrice: doc.get("salePrice"),
+                tags: doc.get("tags"),
               };
             });
           this.fetchData(item);
@@ -255,17 +197,16 @@ export default {
       }
     },
     fetchData(item) {
+      console.log(item);
       this.edit = true;
       var indiItem = JSON.parse(JSON.stringify(item));
       this.form.id = indiItem.id;
       this.form.name = indiItem.name;
-      this.form.displayNames = indiItem.displayNames;
-      this.form.inStock = indiItem.inStock;
       this.form.price = indiItem.price;
-      this.form.unitMeasured = indiItem.unitMeasured;
-      this.form.rank = indiItem.rank;
-      this.form.imageUrl = indiItem.imageUrl;
-      this.imageURL = indiItem.imageUrl;
+      this.form.categories = indiItem.categories;
+      this.form.inStock = item.stock_quantity ? true : false;
+      this.form.stock_quantity = item.stock_quantity;
+      this.form.tags = item.tags;
     },
     setUpdatedIndiItem(item) {
       var index = this.indiItems.findIndex((indi) => indi.id === item.id);
@@ -311,6 +252,7 @@ export default {
 .overlay {
   position: absolute;
   width: 100%;
+  height: 100%;
   z-index: 10;
   background-color: rgba($color: #fff, $alpha: 0.5);
 }

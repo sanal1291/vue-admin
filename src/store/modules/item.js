@@ -25,9 +25,9 @@ export default {
             }
             var itemColl;
             if (state.itemGroups.length === 0) {
-                itemColl = ItemCollection.orderBy('name').limit(25);
+                itemColl = ItemCollection.orderBy('name').limit(15);
             } else {
-                itemColl = ItemCollection.orderBy('name').startAfter(state.lastItemGroup).limit(25)
+                itemColl = ItemCollection.orderBy('name').startAfter(state.lastItemGroup).limit(15)
             }
             itemColl.get().then((querySnapshot) => {
                 var items = [];

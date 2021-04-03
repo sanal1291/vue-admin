@@ -58,6 +58,14 @@
           </b-nav-item>
           <b-nav-item
             active-class="selectedBorder"
+            to="/carousel"
+            class="text-nowrap overflow-hidden"
+          >
+            <b-icon icon="card-image"></b-icon
+            ><span v-if="sidebar"> Carousel</span>
+          </b-nav-item>
+          <b-nav-item
+            active-class="selectedBorder"
             to="/orders"
             class="text-nowrap overflow-hidden"
           >

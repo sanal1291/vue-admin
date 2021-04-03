@@ -45,9 +45,13 @@ export default {
                     items.push({
                         id: doc.id,
                         name: doc.get('name'),
+                        slug: doc.get('slug'),
                         categories: doc.get('categories'),
                         stock_quantity: doc.get('stock_quantity'),
                         price: doc.get('price'),
+                        regularPrice: doc.get('reqularPrice'),
+                        salePrice: doc.get('salePrice'),
+                        tags: doc.get('tags'),
                     })
                 })
                 var item = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -56,7 +60,6 @@ export default {
             })
         },
         getSearchIndiItems({ commit, state }, query) {
-            console.log(query)
             var itemColl;
             if (!query.more) {
                 state.searchIndiItems = []
@@ -71,12 +74,15 @@ export default {
                     items.push({
                         id: doc.id,
                         name: doc.get('name'),
+                        slug: doc.get('slug'),
                         categories: doc.get('categories'),
                         stock_quantity: doc.get('stock_quantity'),
                         price: doc.get('price'),
+                        regularPrice: doc.get('reqularPrice'),
+                        salePrice: doc.get('salePrice'),
+                        tags: doc.get('tags'),
                     })
                 })
-                console.log(items)
                 var item = querySnapshot.docs[querySnapshot.docs.length - 1]
                 commit("setsearchIndiLast", item)
                 commit("setSearchIndiItems", items)
