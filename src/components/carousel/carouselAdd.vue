@@ -189,7 +189,23 @@ export default {
     deleteItem(item) {
       this.items = this.items.filter((e) => e.id != item.id);
     },
-    deleteCarousel() {},
+    deleteCarousel() {
+      var response = window.confirm("Are you sure?");
+      if (response) {
+        carouselCollection
+          .doc(this.selectedCarousel.id)
+          .delete()
+          .then(() => {
+            this.$root.$bvToast.toast("Deleted", {
+              title: "Carousel",
+              autoHideDelay: 5000,
+            });
+          });
+        this.$router.go(-1);
+      } else {
+        console.log(response);
+      }
+    },
     cancel() {
       this.$router.go(-1);
     },

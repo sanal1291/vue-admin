@@ -2,6 +2,7 @@ import firebase from "firebase/app"
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
+import 'firebase/functions'
 
 var firebaseConfig = {
     apiKey: "AIzaSyAtuhinmOSLwVS2Qi7EeuiELT1SjJfWBbI",
@@ -16,7 +17,11 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+var functions = firebase.functions();
 var storage = firebase.storage().ref();
+if (window.location.hostname === 'localhost') {
+    firebase.functions().useEmulator('localhost', 5001);
+}
 db.enablePersistence().catch(err => {
     console.log(err.code)
     if (err.code == 'failed-precondition') {
@@ -41,6 +46,7 @@ const orders = db.collection("orders")
 export {
     db,
     auth,
+    functions,
     storage,
     categoryCollection,
     carouselCollection,

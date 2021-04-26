@@ -89,7 +89,7 @@
               >
                 <b-row align-v="center" align-h="between" class="m-0">
                   <b-col>
-                    <b-row>
+                    <b-row align-h="between">
                       <div>{{ item.name }}</div>
                       <div class="pl-4">{{ item.price }}Rs</div>
                     </b-row>
@@ -101,6 +101,7 @@
                       min="1"
                       v-model="item.quantity"
                       style="width: 60px; text-align: center"
+                      @change="quantityChanged"
                     ></b-form-input>
                   </b-col>
                   <b-col sm="1">
@@ -208,6 +209,15 @@ export default {
       if (!obj) {
         this.items.push(item);
       }
+    },
+    quantityChanged() {
+      this.calculateTotal();
+    },
+    calculateTotal() {
+      this.calculatedTotal = 0;
+      this.items.forEach((item) => {
+        this.calculatedTotal += parseInt(item.quantity) * parseInt(item.price);
+      });
     },
     async uploadImage() {
       if (this.imageData) {
@@ -370,10 +380,7 @@ export default {
       this.fetchData();
     },
     items: function () {
-      this.calculatedTotal = 0;
-      this.items.forEach((item) => {
-        this.calculatedTotal += parseInt(item.quantity) * parseInt(item.price);
-      });
+      this.calculateTotal();
     },
   },
 };

@@ -83,7 +83,7 @@
             aria-controls="order-table-main"
           ></b-pagination
         ></b-col>
-        <b-col cols="12" md="4">{{ selectedOrder }}</b-col>
+        <b-col cols="12" md="4"><order-detail /></b-col>
       </b-row>
     </div>
   </div>
@@ -91,7 +91,9 @@
 
 <script>
 import { mapState } from "vuex";
+import orderDetail from "./orderDetail.vue";
 export default {
+  components: { orderDetail },
   computed: {
     ...mapState({ orders: (state) => state.orders.ordersList }),
     ...mapState({ loading: (state) => state.orders.loading }),
@@ -114,7 +116,7 @@ export default {
       perPage: 15,
       fields: [
         "id",
-        { key: "dateTime", label: "Time" },
+        { key: "dateTimeF", label: "Time" },
         { key: "orderKey", label: "Key" },
         "status",
         "total",
