@@ -1,0 +1,55 @@
+<template>
+  <b-row align-v="center" no-gutters>
+    <b-col
+      class="p-2"
+      cols="6"
+      md="4"
+      v-for="(item, index) in paths"
+      :key="index"
+    >
+      <b-card no-body class="text-center click_cards p-0 m-0">
+        <b-link :to="item.path" class="click_cards_body text-primary">
+          <b-card-body>
+            <div>
+              <b-icon :icon="item.icon"></b-icon>
+              <div>{{ item.name }}</div>
+            </div>
+          </b-card-body>
+        </b-link>
+      </b-card>
+    </b-col>
+    <!-- <b-button @click.prevent :to="{ name: 'settingsPopups' }">Popups</b-button> -->
+  </b-row>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      paths: [
+        {
+          path: { name: "settingsPopups" },
+          name: "Popup messages",
+          icon: "twitch",
+        },
+        {
+          path: { name: "settingsPopups" },
+          name: "testing____",
+          icon: "twitch",
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.click_cards {
+  &:hover {
+    cursor: pointer;
+  }
+  .click_cards_body {
+    text-decoration: none;
+  }
+}
+</style>

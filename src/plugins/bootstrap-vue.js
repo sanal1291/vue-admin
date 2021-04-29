@@ -39,7 +39,10 @@ import {
     BIconGrid,
     BIconLayersHalf,
     BIconArrowRight,
-    BIconCardImage
+    BIconCardImage,
+    BIconTwitch,
+    BIconTools,
+    BIconPenFill,
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -81,3 +84,6 @@ Vue.component('BIconGrid', BIconGrid)
 Vue.component('BIconLayersHalf', BIconLayersHalf)
 Vue.component('BIconArrowRight', BIconArrowRight)
 Vue.component('BIconCardImage', BIconCardImage)
+Vue.component('BIconTwitch', BIconTwitch)
+Vue.component('BIconTools', BIconTools)
+Vue.component('BIconPenFill', BIconPenFill)

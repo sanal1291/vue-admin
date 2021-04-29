@@ -11,6 +11,7 @@ import ItemGroup from '../views/ItemGroup'
 import IndiItem from '../views/IndiItem'
 import orders from '../views/orders'
 import Carousel from '../views/carousel'
+import Settings from '../views/Settings'
 // layouts
 import Footer from '../layouts/Footer.vue'
 import NavigationBar from '../layouts/NavigationBar.vue'
@@ -24,7 +25,9 @@ import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
 import { ordersHome } from '../components/orders'
 import { carouselHome, carouselAdd } from '../components/carousel'
+import { settingsHome, popups, popupsAdd } from '../components/settings'
 import Store from '../store/index'
+import settings from '../store/modules/settings'
 
 
 Vue.use(VueRouter)
@@ -49,6 +52,37 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/settings',
+    components: { default: Settings, footer: Footer, header: NavigationBar, sidebar: Sidebar },
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'Settings',
+        component: settingsHome,
+      },
+      {
+        path: 'popups',
+        name: 'settingsPopups',
+        component: popups,
+        children: [
+          {
+            path: 'add',
+            name: 'settingspopupsAdd',
+            component: popupsAdd,
+          },
+          {
+            path: 'edit',
+            name: 'settingspopupsEdit',
+            component: popupsAdd,
+          }
+        ]
+      }
+    ]
   },
   {
     path: '/category',

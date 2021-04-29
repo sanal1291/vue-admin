@@ -7,6 +7,7 @@ import indiItem from './modules/indiItem'
 import item from './modules/item'
 import orders from './modules/orders'
 import carousel from './modules/carousel'
+import settings from './modules/settings'
 import { categoryCollection, indipendentItemCollection, ItemCollection, packageCollection } from '../firebase'
 // import router from '../router/index'
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     item,
     orders,
     carousel,
+    settings,
   },
   state: {
     packages: [],

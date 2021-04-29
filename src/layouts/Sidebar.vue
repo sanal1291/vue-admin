@@ -21,55 +21,18 @@
       <b-col>
         <b-nav vertical justified>
           <b-nav-item
+            v-for="(item, index) in navItems"
+            :key="index"
             active-class="selectedBorder"
-            to="/package"
-            class="text-nowrap overflow-hidden"
-          >
-            <b-icon icon="box-seam"></b-icon
-            ><span v-if="sidebar"> Packages</span>
-          </b-nav-item>
-          <b-nav-item
-            active-class="selectedBorder"
-            to="/category"
-            class="text-nowrap overflow-hidden"
-          >
-            <b-icon icon="grid"></b-icon><span v-if="sidebar"> Category</span>
-          </b-nav-item>
-          <b-nav-item
-            active-class="selectedBorder"
-            to="/itemgroups"
-            class="text-nowrap overflow-hidden"
-          >
-            <b-icon icon="layers"></b-icon
-            ><span v-if="sidebar"> Group items</span>
-          </b-nav-item>
-          <b-nav-item
-            active-class="selectedBorder"
-            to="/indiItem"
-            class="text-nowrap overflow-hidden w-100"
+            :to="item.to"
+            class="w-100 overflow-hidden"
           >
             <div class="d-flex align-items-center">
-              <b-icon icon="layers-half"></b-icon>
-              <div class="pl-1" v-if="sidebar">
-                Independent <br />
-                Items
+              <b-icon :icon="item.icon" class="mr-2"></b-icon>
+              <div class="pl-1 text-wrap" v-show="sidebar">
+                {{ item.name }}
               </div>
             </div>
-          </b-nav-item>
-          <b-nav-item
-            active-class="selectedBorder"
-            to="/carousel"
-            class="text-nowrap overflow-hidden"
-          >
-            <b-icon icon="card-image"></b-icon
-            ><span v-if="sidebar"> Carousel</span>
-          </b-nav-item>
-          <b-nav-item
-            active-class="selectedBorder"
-            to="/orders"
-            class="text-nowrap overflow-hidden"
-          >
-            <b-icon icon="basket"></b-icon><span v-if="sidebar"> Orders</span>
           </b-nav-item>
         </b-nav>
       </b-col>
@@ -84,6 +47,16 @@ export default {
   data: function () {
     return {
       expanded: false,
+      navItems: [
+        { to: "/package", icon: "layers-half", name: "Packages" },
+        { to: "/settings", icon: "tools", name: "Settings" },
+        { to: "/category", icon: "grid", name: "Category" },
+        { to: "/itemgroups", icon: "layers", name: "Group items" },
+        { to: "/indiItem", icon: "layers-half", name: "Independent Items" },
+        { to: "/carousel", icon: "card-image", name: "Carousel" },
+        { to: "/orders", icon: "basket", name: "Orders" },
+        // { to: "", icon: "", name: "" },
+      ],
     };
   },
   computed: {
@@ -106,6 +79,7 @@ export default {
   }
   .nav-item {
     font-weight: bold;
+    transition: all 0.4s;
   }
 }
 .expanded {
