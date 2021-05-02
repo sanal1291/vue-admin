@@ -22,6 +22,7 @@ import {
     SpinnerPlugin,
     LinkPlugin,
     FormRadioPlugin,
+    FormSelectPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -67,6 +68,7 @@ Vue.use(ToastPlugin)
 Vue.use(FormDatepickerPlugin)
 Vue.use(PaginationPlugin)
 Vue.use(FormRadioPlugin)
+Vue.use(FormSelectPlugin)
 Vue.component('BIcon', BIcon)
 Vue.component('BIconPerson', BIconPerson)
 Vue.component('BIconKey', BIconKey)

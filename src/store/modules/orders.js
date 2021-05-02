@@ -10,7 +10,7 @@ export default {
     mutations: {
         setOrders(state, arr) {
             state.ordersList = arr
-        }
+        },
     },
 
     // actions 
@@ -19,7 +19,7 @@ export default {
             state.loading = true;
             state.orders = [];
             orders.where('dateTime', '>=', query.fromDate).where('dateTime', '<', query.toDate).orderBy('dateTime')
-                .get().then(querySnapshot => {
+                .onSnapshot(querySnapshot => {
                     var arr = [];
                     querySnapshot.forEach(item => {
                         var time = new Date(item.get('dateTime').seconds * 1000);

@@ -83,7 +83,10 @@
             aria-controls="order-table-main"
           ></b-pagination
         ></b-col>
-        <b-col cols="12" md="4"><order-detail /></b-col>
+        <b-col cols="12" md="4" class="px-2">
+          <order-detail v-if="selectedOrder" :order="selectedOrder" />
+          <b-card v-else>Select an order.</b-card>
+        </b-col>
       </b-row>
     </div>
   </div>
@@ -118,7 +121,7 @@ export default {
         "id",
         { key: "dateTimeF", label: "Time" },
         { key: "orderKey", label: "Key" },
-        "status",
+        { key: "livestatus", label: "status" },
         "total",
       ],
       selectedOrder: null,
@@ -135,7 +138,7 @@ export default {
   },
   methods: {
     rowSelected(order) {
-      this.selectedOrder = order;
+      this.selectedOrder = order[0];
     },
     submit() {
       this.queryChange = false;

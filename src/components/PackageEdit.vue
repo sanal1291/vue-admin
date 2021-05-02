@@ -276,7 +276,7 @@ export default {
         name: this.form.displayNames["en"],
         displayNames: this.form.displayNames,
         price: parseInt(this.form.price),
-        total: parseInt(this.form.total),
+        total: parseInt(this.calculatedTotal),
         searchArray: searchArray,
       });
       this.submitting = false;
