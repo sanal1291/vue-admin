@@ -4,6 +4,7 @@
       class="p-2"
       cols="6"
       md="4"
+      lg="3"
       v-for="(item, index) in paths"
       :key="index"
     >
@@ -11,7 +12,7 @@
         <b-link :to="item.path" class="click_cards_body text-primary">
           <b-card-body>
             <div>
-              <b-icon :icon="item.icon"></b-icon>
+              <b-icon :scale="item.scale" :icon="item.icon"></b-icon>
               <div>{{ item.name }}</div>
             </div>
           </b-card-body>
@@ -26,11 +27,17 @@
 export default {
   data() {
     return {
+      scale: { value: 1, key: null },
       paths: [
         {
           path: { name: "settingsPopups" },
           name: "Popup messages",
           icon: "twitch",
+        },
+        {
+          path: { name: "settingsAbout" },
+          name: "About",
+          icon: "info",
         },
         {
           path: { name: "settingsPopups" },
@@ -39,6 +46,9 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    handleHover(hovered) {},
   },
 };
 </script>

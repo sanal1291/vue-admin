@@ -25,7 +25,7 @@ import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
 import { ordersHome } from '../components/orders'
 import { carouselHome, carouselAdd } from '../components/carousel'
-import { settingsHome, popups, popupsAdd } from '../components/settings'
+import { settingsHome, popups, popupsAdd, aboutDetails } from '../components/settings'
 import Store from '../store/index'
 import settings from '../store/modules/settings'
 
@@ -81,6 +81,11 @@ const routes = [
             component: popupsAdd,
           }
         ]
+      },
+      {
+        path: "about",
+        name: "settingsAbout",
+        component: aboutDetails,
       }
     ]
   },

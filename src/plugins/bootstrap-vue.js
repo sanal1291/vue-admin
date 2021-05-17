@@ -23,6 +23,8 @@ import {
     LinkPlugin,
     FormRadioPlugin,
     FormSelectPlugin,
+    VBHoverPlugin,
+    FormTextareaPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -44,6 +46,7 @@ import {
     BIconTwitch,
     BIconTools,
     BIconPenFill,
+    BIconInfo,
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -69,6 +72,8 @@ Vue.use(FormDatepickerPlugin)
 Vue.use(PaginationPlugin)
 Vue.use(FormRadioPlugin)
 Vue.use(FormSelectPlugin)
+Vue.use(VBHoverPlugin)
+Vue.use(FormTextareaPlugin)
 Vue.component('BIcon', BIcon)
 Vue.component('BIconPerson', BIconPerson)
 Vue.component('BIconKey', BIconKey)
@@ -89,3 +94,4 @@ Vue.component('BIconCardImage', BIconCardImage)
 Vue.component('BIconTwitch', BIconTwitch)
 Vue.component('BIconTools', BIconTools)
 Vue.component('BIconPenFill', BIconPenFill)
+Vue.component('BIconInfo', BIconInfo)
