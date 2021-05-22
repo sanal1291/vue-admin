@@ -25,9 +25,8 @@ import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
 import { ordersHome } from '../components/orders'
 import { carouselHome, carouselAdd } from '../components/carousel'
-import { settingsHome, popups, popupsAdd, aboutDetails } from '../components/settings'
+import { settingsHome, popups, popupsAdd, aboutDetails, areaHome, areaAdd, area } from '../components/settings'
 import Store from '../store/index'
-import settings from '../store/modules/settings'
 
 
 Vue.use(VueRouter)
@@ -83,10 +82,31 @@ const routes = [
         ]
       },
       {
+        path: "area",
+        component: area,
+        children: [
+          {
+            path: '',
+            component: areaHome,
+            name: "settingsareaHome"
+          },
+          {
+            path: 'add',
+            name: "settingsareaAdd",
+            component: areaAdd
+          },
+          {
+            path: 'edit',
+            name: "settingsareaEdit",
+            component: areaAdd
+          },
+        ]
+      },
+      {
         path: "about",
         name: "settingsAbout",
         component: aboutDetails,
-      }
+      },
     ]
   },
   {

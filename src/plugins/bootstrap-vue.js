@@ -47,6 +47,7 @@ import {
     BIconTools,
     BIconPenFill,
     BIconInfo,
+    BIconMap,
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -95,3 +96,4 @@ Vue.component('BIconTwitch', BIconTwitch)
 Vue.component('BIconTools', BIconTools)
 Vue.component('BIconPenFill', BIconPenFill)
 Vue.component('BIconInfo', BIconInfo)
+Vue.component('BIconMap', BIconMap)

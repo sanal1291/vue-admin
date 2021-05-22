@@ -35,6 +35,11 @@ export default {
           icon: "twitch",
         },
         {
+          path: { name: "settingsareaHome" },
+          name: "Area",
+          icon: "map",
+        },
+        {
           path: { name: "settingsAbout" },
           name: "About",
           icon: "info",
