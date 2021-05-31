@@ -8,20 +8,33 @@
         <b-col cols="auto"
           ><b-button size="sm" :to="{ name: 'settingsareaAdd' }">Add</b-button>
         </b-col>
+        <b-col cols="auto"
+          ><b-button
+            size="sm"
+            :to="{
+              name: 'settingsareaEdit',
+              query: { edit: true, area: selectedArea },
+            }"
+            :disabled="!selectedArea"
+            >Edit</b-button
+          >
+        </b-col>
       </b-row>
       <b-row class="pt-2">
         <b-col md="5" class="pb-3">
-          <b-list-group class="list-group" flush v-if="loadingAdmin">
+          <b-list-group class="list-group" flush v-if="areaLoading">
             Loading...
           </b-list-group>
           <b-list-group class="list-group" flush v-else>
             <b-list-group-item
-              v-for="(item, index) in adminDetails.areaNames"
+              active-class="active"
+              :active="item == selectedArea ? true : false"
+              v-for="(item, index) in areas"
               :key="index"
               button
               @click="viewDetails(item)"
             >
-              {{ item }}
+              {{ item.name }}
             </b-list-group-item>
           </b-list-group>
         </b-col>
@@ -30,31 +43,51 @@
             <div>
               <b-card>
                 <b-card-body v-if="selectedArea" class="p-0">
-                  <b-button @click="frefresh">f refresh</b-button>
-                  <div>
+                  <b-overlay
+                    :show="locationsLoading"
+                    spinner-variant="primary"
+                    spinner-type="grow"
+                    spinner-small
+                    rounded="sm"
+                  >
+                    <b-button @click="frefresh">f refresh</b-button>
                     <div>
-                      <h5>Selected area : {{ selectedArea }}</h5>
-                      <br />
                       <div>
-                        <b-table
-                          striped
-                          show-empty
-                          empty-text="No locations in selected area"
-                          empty-filtered-text="No orders in given time period or id"
-                          @row-selected="rowSelected"
-                          selectable
-                          select-mode="single"
-                          sticky-header="400px"
-                          hover
-                          :fields="fields"
-                          :busy="locationsLoading"
-                          small
-                          :items="locations[selectedArea]"
-                        >
-                        </b-table>
+                        <b-row>
+                          <b-col cols="7">
+                            Selected area :
+                            <h5>{{ selectedArea.name }}</h5>
+                          </b-col>
+                          <b-col cols="5">
+                            <b-img fluid :src="selectedArea.imageURL"></b-img>
+                          </b-col>
+                        </b-row>
+                        <br />
+                        <div>
+                          <b-table
+                            striped
+                            show-empty
+                            empty-text="No locations in selected area"
+                            empty-filtered-text="No orders in given time period or id"
+                            @row-selected="rowSelected"
+                            selectable
+                            select-mode="single"
+                            sticky-header="400px"
+                            hover
+                            :fields="fields"
+                            :busy="locationsLoading"
+                            small
+                            :items="locations[selectedArea.id]"
+                          >
+                            <template #cell(index)="{ index }">
+                              {{ ++index }}
+                            </template>
+                          </b-table>
+                          <b-button> sync</b-button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </b-overlay>
                 </b-card-body>
                 <b-card-body v-else>
                   Select a package to see details.
@@ -75,28 +108,29 @@ export default {
     return {
       selectedArea: null,
       selectedLocation: null,
-      fields: ["index", "locality"],
+      fields: ["index", { key: "locality", sortable: true }],
     };
   },
   computed: {
-    ...mapState({ adminDetails: (state) => state.settings.adminDetails }),
-    ...mapState({ loadingAdmin: (state) => state.settings.loadingAdmin }),
+    ...mapState({ areas: (state) => state.settings.areas }),
+    ...mapState({ areaLoading: (state) => state.settings.areaLoading }),
     ...mapState({
       locationsLoading: (state) => state.settings.locationsLoading,
     }),
     ...mapState({ locations: (state) => state.settings.locations }),
-    selected() {
-      return this.selectedCategory ? true : false;
-    },
+    // ...mapState({ areaImages: (state) => state.settings.areaImages }),
+  },
+  mounted() {
+    this.$store.dispatch("getSettingsAreas");
   },
   methods: {
     viewDetails(area) {
       this.selectedArea = area;
-      this.$store.dispatch("getSettingsLocations", { area: area });
+      this.$store.dispatch("getSettingsLocations", area);
     },
     frefresh() {
       this.$store.dispatch("getSettingsLocations", {
-        area: this.selectedArea,
+        id: this.selectedArea.id,
         forced: true,
       });
     },
@@ -112,5 +146,9 @@ export default {
   max-height: 500px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+.active {
+  background-color: #6c757d;
+  border-color: #6c757d;
 }
 </style>
