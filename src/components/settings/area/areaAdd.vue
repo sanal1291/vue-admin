@@ -18,40 +18,15 @@
                     </b-form-input>
                   </b-input-group>
                 </b-col>
-                <!-- <b-col>
-                <b-input-group prepend="ML">
-                  <b-form-input
-                    required
-                    placeholder="In Malayalam"
-                    v-model.trim="form.displayName['ml']"
-                  >
-                  </b-form-input>
-                </b-input-group>
-              </b-col> -->
               </b-row>
             </b-form-group>
           </b-col>
           <b-col class="flex-nowrap">
-            <b-form-group
-              class="text-center"
-              label="Package image:"
-              label-for="input-3"
-            >
-              <div class="text-danger" v-if="!validation.img">
-                Select image.
-              </div>
-              <img style="max-height: 100px" class="pb-2" :src="imageURL" />
-              <div class="w-100">
-                <b-form-file
-                  style="width: auto"
-                  type="file"
-                  accept="image/*"
-                  id="input-3"
-                  placeholder="Select image"
-                  @change="onFileChange"
-                ></b-form-file>
-              </div>
-            </b-form-group>
+            <image-input
+              :edit="edit"
+              :oldImageURL="imageURL"
+              @changed="imageChanged"
+            />
           </b-col>
         </b-row>
       </b-form>
@@ -82,7 +57,7 @@
             spinner-variant="primary"
             class="d-inline-block"
           >
-            <b-button type="button" @click="deletePack" variant="danger">
+            <b-button type="button" @click="deleteArea" variant="danger">
               Delete</b-button
             >
           </b-overlay>
@@ -107,12 +82,19 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import {
+  AreaCollection,
+  db,
+  locationCollection,
+  storage,
+} from "../../../firebase";
+import ImageInput from "../../imageInput.vue";
 import addLocation from "./addLocation.vue";
 export default {
-  components: { addLocation },
+  components: { addLocation, ImageInput },
   computed: {
-    ...mapState({ adminDetails: (state) => state.settings.adminDetails }),
-    ...mapState({ loadingAdmin: (state) => state.settings.loadingAdmin }),
+    ...mapState({ areas: (state) => state.settings.areas }),
+    ...mapState({ areaLoading: (state) => state.settings.areaLoading }),
     ...mapState({
       locationsLoading: (state) => state.settings.locationsLoading,
     }),
@@ -122,18 +104,18 @@ export default {
   data() {
     return {
       validation: {
-        img: true,
         locations: true,
       },
       imageURL: "",
-      form: { area: null },
+      imageData: null,
+      form: { id: null, area: null },
       locations: [{ locality: "", minAmount: null, type: 0 }],
       // type: 0-input,1-new,2-edit
       submitting: false,
       // inits
       edit: null,
-      needinit: true,
-      initLoad: false,
+      // needinit: true,
+      initLoad: true,
     };
   },
   mounted() {
@@ -144,69 +126,169 @@ export default {
     cancel() {
       this.$router.go(-1);
     },
-    deletePack() {},
-    onFileChange(e) {
-      var input = e.target;
-      this.imageData = e.target.files[0];
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = (e) => {
-          this.imageURL = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
+    imageChanged(data) {
+      this.imageData = data;
+    },
+    deleteArea() {
+      var response = window.confirm("Delete " + this.form.area + "?");
+      if (response) {
+        var batch = db.batch();
+        var docRef = AreaCollection.doc(this.form.id);
+        batch.delete(docRef);
+        this.locations.forEach((item) => {
+          if (item.id) {
+            docRef = locationCollection.doc(item.id);
+            batch.delete(docRef);
+          }
+        });
+        batch.commit().then(() => {
+          this.processComplete("Delete done");
+        });
+      } else {
+        console.log(response);
       }
     },
-    createArea() {
-      let needVerification = false;
-      // img validation
-      if (!this.edit && !this.imageData) {
-        this.validation.img = false;
-        needVerification = true;
+    async uploadImage() {
+      if (this.imageData) {
+        var storageRef = storage.child(
+          "Areaimages/" + this.form.area + new Date().toISOString()
+        );
+        var snapshot = await storageRef.put(this.imageData);
+        return await snapshot.ref.getDownloadURL();
       } else {
-        this.validation.img = true;
+        return this.form.imageURL;
       }
-      // error checking
-      if (this.edit) {
-        console.log("edit");
-      } else {
-        console.log("new");
-        let temp = this.adminDetails.areaNames.slice(0);
-        temp.push(this.form.area);
+    },
+    async createArea() {
+      try {
+        let needVerification = false;
+        // error checking
+        this.submitting = true;
+        var areaRef;
+        var searchArray = this.createSearchArray(this.form.area);
+        var locationArray = [];
+        for (let index = 1; index < this.locations.length; index++) {
+          if (this.locations[index].type != 0) {
+            locationArray.push(this.locations[index]);
+          }
+        }
+        if (this.form.id && this.edit) {
+          areaRef = AreaCollection.doc(this.form.id);
+        } else {
+          areaRef = AreaCollection.doc();
+        }
+        this.form.imageURL = await this.uploadImage();
+        await areaRef
+          .set({
+            name: this.form.area,
+            imageURL: this.form.imageURL,
+          })
+          .then(() => {
+            this.manageLocations(locationArray, areaRef.id);
+          });
+      } catch (error) {
+        console.log(error);
+        this.submitting = false;
       }
-
-      // this.submitting = true;
+    },
+    manageLocations(items, id) {
+      var locationRef;
+      var searchArray;
+      var batch = db.batch();
+      items.forEach((item) => {
+        searchArray = this.createSearchArray(item.locality);
+        switch (item.type) {
+          case 1:
+            console.log("new");
+            locationRef = locationCollection.doc();
+            batch.set(locationRef, {
+              areaId: id,
+              locality: item.locality,
+              minAmount: item.minAmount,
+              searchArray: searchArray,
+            });
+            break;
+          case 2:
+            console.log("edit");
+            locationRef = locationCollection.doc(item.id);
+            batch.update(locationRef, {
+              areaId: id,
+              locality: item.locality,
+              minAmount: item.minAmount,
+              searchArray: searchArray,
+            });
+            break;
+          case 10:
+            console.log("delete");
+            locationRef = locationCollection.doc(item.id);
+            batch.delete(locationRef);
+            break;
+          default:
+            console.log("no change");
+            break;
+        }
+      });
+      batch.commit().then(() => {
+        this.$store.dispatch("getSettingsLocations", {
+          id: id,
+          forced: true,
+        });
+        this.processComplete("Upload done");
+      });
+    },
+    processComplete(message) {
+      this.submitting = false;
+      this.$root.$bvToast.toast(message, {
+        title: "Area/locations",
+        autoHideDelay: 5000,
+      });
+      this.$router.go(-1);
+    },
+    createSearchArray(value) {
+      var arr = [];
+      for (var i = 1; i <= value.length; i++) {
+        arr.push(value.trim().slice(0, i).toLowerCase());
+      }
+      return arr;
     },
     //////////////////init fns ////////////////
     init() {
-      if (
-        this.edit &&
-        this.adminDetails &&
-        this.adminDetails.areaNames.includes(this.$route.query.area)
-      ) {
-        this.form.area = this.$route.query.area;
-        this.initLoad = true;
-        this.$store.dispatch("getSettingsLocations", {
-          area: this.form.area,
-          forced: true,
-        });
+      if (this.edit && this.areas) {
+        var tempArea = null;
+        tempArea = this.areas.find(
+          (element) => element.id == this.$route.query.area
+        );
+        if (tempArea) {
+          this.form.id = tempArea.id;
+          this.form.area = tempArea.name;
+          this.form.imageURL = tempArea.imageURL;
+          this.imageURL = tempArea.imageURL;
+          this.initLoad = true;
+          this.$store.dispatch("getSettingsLocations", {
+            id: tempArea.id,
+            forced: true,
+          });
+        }
+      }
+      if (!this.edit) {
+        this.initLoad = false;
       }
     },
     getlocations() {
-      this.imageURL = this.areaImages[this.form.area];
       // Object.assign(this.locations, this.datLocations[this.form.area])
       var temp;
-      this.datLocations[this.form.area].forEach((element) => {
+      this.datLocations[this.form.id].forEach((element) => {
         temp = {};
         Object.assign(temp, element);
         this.locations.push(temp);
       });
       this.initLoad = false;
-      this.needinit = false;
+      // this.needinit = false;
     },
   },
   watch: {
-    loadingAdmin() {
-      if (this.loadingAdmin == false && this.needinit) {
+    areaLoading() {
+      if (this.areaLoading == false && this.initLoad) {
         this.init();
       }
     },

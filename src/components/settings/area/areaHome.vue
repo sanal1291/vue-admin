@@ -13,7 +13,10 @@
             size="sm"
             :to="{
               name: 'settingsareaEdit',
-              query: { edit: true, area: selectedArea },
+              query: {
+                edit: true,
+                area: selectedArea ? selectedArea.id : null,
+              },
             }"
             :disabled="!selectedArea"
             >Edit</b-button
@@ -77,13 +80,13 @@
                             :fields="fields"
                             :busy="locationsLoading"
                             small
+                            sort-icon-left
                             :items="locations[selectedArea.id]"
                           >
                             <template #cell(index)="{ index }">
                               {{ ++index }}
                             </template>
                           </b-table>
-                          <b-button> sync</b-button>
                         </div>
                       </div>
                     </div>
@@ -108,7 +111,11 @@ export default {
     return {
       selectedArea: null,
       selectedLocation: null,
-      fields: ["index", { key: "locality", sortable: true }],
+      fields: [
+        "index",
+        { key: "locality", sortable: true },
+        { key: "minAmount", label: "Minimum order price" },
+      ],
     };
   },
   computed: {
@@ -119,9 +126,6 @@ export default {
     }),
     ...mapState({ locations: (state) => state.settings.locations }),
     // ...mapState({ areaImages: (state) => state.settings.areaImages }),
-  },
-  mounted() {
-    this.$store.dispatch("getSettingsAreas");
   },
   methods: {
     viewDetails(area) {

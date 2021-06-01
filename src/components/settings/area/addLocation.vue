@@ -29,9 +29,10 @@
           :items="locations"
           :fields="fields"
           :tbody-tr-class="inputRow"
+          hover
         >
           <template #cell(index)="data">
-            {{ data.index == 0 ? ">>>" : data.index }}
+            {{ data.index == 0 ? "Add" : data.index }}
           </template>
           <template #cell(locality)="data">
             <b-input

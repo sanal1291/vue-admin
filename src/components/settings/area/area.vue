@@ -3,7 +3,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.$store.dispatch("getSettingsAreas");
+  },
+};
 </script>
 
 <style lang="scss" scoped>

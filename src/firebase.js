@@ -43,6 +43,8 @@ const ItemCollection = db.collection("items")
 const packageCollection = db.collection("packages")
 const userCollection = db.collection("users")
 const orders = db.collection("orders")
+const AreaCollection = db.collection("Areas")
+const locationCollection = db.collection("locations")
 export {
     db,
     auth,
@@ -55,5 +57,7 @@ export {
     userCollection,
     ItemCollection,
     orders,
+    AreaCollection,
+    locationCollection,
 }
 

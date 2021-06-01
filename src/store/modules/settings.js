@@ -89,22 +89,23 @@ export default {
             }
         }
         // /////////////// batch update
-        // console.log(query)
-        // var batch = db.batch()
-        // var docref;
-        // db.collection('locations').where("area", "==", query.name).get().then(querysnapshot => {
-        //     querysnapshot.forEach((doc) => {
-        //         docref = db.collection('locations').doc(doc.id)
-        //         batch.update(docref, { areaId: query.id })
+        //     console.log(query)
+        //     var batch = db.batch()
+        //     var docref;
+        //     db.collection('locations').where("area", "==", query.name).get().then(querysnapshot => {
+        //         querysnapshot.forEach((doc) => {
+        //             docref = db.collection('locations').doc(doc.id)
+        //             batch.set(docref, { areaId: doc.get('areaId'), locality: doc.get('locality'), minAmount: doc.get('minAmount') })
+        //         })
+        //         batch.commit().then(() => {
+        //             console.log('sucess')
+        //         })
         //     })
-        //     batch.commit().then(() => {
-        //         console.log('sucess')
-        //     })
-        // })
-        // var docref = db.collection('locations').doc('123')
-        // batch.update(docref, { areaId: query.id })
-        // batch.commit().then(() => {
-        //     console.log('sucess')
-        // })
+        //     // var docref = db.collection('locations').doc('123')
+        //     // batch.update(docref, { areaId: query.id })
+        //     // batch.commit().then(() => {
+        //     //     console.log('sucess')
+        //     // })
+        // }
     },
 }
