@@ -2,17 +2,24 @@
   <b-navbar
     class="pl-0"
     id="navbar"
-    toggleable="lg"
+    toggleable="md"
     sticky
     type="light"
     variant="light"
   >
     <!-- using vuex to toggle sidebar -->
-    <b-navbar-nav>
-      <b-nav-item @click="toggleSidebar()">
-        <b-icon v-if="!sidebar" icon="justify"></b-icon>
-      </b-nav-item>
-    </b-navbar-nav>
+    <b-navbar-brand
+      v-if="isMobile"
+      style="height: 50px"
+      class="d-flex align-items-center"
+    >
+      <b-button variant="light" v-b-toggle.sidebar-backdrop>
+        <b-icon icon="justify"></b-icon>
+      </b-button>
+      <b-link to="/" class="h-100">
+        <b-img src="@/assets/logo.png" class="d-inline-block align-top"></b-img>
+      </b-link>
+    </b-navbar-brand>
     <!-- end-->
 
     <b-navbar-toggle class="logo" target="nav-collapse">
@@ -22,7 +29,7 @@
       </template>
     </b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav style="width: 100%" align="end">
+      <b-navbar-nav class="ml-2" style="width: 100%" align="end">
         <b-nav-item to="/dashboard" class="navbar-item">Dashboard</b-nav-item>
         <b-nav-item to="/about" class="navbar-item">About</b-nav-item>
         <b-nav-item to="/package" class="navbar-item">Package</b-nav-item>
@@ -45,9 +52,10 @@ export default {
   computed: {
     ...mapState({ user: (state) => state.auth.user }),
     ...mapState({ sidebar: (state) => state.sidebar.sidebar }),
+    ...mapState({ isMobile: (state) => state.sidebar.isMobile }),
   },
   methods: {
-    ...mapActions(["toggleSidebar", "logout"]),
+    ...mapActions(["toggleSidebar"]),
   },
 };
 </script>
