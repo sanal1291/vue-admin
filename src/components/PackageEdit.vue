@@ -222,7 +222,7 @@ export default {
     async uploadImage() {
       if (this.imageData) {
         var storageRef = storage.child(
-          "packages/" + +new Date() + this.imageData["name"]
+          "packages/" + this.form.displayNames["en"] + new Date().toISOString()
         );
         var snapshot = await storageRef.put(this.imageData);
         return await snapshot.ref.getDownloadURL();

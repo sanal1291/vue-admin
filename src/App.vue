@@ -4,10 +4,7 @@
     <router-view name="sidebar"></router-view>
     <b-col class="d-flex flex-column">
       <router-view name="header"></router-view>
-      <router-view
-        class="flex-fill"
-        style="background-color: #dde4e7"
-      ></router-view>
+      <router-view id="body-content" class="flex-fill"></router-view>
       <router-view name="footer"></router-view>
     </b-col>
   </b-row>

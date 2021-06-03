@@ -50,6 +50,7 @@ import {
     BIconInfo,
     BIconMap,
     BIconBoxArrowRight,
+    BIconFileBarGraph,
 } from 'bootstrap-vue'
 import '../styles/base.scss'
 
@@ -101,3 +102,4 @@ Vue.component('BIconPenFill', BIconPenFill)
 Vue.component('BIconInfo', BIconInfo)
 Vue.component('BIconMap', BIconMap)
 Vue.component('BIconBoxArrowRight', BIconBoxArrowRight)
+Vue.component('BIconFileBarGraph', BIconFileBarGraph)

@@ -40,7 +40,7 @@ export default {
     return {
       expanded: false,
       navMainItems: [
-        { to: "/dashboard", icon: "tools", name: "Dashboard" },
+        { to: "/dashboard", icon: "file-bar-graph", name: "Dashboard" },
         { to: "/settings", icon: "tools", name: "Settings" },
       ],
       navItems: [

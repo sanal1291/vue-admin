@@ -3,6 +3,20 @@
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 @import 'node_modules/bootstrap-vue/src/index.scss';
+#body-content, #navbar{
+    background-color: #dde4e7 ;
+}
+.bottom_shadow{
+    -webkit-box-shadow: 1px 2px 2px 0px #999;
+    -moz-box-shadow: 1px 2px 2px 0px #999;
+    box-shadow: 1px 2px 2px 0px #999;
+}
+.right_shadow{
+    z-index: 2;
+    box-shadow: 1px 0px 2px 0px #999;
+    -webkit-box-shadow: 1px 0px 2px 0px #999;
+    -moz-box-shadow: 1px 0px 2px 0px #999;
+}
 img{
     height: 100%;
 }

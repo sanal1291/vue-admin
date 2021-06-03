@@ -201,7 +201,9 @@ export default {
     async uploadImage() {
       if (this.imageData) {
         var storageRef = storage.child(
-          "packages/" + +new Date() + this.imageData["name"]
+          "item_groups/" +
+            this.form.displayName["en"] +
+            new Date().toISOString()
         );
         var snapshot = await storageRef.put(this.imageData);
         return await snapshot.ref.getDownloadURL();

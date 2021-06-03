@@ -1,18 +1,14 @@
 <template >
   <b-navbar
-    class="pl-0"
+    class="pl-0 bottom_shadow"
     id="navbar"
     toggleable="md"
     sticky
     type="light"
-    variant="light"
+    style="height: 50px"
   >
     <!-- using vuex to toggle sidebar -->
-    <b-navbar-brand
-      v-if="isMobile"
-      style="height: 50px"
-      class="d-flex align-items-center"
-    >
+    <b-navbar-brand v-if="isMobile" class="d-flex align-items-center h-100">
       <b-button variant="light" v-b-toggle.sidebar-backdrop>
         <b-icon icon="justify"></b-icon>
       </b-button>
@@ -32,7 +28,6 @@
       <b-navbar-nav class="ml-2" style="width: 100%" align="end">
         <b-nav-item to="/dashboard" class="navbar-item">Dashboard</b-nav-item>
         <b-nav-item to="/about" class="navbar-item">About</b-nav-item>
-        <b-nav-item to="/package" class="navbar-item">Package</b-nav-item>
         <b-nav-item>{{ user }}</b-nav-item>
         <b-nav-item @click="logout()" class="navbar-item">Signout</b-nav-item>
       </b-navbar-nav>

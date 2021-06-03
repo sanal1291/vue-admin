@@ -8,7 +8,7 @@
     </b-sidebar>
   </div>
   <!-- desktop -->
-  <div v-else>
+  <div v-else class="">
     <div
       id="sidebard"
       style="position: sticky; top: 0"
@@ -16,16 +16,11 @@
       :class="sidebar ? 'expanded' : 'shrinked'"
     >
       <b-container fluid class="p-0">
-        <b-row no-gutters class="sidebar-navbar">
-          <b-navbar class="p-1 w-100 h-100" variant="light" type="light">
+        <b-row no-gutters class="sidebar-navbar" align-h="center">
+          <b-navbar class="p-1 h-100" variant="light" type="light">
             <b-navbar-brand class="h-100 m-0" to="/" style="color: #808080">
               <img src="@/assets/logo.png" class="d-inline-block align-top" />
             </b-navbar-brand>
-            <b-navbar-nav v-if="sidebar" class="w-100" align="end" fill>
-              <b-nav-item @click="toggleSidebar()">
-                <b-icon class="float-right" icon="arrow-left"></b-icon>
-              </b-nav-item>
-            </b-navbar-nav>
           </b-navbar>
         </b-row>
         <b-row>
