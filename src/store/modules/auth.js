@@ -30,6 +30,7 @@ export default {
             commit('setBusy', true)
             auth.signInWithEmailAndPassword(form.email, form.password).then(user => {
             }, (error) => {
+                commit('setBusy', false)
                 commit('setError', "Email or password incorrect")
             })
         },
@@ -53,7 +54,9 @@ export default {
                 element()
             });
             await auth.signOut()
-            router.push('/')
+            if (router.currentRoute.path != '/') {
+                router.push('/')
+            }
         }
     },
 }
