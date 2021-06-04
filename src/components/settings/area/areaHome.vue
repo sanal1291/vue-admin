@@ -86,6 +86,9 @@
                             <template #cell(index)="{ index }">
                               {{ ++index }}
                             </template>
+                            <!-- <template #cell(minAmount)="{ value }">
+                              {{ typeof value }}{{ value }}
+                            </template> -->
                           </b-table>
                         </div>
                       </div>

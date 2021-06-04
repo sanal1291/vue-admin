@@ -46,7 +46,7 @@
             <b-input
               required
               type="number"
-              v-model.trim="singleLocation.minAmount"
+              v-model.number="singleLocation.minAmount"
               v-if="singleLocationIndex == data.index"
             ></b-input>
             <div v-else>{{ data.item.minAmount }}</div>

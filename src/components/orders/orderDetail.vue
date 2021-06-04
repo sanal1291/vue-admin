@@ -1,7 +1,12 @@
 <template>
   <div>
-    <b-card>
-      <div>Delivery stats</div>
+    <b-card no-body class="p-2">
+      <b-container class="p-0">
+        <b-row no-gutters>
+          <b-col>hi</b-col>
+        </b-row>
+      </b-container>
+      <!-- <div>Delivery stats</div>
       <b-form-select
         @change="statsChanged"
         v-model="statusValue"
@@ -24,7 +29,7 @@
         >
           Submit
         </b-button>
-      </b-overlay>
+      </b-overlay> -->
     </b-card>
   </div>
 </template>

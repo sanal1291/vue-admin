@@ -43,7 +43,7 @@
                     <b-form-input
                       type="number"
                       required
-                      v-model="form.price"
+                      v-model.number="form.price"
                       id="input-2"
                       placeholder="Input price"
                     >

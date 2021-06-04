@@ -61,6 +61,7 @@
     </b-form>
     <div class="flex-grow-1 p-1">
       <b-table
+        small
         show-empty
         empty-text="No orders in given time period or id"
         empty-filtered-text="No orders in given time period or id"
@@ -71,7 +72,6 @@
         hover
         :fields="fields"
         :busy="loading"
-        samll
         id="order-table-main"
         :items="orders"
         :per-page="perPage"
@@ -85,18 +85,11 @@
         </template>
         <template #row-details="row">
           <b-card no-body>
-            {{ row.item }}
+            <order-detail :order="row.item" />
             <b-container></b-container>
           </b-card>
         </template>
         <template #cell(actions)="row">
-          <!-- <b-button
-            size="sm"
-            @click="info(row.item, row.index, $event.target)"
-            class="mr-1"
-          >
-            Info modal
-          </b-button> -->
           <b-button size="sm" @click="row.toggleDetails">
             <b-icon v-if="row.detailsShowing" icon="chevron-bar-up"></b-icon>
             <b-icon v-else icon="chevron-bar-down"></b-icon>
@@ -117,9 +110,9 @@
 
 <script>
 import { mapState } from "vuex";
-// import orderDetail from "./orderDetail.vue";
+import orderDetail from "./orderDetail.vue";
 export default {
-  // components: { orderDetail },
+  components: { orderDetail },
   computed: {
     ...mapState({ orders: (state) => state.orders.ordersList }),
     ...mapState({ loading: (state) => state.orders.loading }),

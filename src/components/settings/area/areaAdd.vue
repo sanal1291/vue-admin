@@ -199,7 +199,6 @@ export default {
         searchArray = this.createSearchArray(item.locality);
         switch (item.type) {
           case 1:
-            console.log("new");
             locationRef = locationCollection.doc();
             batch.set(locationRef, {
               areaId: id,
@@ -209,7 +208,6 @@ export default {
             });
             break;
           case 2:
-            console.log("edit");
             locationRef = locationCollection.doc(item.id);
             batch.update(locationRef, {
               areaId: id,
@@ -219,12 +217,11 @@ export default {
             });
             break;
           case 10:
-            console.log("delete");
             locationRef = locationCollection.doc(item.id);
             batch.delete(locationRef);
             break;
           default:
-            console.log("no change");
+            console.log("1 location error");
             break;
         }
       });
