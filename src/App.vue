@@ -10,8 +10,12 @@
   </b-row>
 </template>
 <script>
+import { mapState } from "vuex";
 import Ismobile from "./components/Ismobile.vue";
 export default {
+  computed: {
+    ...mapState({ busy: (state) => state.auth.busy }),
+  },
   components: { Ismobile },
 };
 </script>

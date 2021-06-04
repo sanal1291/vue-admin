@@ -37,25 +37,25 @@ export default {
 
     // actions 
     actions: {
-        getSettingsAdminDetails({ commit, state }) {
+        getSettingsAdminDetails({ commit, state, rootState }) {
             commit("setloadingAdmin", true)
             if (!state.adminDetails) {
-                db.collection('adminDetials').doc('yN7N5geufqe2XmoKnyYyHPrajaR2').onSnapshot(doc => {
+                rootState.snapshots.push(db.collection('adminDetials').doc('yN7N5geufqe2XmoKnyYyHPrajaR2').onSnapshot(doc => {
                     let adminDetails;
                     adminDetails = { id: doc.id, ...doc.data() }
                     commit("setadminDetails", adminDetails)
                     commit("setloadingAdmin", false)
 
-                })
+                }))
             } else {
                 commit("setloadingAdmin", false)
             }
         },
 
-        getSettingsAreas({ commit, state }) {
+        getSettingsAreas({ commit, state, rootState }) {
             if (state.areas.length == 0) {
                 commit("setareaLoading", true)
-                db.collection('Areas').onSnapshot(snapshot => {
+                rootState.snapshots.push(db.collection('Areas').onSnapshot(snapshot => {
                     let areas = []
                     snapshot.docs.forEach(doc => {
                         areas.push({
@@ -65,7 +65,7 @@ export default {
                     })
                     commit("setareaLoading", false)
                     commit("setareas", areas)
-                })
+                }))
             }
         },
 

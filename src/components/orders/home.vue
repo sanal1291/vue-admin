@@ -5,98 +5,121 @@
       <b-button>Create</b-button>
     </div>
     <b-form @submit.prevent="submit" class="pt-2">
-      <div class="d-flex align-items-center">
-        <div class="px-2">From:</div>
-        <b-form-datepicker
-          :max="today"
-          value-as-date
-          v-model="fromDate"
-          class="datepicker"
-          :state="reqFrom"
-          placeholder="From date"
-          locale="en-GB"
-          dark
-          :date-format-options="{
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          }"
-        ></b-form-datepicker>
-        <div class="px-2">TO:</div>
-        <b-form-datepicker
-          :max="maxDate"
-          :min="minDate"
-          :disabled="fromDate == null"
-          value-as-date
-          v-model="toDate"
-          class="datepicker mr-2"
-          :state="reqTo"
-          placeholder="To date"
-          locale="en-GB"
-          dark
-          :date-format-options="{
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          }"
-        ></b-form-datepicker>
-        <b-button
-          :disabled="fromDate == null || toDate == null || !queryChange"
-          type="submit"
-          >go</b-button
-        >
-      </div>
+      <b-container class="p-0">
+        <b-row no-gutters>
+          <b-col cols="auto">
+            <div class="d-flex justify-content-between">
+              <span class="pr-1"> From:</span>
+              <b-form-datepicker
+                size="sm"
+                :max="today"
+                value-as-date
+                v-model="fromDate"
+                class="datepicker"
+                :state="reqFrom"
+                placeholder="From date"
+                locale="en-GB"
+                dark
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }"
+              ></b-form-datepicker>
+            </div>
+            <div class="d-flex justify-content-between py-1">
+              <span class="pr-1"> To:</span>
+              <b-form-datepicker
+                size="sm"
+                :max="maxDate"
+                :min="minDate"
+                :disabled="fromDate == null"
+                value-as-date
+                v-model="toDate"
+                class="datepicker"
+                :state="reqTo"
+                placeholder="To date"
+                locale="en-GB"
+                dark
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }"
+              ></b-form-datepicker>
+            </div>
+            <b-button
+              class="float-right"
+              size="sm"
+              :disabled="fromDate == null || toDate == null || !queryChange"
+              type="submit"
+              >go</b-button
+            >
+          </b-col>
+        </b-row>
+      </b-container>
     </b-form>
     <div class="flex-grow-1 p-1">
-      <b-row no-gutters>
-        <b-col cols="12" md="8">
-          <b-table
-            show-empty
-            empty-text="No orders in given time period or id"
-            empty-filtered-text="No orders in given time period or id"
-            @row-selected="rowSelected"
-            selectable
-            select-mode="single"
-            sticky-header="500px"
-            hover
-            :fields="fields"
-            :busy="loading"
-            samll
-            id="order-table-main"
-            :items="orders"
-            :per-page="perPage"
-            :current-page="currentPage"
+      <b-table
+        show-empty
+        empty-text="No orders in given time period or id"
+        empty-filtered-text="No orders in given time period or id"
+        @row-selected="rowSelected"
+        selectable
+        select-mode="single"
+        sticky-header="500px"
+        hover
+        :fields="fields"
+        :busy="loading"
+        samll
+        id="order-table-main"
+        :items="orders"
+        :per-page="perPage"
+        :current-page="currentPage"
+      >
+        <template #table-busy>
+          <div class="text-center text-danger my-2">
+            <b-spinner class="align-middle"></b-spinner>
+            <strong>Loading...</strong>
+          </div>
+        </template>
+        <template #row-details="row">
+          <b-card no-body>
+            {{ row.item }}
+            <b-container></b-container>
+          </b-card>
+        </template>
+        <template #cell(actions)="row">
+          <!-- <b-button
+            size="sm"
+            @click="info(row.item, row.index, $event.target)"
+            class="mr-1"
           >
-            <template #table-busy>
-              <div class="text-center text-danger my-2">
-                <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
-              </div>
-            </template>
-          </b-table>
-          <b-pagination
-            v-model="currentPage"
-            align="center"
-            pills
-            :per-page="perPage"
-            :total-rows="totalRows"
-            aria-controls="order-table-main"
-          ></b-pagination
-        ></b-col>
-        <b-col cols="12" md="4" class="px-2">
-          <order-detail v-if="selectedOrder" :order="selectedOrder" />
-          <b-card v-else>Select an order.</b-card>
-        </b-col>
-      </b-row>
+            Info modal
+          </b-button> -->
+          <b-button size="sm" @click="row.toggleDetails">
+            <b-icon v-if="row.detailsShowing" icon="chevron-bar-up"></b-icon>
+            <b-icon v-else icon="chevron-bar-down"></b-icon>
+          </b-button>
+        </template>
+      </b-table>
+      <b-pagination
+        v-model="currentPage"
+        align="center"
+        pills
+        :per-page="perPage"
+        :total-rows="totalRows"
+        aria-controls="order-table-main"
+      ></b-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import orderDetail from "./orderDetail.vue";
+// import orderDetail from "./orderDetail.vue";
 export default {
-  components: { orderDetail },
+  // components: { orderDetail },
   computed: {
     ...mapState({ orders: (state) => state.orders.ordersList }),
     ...mapState({ loading: (state) => state.orders.loading }),
@@ -120,9 +143,10 @@ export default {
       fields: [
         "id",
         { key: "dateTimeF", label: "Time" },
-        { key: "orderKey", label: "Key" },
+        // { key: "orderKey", label: "Key" },
         { key: "livestatus", label: "status" },
-        "total",
+        { key: "totalCost", label: "Total" },
+        "actions",
       ],
       selectedOrder: null,
     };

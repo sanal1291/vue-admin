@@ -25,6 +25,7 @@ export default new Vuex.Store({
     settings,
   },
   state: {
+    snapshots: [],
     packages: [],
     categories: [],
 
@@ -40,7 +41,7 @@ export default new Vuex.Store({
   actions: {
     setPackages({ commit, state }) {
       if (state.packages.length === 0) {
-        packageCollection.onSnapshot((snapshot) => {
+        state.snapshots.push(packageCollection.onSnapshot((snapshot) => {
           let packages = []
           snapshot.forEach((doc) => {
             packages.push({
@@ -54,12 +55,12 @@ export default new Vuex.Store({
             })
           })
           commit("setPackages", packages)
-        })
+        }))
       }
     },
     setCategories({ commit, state }) {
       if (state.categories.length === 0) {
-        categoryCollection.onSnapshot((snapshot) => {
+        state.snapshots.push(categoryCollection.onSnapshot((snapshot) => {
           let categories = []
           snapshot.forEach((doc) => {
             categories.push({
@@ -70,7 +71,7 @@ export default new Vuex.Store({
             })
           })
           commit("setCategories", categories)
-        })
+        }))
       }
     },
   }

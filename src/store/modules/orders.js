@@ -15,10 +15,10 @@ export default {
 
     // actions 
     actions: {
-        async getOrders({ commit, state }, query) {
+        async getOrders({ commit, state, rootState }, query) {
             state.loading = true;
             state.orders = [];
-            orders.where('dateTime', '>=', query.fromDate).where('dateTime', '<', query.toDate).orderBy('dateTime')
+            var snap = orders.where('dateTime', '>=', query.fromDate).where('dateTime', '<', query.toDate).orderBy('dateTime')
                 .onSnapshot(querySnapshot => {
                     var arr = [];
                     querySnapshot.forEach(item => {
@@ -36,6 +36,7 @@ export default {
                     state.loading = false;
 
                 })
+            rootState.snapshots.push(snap)
 
         },
     },

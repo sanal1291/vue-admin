@@ -20,6 +20,9 @@ auth.onAuthStateChanged(() => {
       }).$mount('#app')
   }
   if (auth.currentUser != null) {
-    store.dispatch("fetchUser")
+    store.commit('setBusy', true)
+    store.dispatch('checkAdmin', auth.currentUser.uid)
+  } else {
+    // store.commit('setBusy', false)
   }
 })

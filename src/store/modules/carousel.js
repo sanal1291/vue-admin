@@ -15,18 +15,17 @@ export default {
 
     // actions 
     actions: {
-        getCarousels({ commit, state }) {
+        getCarousels({ commit, state, rootState }) {
             if (state.carousels.length === 0) {
-                carouselCollection.onSnapshot((snapshot) => {
+                rootState.snapshots.push(carouselCollection.onSnapshot((snapshot) => {
                     let carousels = []
                     snapshot.forEach((doc) => {
                         carousels.push({
                             id: doc.id, ...doc.data()
                         })
                     })
-                    console.log(carousels)
                     commit("setCarousels", carousels)
-                })
+                }))
             }
         }
     },

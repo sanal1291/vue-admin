@@ -5,14 +5,13 @@
     toggleable="md"
     sticky
     type="light"
-    style="height: 50px"
   >
     <!-- using vuex to toggle sidebar -->
-    <b-navbar-brand v-if="isMobile" class="d-flex align-items-center h-100">
+    <b-navbar-brand v-if="isMobile" class="d-flex align-items-center">
       <b-button variant="light" v-b-toggle.sidebar-backdrop>
         <b-icon icon="justify"></b-icon>
       </b-button>
-      <b-link to="/" class="h-100">
+      <b-link to="/" style="height: 40px">
         <b-img src="@/assets/logo.png" class="d-inline-block align-top"></b-img>
       </b-link>
     </b-navbar-brand>
@@ -50,7 +49,7 @@ export default {
     ...mapState({ isMobile: (state) => state.sidebar.isMobile }),
   },
   methods: {
-    ...mapActions(["toggleSidebar"]),
+    ...mapActions(["toggleSidebar", "logout"]),
   },
 };
 </script>

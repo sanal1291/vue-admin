@@ -37,7 +37,7 @@ const routes = [
     name: 'Home',
     component: Home,
     beforeEnter(to, from, next) {
-      if (auth.currentUser) {
+      if (auth.currentUser && Store.state.auth.isAdmin) {
         next('/dashboard')
       } else {
         next()

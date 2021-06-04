@@ -45,11 +45,13 @@ const userCollection = db.collection("users")
 const orders = db.collection("orders")
 const AreaCollection = db.collection("Areas")
 const locationCollection = db.collection("locations")
+const adminCollection = db.collection("admin")
 export {
     db,
     auth,
     functions,
     storage,
+    adminCollection,
     categoryCollection,
     carouselCollection,
     indipendentItemCollection,
