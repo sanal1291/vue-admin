@@ -77,7 +77,6 @@
             </div>
           </template>
         </b-table>
-        {{ singleLocation.locality }}
       </b-form>
     </div>
   </b-overlay>

@@ -6,6 +6,7 @@
 export default {
   mounted() {
     this.$store.dispatch("getCarousels");
+    this.$store.dispatch("setRouteName", "Carousels");
   },
 };
 </script>

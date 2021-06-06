@@ -1,26 +1,28 @@
 <template>
-  <b-row align-v="center" no-gutters>
-    <b-col
-      class="p-2"
-      cols="6"
-      md="4"
-      lg="3"
-      v-for="(item, index) in paths"
-      :key="index"
-    >
-      <b-card no-body class="text-center click_cards p-0 m-0">
-        <b-link :to="item.path" class="click_cards_body text-primary">
-          <b-card-body>
-            <div>
-              <b-icon :scale="item.scale" :icon="item.icon"></b-icon>
-              <div>{{ item.name }}</div>
-            </div>
-          </b-card-body>
-        </b-link>
-      </b-card>
-    </b-col>
-    <!-- <b-button @click.prevent :to="{ name: 'settingsPopups' }">Popups</b-button> -->
-  </b-row>
+  <b-container fluid class="p-0 h-100">
+    <b-row align-v="center" no-gutters>
+      <b-col
+        class="p-2"
+        cols="12"
+        md="4"
+        lg="3"
+        v-for="(item, index) in paths"
+        :key="index"
+      >
+        <b-card no-body class="text-center click_cards p-0 m-0">
+          <b-link :to="item.path" class="click_cards_body text-primary">
+            <b-card-body>
+              <div>
+                <b-icon :scale="item.scale" :icon="item.icon"></b-icon>
+                <div>{{ item.name }}</div>
+              </div>
+            </b-card-body>
+          </b-link>
+        </b-card>
+      </b-col>
+      <!-- <b-button @click.prevent :to="{ name: 'settingsPopups' }">Popups</b-button> -->
+    </b-row>
+  </b-container>
 </template>
 
 <script>

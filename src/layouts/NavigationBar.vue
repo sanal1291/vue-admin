@@ -1,6 +1,6 @@
 <template >
   <b-navbar
-    class="pl-0 bottom_shadow"
+    class="pl-0 bottom_shadow p-1"
     id="navbar"
     toggleable="md"
     sticky
@@ -11,12 +11,17 @@
       <b-button variant="light" v-b-toggle.sidebar-backdrop>
         <b-icon icon="justify"></b-icon>
       </b-button>
-      <b-link to="/" style="height: 40px">
+      <b-link to="/" style="height: 30px">
         <b-img src="@/assets/logo.png" class="d-inline-block align-top"></b-img>
       </b-link>
+      <div class="lead ml-1">
+        {{ routeName }}
+      </div>
     </b-navbar-brand>
+    <div v-else class="lead ml-3">
+      {{ routeName }}
+    </div>
     <!-- end-->
-
     <b-navbar-toggle class="logo" target="nav-collapse">
       <template #default="{ expanded }">
         <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
@@ -44,6 +49,7 @@ export default {
     };
   },
   computed: {
+    ...mapState({ routeName: (state) => state.routeName }),
     ...mapState({ user: (state) => state.auth.user }),
     ...mapState({ sidebar: (state) => state.sidebar.sidebar }),
     ...mapState({ isMobile: (state) => state.sidebar.isMobile }),

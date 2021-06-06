@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.$store.dispatch("setRouteName", "Item groups");
+  },
+};
 </script>
 
 <style lang="scss" scoped>

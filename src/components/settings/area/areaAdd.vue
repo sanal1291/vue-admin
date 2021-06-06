@@ -221,7 +221,6 @@ export default {
             batch.delete(locationRef);
             break;
           default:
-            console.log("1 location error");
             break;
         }
       });

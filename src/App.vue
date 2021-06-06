@@ -4,7 +4,9 @@
     <router-view name="sidebar"></router-view>
     <b-col class="d-flex flex-column">
       <router-view name="header"></router-view>
-      <router-view id="body-content" class="flex-fill"></router-view>
+      <div id="body-content" class="flex-fill p-2 pl-md-2">
+        <router-view> </router-view>
+      </div>
       <router-view name="footer"></router-view>
     </b-col>
   </b-row>

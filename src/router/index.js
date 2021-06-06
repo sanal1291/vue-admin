@@ -23,7 +23,7 @@ import CategoryAdd from '../components/CategoryAdd'
 import IndiItemAdd from '../components/IndiItemAdd'
 import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
-import { ordersHome } from '../components/orders'
+import { orderAdd, ordersHome } from '../components/orders'
 import { carouselHome, carouselAdd } from '../components/carousel'
 import { settingsHome, popups, popupsAdd, aboutDetails, areaHome, areaAdd, area } from '../components/settings'
 import Store from '../store/index'
@@ -218,11 +218,23 @@ const routes = [
   {
     path: '/orders',
     components: { default: orders, footer: Footer, header: NavigationBar, sidebar: Sidebar },
-    children: [{
-      path: '',
-      name: "orderHome",
-      component: ordersHome,
-    },],
+    children: [
+      {
+        path: '',
+        name: "orderHome",
+        component: ordersHome,
+      },
+      {
+        path: 'add',
+        name: 'orderAdd',
+        component: orderAdd,
+      },
+      // {
+      //   path: 'edit',
+      //   name: 'orderEdit',
+      //   component: orderAdd,
+      // }
+    ],
     meta: {
       requiresAuth: true
     }

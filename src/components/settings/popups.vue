@@ -1,53 +1,60 @@
 <template>
-  <div class="pt-2" style="position: relative">
+  <div class="pt-2 h-100" style="position: relative">
     <router-view></router-view>
-    <b-container fluid>
-      <b-row class="flex-nowrap">
-        <b-col sm="3">
+    <b-card class="h-100 m-1">
+      <template #header>
+        <div class="d-flex justify-content-between">
           <h5>Popup messages</h5>
-        </b-col>
-        <b-col cols="auto">
-          <b-button
-            size="sm"
-            :to="{
-              name: 'settingspopupsAdd',
-              query: {
-                edit: false,
-              },
-            }"
-            >Add</b-button
-          >
-          <span class="p-2"></span>
-        </b-col>
-      </b-row>
-      <b-row class="pt-2">
-        <b-col cols="12" md="8" class="pb-3">
-          <b-list-group class="list-group" flush v-if="adminDetails">
-            <b-list-group-item
-              v-for="(item, index) in adminDetails.messages"
-              :key="index"
+
+          <div>
+            <b-button
+              pill
+              size="sm"
+              :to="{
+                name: 'settingspopupsAdd',
+                query: {
+                  edit: false,
+                },
+              }"
+              >Add message</b-button
             >
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="text-wrap">{{ item }}</div>
-                <b-button
-                  size="sm"
-                  variant="light"
-                  :to="{
-                    name: 'settingspopupsEdit',
-                    query: {
-                      edit: true,
-                      index: index,
-                    },
-                  }"
+          </div>
+        </div>
+      </template>
+      <template #default>
+        <b-container fluid class="p-0">
+          <b-row class="pt-2">
+            <b-col cols="12" md="8" class="pb-3">
+              <b-list-group class="list-group" flush v-if="adminDetails">
+                <b-list-group-item
+                  v-for="(item, index) in adminDetails.messages"
+                  :key="index"
                 >
-                  <b-icon icon="pen-fill" animation="pulse"></b-icon
-                ></b-button>
-              </div>
-            </b-list-group-item>
-          </b-list-group>
-        </b-col>
-      </b-row>
-    </b-container>
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div class="text-wrap">{{ item }}</div>
+                    <b-button
+                      size="sm"
+                      variant="light"
+                      :to="{
+                        name: 'settingspopupsEdit',
+                        query: {
+                          edit: true,
+                          index: index,
+                        },
+                      }"
+                    >
+                      <b-icon icon="pen-fill" animation="pulse"></b-icon
+                    ></b-button>
+                  </div>
+                </b-list-group-item>
+              </b-list-group>
+            </b-col>
+          </b-row>
+        </b-container>
+      </template>
+    </b-card>
   </div>
 </template>
 

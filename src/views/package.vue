@@ -9,5 +9,8 @@ export default {
       this.$store.dispatch("setPackages");
     }
   },
+  mounted() {
+    this.$store.dispatch("setRouteName", "Packages");
+  },
 };
 </script>

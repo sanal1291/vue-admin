@@ -1,30 +1,15 @@
 <template>
-  <b-col>
-    <h3>Packages</h3>
-    <b-row>
-      <b-col md="5" class="pb-3">
-        <b-row align-h="end" class="m-1">
+  <b-card class="h-100 m-1">
+    <template #header>
+      <div class="d-flex justify-content-between">
+        <h5>Packages</h5>
+        <div>
           <b-button pill class="text-nowrap" size="sm" :to="{ name: 'add' }">
             Add package
           </b-button>
-        </b-row>
-        <b-list-group class="list-group" flush>
-          <b-list-group-item
-            v-for="item in packages"
-            :key="item.id"
-            button
-            @click="viewDetails(item.id)"
-          >
-            {{ item.displayNames["en"] }} <br />
-            {{ item.displayNames["ml"] }}
-          </b-list-group-item>
-        </b-list-group>
-      </b-col>
-      <b-col md="7" class="pb-3">
-        <b-row align-h="end" class="m-1">
           <b-button
             pill
-            class="text-nowrap"
+            class="text-nowrap ml-2"
             size="sm"
             :disabled="selected == null ? true : false"
             :to="{
@@ -37,48 +22,70 @@
           >
             Edit package
           </b-button>
-        </b-row>
-        <div class="package-details">
-          <div>
-            <b-card>
-              <b-card-body v-if="selected" class="p-0">
-                <b-row>
-                  <b-col sm="6">
-                    <h4>{{ selectedPackage.displayNames["en"] }}</h4>
-                    <h6>{{ selectedPackage.displayNames["ml"] }}</h6>
-                    <br />
-                    <div>Price: {{ selectedPackage.price }}</div>
-                    <br />
-                    <div>Total: {{ selectedPackage.calculatedTotal }}</div>
-                  </b-col>
-                  <b-col sm="6">
-                    <b-img-lazy :src="selectedPackage.img" fluid rounded>
-                    </b-img-lazy>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <p class="text-center">Items in package.</p>
-                </b-row>
-                <b-row>
-                  <div class="table-responsive">
-                    <b-table
-                      :fields="fields"
-                      :items="items"
-                      responsive
-                      small
-                    ></b-table>
-                  </div>
-                </b-row>
-              </b-card-body>
-              <b-card-body v-else>
-                Select a package to see details.
-              </b-card-body>
-            </b-card>
-          </div>
         </div>
-      </b-col>
-    </b-row>
-  </b-col>
+      </div>
+    </template>
+    <template #default>
+      <b-container fluid class="p-0">
+        <b-row>
+          <b-col md="5" class="pb-3">
+            <b-list-group class="list-group" flush>
+              <b-list-group-item
+                v-for="item in packages"
+                :key="item.id"
+                button
+                @click="viewDetails(item.id)"
+              >
+                {{ item.displayNames["en"] }} <br />
+                {{ item.displayNames["ml"] }}
+              </b-list-group-item>
+            </b-list-group>
+          </b-col>
+          <b-col md="7" class="pb-3">
+            <b-row align-h="end" class="m-1"> </b-row>
+            <div class="package-details">
+              <div>
+                <b-card>
+                  <b-card-body v-if="selected" class="p-0">
+                    <b-row>
+                      <b-col sm="6">
+                        <h4>{{ selectedPackage.displayNames["en"] }}</h4>
+                        <h6>{{ selectedPackage.displayNames["ml"] }}</h6>
+                        <br />
+                        <div>Price: {{ selectedPackage.price }}</div>
+                        <br />
+                        <div>Total: {{ selectedPackage.calculatedTotal }}</div>
+                      </b-col>
+                      <b-col sm="6">
+                        <b-img-lazy :src="selectedPackage.img" fluid rounded>
+                        </b-img-lazy>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <p class="text-center">Items in package.</p>
+                    </b-row>
+                    <b-row>
+                      <div class="table-responsive">
+                        <b-table
+                          :fields="fields"
+                          :items="items"
+                          responsive
+                          small
+                        ></b-table>
+                      </div>
+                    </b-row>
+                  </b-card-body>
+                  <b-card-body v-else>
+                    Select a package to see details.
+                  </b-card-body>
+                </b-card>
+              </div>
+            </div>
+          </b-col>
+        </b-row>
+      </b-container>
+    </template>
+  </b-card>
 </template>
 
 <script>

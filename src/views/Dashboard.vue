@@ -24,5 +24,8 @@ export default {
   //       });
   //   },
   // },
+  mounted() {
+    this.$store.dispatch("setRouteName", "Dashboard");
+  },
 };
 </script>

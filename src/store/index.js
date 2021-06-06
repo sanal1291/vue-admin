@@ -25,12 +25,16 @@ export default new Vuex.Store({
     settings,
   },
   state: {
+    routeName: null,
     snapshots: [],
     packages: [],
     categories: [],
 
   },
   mutations: {
+    setRouteName(state, name) {
+      state.routeName = name;
+    },
     setPackages(state, packages) {
       state.packages = packages;
     },
@@ -74,5 +78,8 @@ export default new Vuex.Store({
         }))
       }
     },
+    setRouteName({ commit }, name) {
+      commit('setRouteName', name)
+    }
   }
 })
