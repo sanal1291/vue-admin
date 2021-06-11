@@ -1,90 +1,77 @@
 <template>
   <div class="overlay">
-    <b-container>
-      <b-row align-h="center" align-v="center">
-        <b-card style="min-width: 60%">
-          <b-card-title>
-            <b-row>
-              <b-col cols="auto">
-                <b-button @click="close"
-                  ><b-icon icon="arrow-left"></b-icon
-                ></b-button>
-              </b-col>
-              <b-col v-if="edit"> Edit {{ form.name }} {{ form.id }}</b-col>
-              <b-col v-else>Create a Indipendent item.</b-col>
-            </b-row>
-          </b-card-title>
-          <b-card-text>
-            <b-form @submit.prevent="create">
+    <b-overlay :show="loading">
+      <b-container>
+        <b-row align-h="center" align-v="center">
+          <b-card style="min-width: 60%">
+            <b-card-title>
               <b-row>
-                <b-col>
-                  <b-form-group label="Name of Item:" label-for="input-1">
-                    <b-input-group id="input-1">
-                      <b-form-input
-                        required
-                        placeholder="In English"
-                        v-model.trim="form.name"
-                      ></b-form-input>
-                    </b-input-group>
-                  </b-form-group>
-                </b-col>
                 <b-col cols="auto">
-                  <b-form-group label="In stock :" label-for="input-4">
-                    <b-form-checkbox v-model="form.inStock" switch>
-                      <div v-if="form.inStock" class="">In stock.</div>
-                      <div v-else class="text-danger">Out of stock.</div>
-                    </b-form-checkbox>
-                  </b-form-group>
+                  <b-button @click="close"
+                    ><b-icon icon="arrow-left"></b-icon
+                  ></b-button>
                 </b-col>
+                <b-col v-if="edit"> Edit {{ form.name }}id:{{ form.id }}</b-col>
+                <b-col v-else>Create a Indipendent item.</b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-form-group label="Price :" input-for="input-2">
-                    <b-form-input
-                      type="number"
-                      required
-                      v-model.number="form.price"
-                      id="input-2"
-                      placeholder="Input price"
+            </b-card-title>
+            <b-card-text>
+              <b-form @submit.prevent="create">
+                <b-row>
+                  <b-col>
+                    <b-form-group label="Name of Item:" label-for="input-1">
+                      <b-input-group id="input-1" prepend="EN">
+                        <b-form-input
+                          required
+                          placeholder="In English"
+                          v-model.trim="form.displayNames['en']"
+                        ></b-form-input>
+                      </b-input-group>
+                      <b-input-group class="pt-3" id="input-1" prepend="ML">
+                        <b-form-input
+                          required
+                          placeholder="In malayalam"
+                          v-model.trim="form.displayNames['ml']"
+                        ></b-form-input>
+                      </b-input-group>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row align-h="around">
+                  <b-col cols="auto" v-if="edit">
+                    <b-overlay
+                      :show="submitting"
+                      rounded
+                      opacity="0.6"
+                      spinner-small
+                      spinner-variant="primary"
+                      class="d-inline-block"
                     >
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-              <b-row align-h="around">
-                <b-col cols="auto" v-if="edit">
-                  <b-overlay
-                    :show="submitting"
-                    rounded
-                    opacity="0.6"
-                    spinner-small
-                    spinner-variant="primary"
-                    class="d-inline-block"
-                  >
-                    <b-button variant="danger" @click="deleteCat">
-                      Delete
-                    </b-button>
-                  </b-overlay>
-                </b-col>
-                <b-col cols="auto">
-                  <b-overlay
-                    :show="submitting"
-                    rounded
-                    opacity="0.6"
-                    spinner-small
-                    spinner-variant="primary"
-                    class="d-inline-block"
-                  >
-                    <b-button variant="success" type="submit">
-                      Submit
-                    </b-button>
-                  </b-overlay>
-                </b-col>
-              </b-row>
-            </b-form>
-          </b-card-text>
-        </b-card></b-row
-      ></b-container
+                      <b-button variant="danger" @click="deleteCat">
+                        Delete
+                      </b-button>
+                    </b-overlay>
+                  </b-col>
+                  <b-col cols="auto">
+                    <b-overlay
+                      :show="submitting"
+                      rounded
+                      opacity="0.6"
+                      spinner-small
+                      spinner-variant="primary"
+                      class="d-inline-block"
+                    >
+                      <b-button variant="success" type="submit">
+                        Submit
+                      </b-button>
+                    </b-overlay>
+                  </b-col>
+                </b-row>
+              </b-form>
+            </b-card-text>
+          </b-card></b-row
+        ></b-container
+      ></b-overlay
     >
   </div>
 </template>
@@ -95,12 +82,10 @@ import { indipendentItemCollection, storage } from "../firebase";
 export default {
   data: () => {
     return {
-      form: { inStock: true },
-      // validation: { img: true },
-      imageData: null,
-      imageURL: null,
+      form: { displayNames: {} },
       submitting: false,
       edit: false,
+      loading: false,
     };
   },
   computed: {
@@ -120,14 +105,6 @@ export default {
     },
     async create() {
       this.submitting = true;
-      // if (!this.imageData && !this.edit) {
-      //   this.validation.img = false;
-      //   this.submitting = false;
-      //   return true;
-      // } else {
-      //   this.validation.img = true;
-      // }
-      // this.submitting = true;
       var indiRef;
       if (this.form.id && this.edit) {
         indiRef = indipendentItemCollection.doc(this.form.id);
@@ -135,86 +112,60 @@ export default {
         indiRef = indipendentItemCollection.doc();
       }
       var searchArray = this.createSearchArray(this.form.name);
-      var item = {
-        name: this.form.name,
-        price: this.form.price,
-        stock_quantity: this.form.inStock ? this.form.stock_quantity || 1 : 0,
-        categories: this.form.categories || [],
-        reqularPrice: this.form.price.toString(),
-        salePrice: this.form.price.toString(),
-        slug: this.form.name,
-        searchArray: searchArray,
-        tags: this.form.tags || [],
-      };
-      console.log(item);
       try {
-        await indiRef.set(item);
+        indiRef
+          .update({
+            name: this.form.displayNames["en"],
+            displayNames: this.form.displayNames,
+            searchArray: searchArray,
+          })
+          .then(() => {
+            // adding the updated value to state
+            this.setUpdatedIndiItem(indiRef);
+            this.submitting = false;
+            this.$root.$bvToast.toast(`upload done`, {
+              title: "Indipendent item",
+              autoHideDelay: 5000,
+            });
+            this.$router.go(-1);
+          });
       } catch (error) {
-        console.log(error);
         this.$root.$bvToast.toast(error, {
           title: "Indipendent item",
           autoHideDelay: 5000,
         });
         this.$router.go(-1);
+        this.submitting = false;
         return;
       }
-      // adding the updated value to state
-      item.id = indiRef.id;
-      this.setUpdatedIndiItem(item);
-      //
-      this.submitting = false;
-      this.$root.$bvToast.toast(`upload done`, {
-        title: "Indipendent item",
-        autoHideDelay: 5000,
-      });
-      this.$router.go(-1);
     },
     async init() {
-      if (this.$route.query.edit) {
-        if (this.$route.query.indiItem.id != undefined) {
-          // if indiitem is passes
-          this.fetchData(this.$route.query.indiItem);
-        } else {
-          // fetch indiItem
-          var item = await indipendentItemCollection
-            .doc(this.$route.query.indiItemId)
-            .get()
-            .then((doc) => {
-              return {
-                id: doc.id,
-                name: doc.get("name"),
-                slug: doc.get("slug"),
-                categories: doc.get("categories"),
-                stock_quantity: doc.get("stock_quantity"),
-                price: doc.get("price"),
-                regularPrice: doc.get("reqularPrice"),
-                salePrice: doc.get("salePrice"),
-                tags: doc.get("tags"),
-              };
-            });
-          this.fetchData(item);
-        }
+      if (this.$route.query.edit && this.$route.query.indiItemId) {
+        this.edit = true;
+        this.loading = true;
+        indipendentItemCollection
+          .doc(this.$route.query.indiItemId)
+          .get()
+          .then((doc) => {
+            this.form.id = doc.id;
+            this.form.name = doc.get("displayNames")["en"];
+            this.form.displayNames = doc.get("displayNames");
+            this.loading = false;
+          });
+      } else {
+        this.loading = false;
       }
     },
-    fetchData(item) {
-      console.log(item);
-      this.edit = true;
-      var indiItem = JSON.parse(JSON.stringify(item));
-      this.form.id = indiItem.id;
-      this.form.name = indiItem.name;
-      this.form.price = indiItem.price;
-      this.form.categories = indiItem.categories;
-      this.form.inStock = item.stock_quantity ? true : false;
-      this.form.stock_quantity = item.stock_quantity;
-      this.form.tags = item.tags;
-    },
-    setUpdatedIndiItem(item) {
-      var index = this.indiItems.findIndex((indi) => indi.id === item.id);
+    async setUpdatedIndiItem(docRef) {
+      let doc = await docRef.get();
+      var index = this.indiItems.findIndex((indi) => indi.id === doc.id);
       if (index >= 0) {
-        this.indiItems[index] = item;
+        this.indiItems[index] = {
+          id: doc.id,
+          ...doc.data(),
+        };
       }
     },
-
     close() {
       this.$router.go(-1);
     },

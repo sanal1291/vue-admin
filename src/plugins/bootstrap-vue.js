@@ -1,5 +1,4 @@
 import Vue from 'vue'
-
 import {
     NavPlugin,
     LayoutPlugin,
@@ -26,6 +25,7 @@ import {
     VBHoverPlugin,
     FormTextareaPlugin,
     SidebarPlugin,
+    SkeletonPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -79,6 +79,8 @@ Vue.use(FormSelectPlugin)
 Vue.use(VBHoverPlugin)
 Vue.use(FormTextareaPlugin)
 Vue.use(SidebarPlugin)
+Vue.use(SkeletonPlugin)
+
 Vue.component('BIcon', BIcon)
 Vue.component('BIconPerson', BIconPerson)
 Vue.component('BIconKey', BIconKey)

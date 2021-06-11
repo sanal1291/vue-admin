@@ -1,12 +1,12 @@
 <template>
-  <b-card no-body class="p-2">
+  <b-card no-body class="p-2" id="order-content">
     <b-container fluid class="p-0">
       <b-row no-gutters>
         <b-col cols="12">
-          <b-card>
+          <b-card no-body class="p-1">
             <b-row no-gutters>
               <b-col cols="12" sm="6" md="4" class="px-1">
-                {{ order.userId }}
+                <usercard :userId="order.userId" />
               </b-col>
               <b-col cols="12" sm="6" md="4" class="px-1">
                 <div>
@@ -45,6 +45,15 @@
                     >
                   </li>
                   <li>
+                    Razor pay id:
+                    <b-link
+                      :href="razorpayURL + order.razorpayOrderId"
+                      target="_blank"
+                    >
+                      {{ order.razorpayOrderId }}</b-link
+                    >
+                  </li>
+                  <li>
                     <div>Change status</div>
                     <b-form-select
                       @change="statsChanged"
@@ -75,7 +84,7 @@
             </b-row></b-card
           >
         </b-col>
-        <b-col cols="12" lg="6">
+        <b-col cols="12" lg="6" class="py-1 pr-1">
           <b-card no-body>
             <b-card-header class="p-2">
               <span class="h6"> Items</span>
@@ -92,7 +101,9 @@
             </div>
           </b-card>
         </b-col>
-        <b-col cols="12" lg="6"> <b-card no-body>hisss</b-card></b-col>
+        <b-col cols="12" lg="6" class="p-1">
+          <b-card no-body>hisss</b-card></b-col
+        >
       </b-row>
     </b-container>
   </b-card>
@@ -101,7 +112,9 @@
 <script>
 import { mapState } from "vuex";
 import { functions } from "../../firebase";
+import usercard from "./usercard.vue";
 export default {
+  components: { usercard },
   props: ["order"],
   computed: {
     ...mapState({ orders: (state) => state.orders.ordersList }),
@@ -134,6 +147,7 @@ export default {
       statusValue: null,
       changed: false,
       submitting: false,
+      razorpayURL: "https://dashboard.razorpay.com/app/orders/",
     };
   },
   mounted() {
@@ -160,16 +174,17 @@ export default {
       var statusFun = functions.httpsCallable("notifications-orderStatus");
       var result = await statusFun({
         status: this.statusValue,
-        orderId: this.order.orderId,
+        orderId: this.order.id,
       });
       if (result.error) {
+        console.log("error");
         this.$root.$bvToast.toast(result.data, {
-          title: "Order",
+          title: "Order ",
           autoHideDelay: 5000,
         });
       } else {
         this.$root.$bvToast.toast("Sucess", {
-          title: "Order",
+          title: "Order" + this.order.id,
           autoHideDelay: 5000,
         });
       }
@@ -185,4 +200,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#order-content {
+  background-color: #e1e8eb;
+}
 </style>

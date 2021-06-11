@@ -33,8 +33,6 @@
                   name: 'editIndiItem',
                   query: {
                     edit: true,
-                    indiItem:
-                      selectedIndiItem != null ? selectedIndiItem : null,
                     indiItemId:
                       selectedIndiItem != null ? selectedIndiItem.id : null,
                   },
@@ -63,7 +61,8 @@
                 >
                   <div class="d-flex justify-content-between">
                     <div>
-                      {{ item.name }}
+                      {{ item.displayNames["en"] }} :
+                      {{ item.displayNames["ml"] || "ml not provided" }}
                     </div>
                     <div>{{ item.price }}.Rs</div>
                   </div>
@@ -90,7 +89,8 @@
                 >
                   <div class="d-flex justify-content-between">
                     <div>
-                      {{ item.name }}
+                      {{ item.displayNames["en"] }} :
+                      {{ item.displayNames["ml"] || "ml not provided" }}
                     </div>
                     <div>{{ item.price }}.Rs</div>
                   </div>
@@ -112,7 +112,11 @@
                   <b-card>
                     <b-card-body v-if="selected" class="p-0">
                       <h4>
-                        {{ selectedIndiItem.name }}
+                        {{ selectedIndiItem.displayNames["en"] }} :
+                        {{
+                          selectedIndiItem.displayNames["ml"] ||
+                          "ml not provided"
+                        }}
                       </h4>
                       <br />
                       <div>Price: {{ selectedIndiItem.price }}Rs</div>
