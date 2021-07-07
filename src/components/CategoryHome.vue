@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative" class="h-100">
     <router-view class="h-100"></router-view>
-    <b-card class="h-100 m-1">
+    <b-card class="h-100">
       <template #header>
         <div class="d-flex justify-content-between">
           <h5>Category</h5>

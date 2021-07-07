@@ -1,7 +1,7 @@
 <template>
   <div class="h-100" style="position: relative">
     <router-view></router-view>
-    <b-card class="h-100 m-1">
+    <b-card class="h-100">
       <template #header>
         <div class="d-flex justify-content-between">
           <h5>Indipendent Item</h5>
@@ -45,7 +45,7 @@
         </div>
       </template>
       <template #default>
-        <b-container fluid>
+        <b-container fluid class="p-0">
           <b-row class="pt-2">
             <b-col md="7" class="pb-3">
               <b-list-group

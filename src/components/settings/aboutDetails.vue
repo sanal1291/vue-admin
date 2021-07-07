@@ -1,55 +1,63 @@
 <template>
-  <b-overlay :show="loadingAdmin">
-    <h4>Edit details.</h4>
-    <b-form @submit.prevent="submitDetails" class="p-3">
-      <b-row>
-        <b-col sm="12" md="8" lg="6">
-          <b-form-group label="Name:" label-for="input-2">
-            <b-form-input
-              required
-              v-model="form.name"
-              id="input-2"
-              placeholder="Name"
-            ></b-form-input>
-          </b-form-group>
-          <b-form-group label="Email:" label-for="input-2">
-            <b-form-input
-              required
-              v-model="form.email"
-              id="input-2"
-              placeholder="Email"
-            ></b-form-input>
-          </b-form-group>
-          <b-form-group label="Phone no:" label-for="input-2">
-            <b-form-input
-              required
-              v-model="form.phone"
-              id="input-2"
-              placeholder="Phone no"
-            ></b-form-input>
-          </b-form-group>
-          <b-form-group label="About:" label-for="input-2">
-            <b-form-textarea
-              required
-              v-model="form.about"
-              id="input-2"
-              placeholder="About"
-            ></b-form-textarea>
-          </b-form-group>
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block float-right"
-          >
+  <div class="pt-2 px-2 h-100">
+    <b-overlay :show="loadingAdmin">
+      <b-card class="h-100">
+        <template #header>
+          <div class="d-flex justify-content-between flex-wrap">
+            <h5>Edit details.</h5>
             <b-button variant="success" type="submit"> Submit </b-button>
-          </b-overlay>
-        </b-col>
-      </b-row>
-    </b-form>
-  </b-overlay>
+          </div>
+        </template>
+        <b-form @submit.prevent="submitDetails" class="p-3">
+          <b-row>
+            <b-col sm="12" md="8" lg="6">
+              <b-form-group label="Name:" label-for="input-2">
+                <b-form-input
+                  required
+                  v-model="form.name"
+                  id="input-2"
+                  placeholder="Name"
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group label="Email:" label-for="input-2">
+                <b-form-input
+                  required
+                  v-model="form.email"
+                  id="input-2"
+                  placeholder="Email"
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group label="Phone no:" label-for="input-2">
+                <b-form-input
+                  required
+                  v-model="form.phone"
+                  id="input-2"
+                  placeholder="Phone no"
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group label="About:" label-for="input-2">
+                <b-form-textarea
+                  required
+                  v-model="form.about"
+                  id="input-2"
+                  placeholder="About"
+                ></b-form-textarea>
+              </b-form-group>
+              <b-overlay
+                :show="submitting"
+                rounded
+                opacity="0.6"
+                spinner-small
+                spinner-variant="primary"
+                class="d-inline-block float-right"
+              >
+              </b-overlay>
+            </b-col>
+          </b-row>
+        </b-form>
+      </b-card>
+    </b-overlay>
+  </div>
 </template>
 
 

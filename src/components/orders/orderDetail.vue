@@ -84,25 +84,55 @@
             </b-row></b-card
           >
         </b-col>
-        <b-col cols="12" lg="6" class="py-1 pr-1">
+        <b-col cols="12" lg="5" class="py-1 pr-1">
           <b-card no-body>
             <b-card-header class="p-2">
               <span class="h6"> Items</span>
               <span class="float-right">total: {{ itemsTotalCost }}</span>
             </b-card-header>
-            <div class="p-1">
-              <b-table
-                :hover="false"
-                small
-                :fields="itemsFields"
-                :items="[...order.items, ...order.items]"
-              >
-              </b-table>
-            </div>
+            <b-table
+              :hover="false"
+              small
+              :fields="itemsFields"
+              :items="order.items"
+            >
+              <template #cell(index)="data">
+                {{ data.index + 1 }}
+              </template>
+              <template #cell(itemName)="{ value }">
+                {{ value["en"] }}
+              </template>
+            </b-table>
           </b-card>
         </b-col>
-        <b-col cols="12" lg="6" class="p-1">
-          <b-card no-body>hisss</b-card></b-col
+        <b-col cols="12" lg="7" class="p-1">
+          <b-card no-body>
+            <b-card-header class="p-2">
+              <span class="h6"> Packages</span>
+              <span class="float-right">total: {{ packagesTotalCost }}</span>
+            </b-card-header>
+            <b-table
+              :hover="false"
+              small
+              :fields="packagesFields"
+              :items="order.packages"
+            >
+              <template #cell(index)="data">
+                {{ data.index + 1 }}
+              </template>
+              <template #cell(itemName)="{ value }">
+                {{ value["en"] }}
+              </template>
+              <template #cell(items)="data">
+                <ul>
+                  <li v-for="(item, index) in data.item.items" :key="index">
+                    {{ item.itemName["en"] + " : " + item.quantity + ":" }}Nos
+                    ,total={{ item.total }}
+                  </li>
+                </ul>
+              </template>
+            </b-table>
+          </b-card></b-col
         >
       </b-row>
     </b-container>
@@ -124,7 +154,7 @@ export default {
       // item data
       itemsTotalCost: 0,
       itemsFields: [
-        { key: "itemId", label: "ID" },
+        "index",
         { key: "itemName", label: "Name" },
         "quantity",
         "total",
@@ -132,11 +162,13 @@ export default {
       // end item data
       // packages data
       packagesTotalCost: 0,
-      packages: [
-        { items: null, name: "test1", id: 1 },
-        { items: null, name: "test2", id: 2 },
+      packagesFields: [
+        "index",
+        { key: "itemName", label: "Package Name" },
+        "items",
+        { key: "quantity", label: "Quantity" },
+        { key: "total", label: "Total" },
       ],
-      packagesFields: [{ key: "id", label: "ID" }],
       // end packages data
       options: [
         { value: "on-hold", text: "On-hold" },
@@ -153,6 +185,9 @@ export default {
   mounted() {
     this.order.items.forEach((item) => {
       this.itemsTotalCost += item.total;
+    });
+    this.order.packages.forEach((item) => {
+      this.packagesTotalCost += item.price;
     });
     // this.packages.forEach((item) => item.push(this.order.items));
     this.init();
@@ -177,7 +212,6 @@ export default {
         orderId: this.order.id,
       });
       if (result.error) {
-        console.log("error");
         this.$root.$bvToast.toast(result.data, {
           title: "Order ",
           autoHideDelay: 5000,

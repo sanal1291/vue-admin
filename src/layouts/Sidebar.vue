@@ -8,7 +8,7 @@
     </b-sidebar>
   </div>
   <!-- desktop -->
-  <div v-else class="">
+  <div v-else>
     <div
       id="sidebard"
       style="position: sticky; top: 0"

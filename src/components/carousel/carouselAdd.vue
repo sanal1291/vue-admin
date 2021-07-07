@@ -1,10 +1,45 @@
 <template>
-  <div>
-    <div class="pl-3">
-      <h4 v-if="edit">Edit {{ selectedCarousel.displayNames["en"] }}</h4>
-      <h4 v-else>Create new carousel.</h4>
-    </div>
-    <b-form @submit.prevent="createCarousel" class="p-3">
+  <b-card class="h-100">
+    <template #header>
+      <div class="d-flex justify-content-between flex-wrap">
+        <h5 v-if="edit">Edit {{ form.name }}</h5>
+        <h5 v-else>Create new carousel</h5>
+        <b-row>
+          <b-col cols="auto">
+            <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
+          </b-col>
+          <b-col cols="auto" v-if="edit">
+            <b-overlay
+              :show="submitting"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-button @click="deleteCarousel" variant="danger">
+                Delete</b-button
+              >
+            </b-overlay>
+          </b-col>
+          <b-col cols="auto">
+            <b-overlay
+              :show="submitting"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-button variant="success" form="carousel-form" type="submit">
+                Submit</b-button
+              >
+            </b-overlay>
+          </b-col>
+        </b-row>
+      </div>
+    </template>
+    <b-form @submit.prevent="createCarousel" id="carousel-form">
       <b-row>
         <b-col md="6">
           <b-form-group label="Name of carousel:" label-for="input-1">
@@ -53,11 +88,13 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <h6 v-if="form.isPackage">Carousel target packages</h6>
-      <h6 v-if="!form.isPackage">Carousel target Items</h6>
+      <div class="font-weight-bold">
+        <div v-if="form.isPackage">Carousel target packages</div>
+        <div v-if="!form.isPackage">Carousel target Items</div>
+      </div>
       <b-row no-gutters>
-        <b-col lg="6">
-          <b-card no-body style="max-height: 500px">
+        <b-col lg="6" class="pt-1" style="max-height: 400px">
+          <b-card no-body>
             <b-card-header style="background-color: #6c757d">
               Items in this group
             </b-card-header>
@@ -91,7 +128,7 @@
             </b-list-group>
           </b-card>
         </b-col>
-        <b-col lg="6">
+        <b-col lg="6" class="pt-1 pl-lg-1" style="max-height: 400px">
           <package-select
             v-show="form.isPackage"
             :selectedItems="items"
@@ -105,39 +142,9 @@
         </b-col>
       </b-row>
       <br />
-      <b-row align-h="center">
-        <b-col cols="auto">
-          <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
-        </b-col>
-        <b-col cols="auto" v-if="edit">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button @click="deleteCarousel" variant="danger">
-              Delete</b-button
-            >
-          </b-overlay>
-        </b-col>
-        <b-col cols="auto">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button variant="success" type="submit"> Submit</b-button>
-          </b-overlay>
-        </b-col>
-      </b-row>
+      <b-row align-h="center"> </b-row>
     </b-form>
-  </div>
+  </b-card>
 </template>
 
 <script>
@@ -301,6 +308,7 @@ export default {
         this.selectedCarousel = this.carousels.find(
           (item) => item.id == this.$route.query.carousel
         );
+        this.form.name = this.selectedCarousel.displayNames["en"];
         this.form.id = this.selectedCarousel.id;
         this.form.displayNames = this.selectedCarousel.displayNames;
         this.form.isPackage = this.selectedCarousel.isPackage;

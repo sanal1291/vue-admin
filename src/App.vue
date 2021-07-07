@@ -4,8 +4,8 @@
     <router-view name="sidebar"></router-view>
     <b-col class="d-flex flex-column">
       <router-view name="header"></router-view>
-      <div id="body-content" class="flex-fill p-2 pl-md-2">
-        <router-view> </router-view>
+      <div id="body-content" class="flex-fill">
+        <router-view></router-view>
       </div>
       <router-view name="footer"></router-view>
     </b-col>
@@ -16,7 +16,7 @@ import { mapState } from "vuex";
 import Ismobile from "./components/Ismobile.vue";
 export default {
   computed: {
-    ...mapState({ busy: (state) => state.auth.busy }),
+    ...mapState({ redirect: (state) => state.auth.redirect }),
   },
   components: { Ismobile },
 };

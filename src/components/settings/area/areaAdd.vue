@@ -1,83 +1,87 @@
 <template>
   <b-overlay>
-    <b-container fluid>
-      <b-row no-gutters class="text-center">
-        <b-col md="6">
-          <h4 v-if="edit">Edit {{ form.area }}</h4>
-          <h4 v-else>Add a new Area.</h4>
-        </b-col>
-      </b-row>
-      <b-form @submit.prevent="createArea" id="area-form">
+    <b-card class="h-100">
+      <template #header>
+        <div class="d-flex justify-content-between flex-wrap">
+          <h5 v-if="edit">Edit {{ form.area }}</h5>
+          <h5 v-else>Add a new Area.</h5>
+          <b-row>
+            <b-col cols="auto">
+              <b-button :disabled="submitting" @click="cancel">
+                cancel
+              </b-button>
+            </b-col>
+            <b-col cols="auto" v-if="edit">
+              <b-overlay
+                :show="submitting"
+                rounded
+                opacity="0.6"
+                spinner-small
+                spinner-variant="primary"
+                class="d-inline-block"
+              >
+                <b-button type="button" @click="deleteArea" variant="danger">
+                  Delete</b-button
+                >
+              </b-overlay>
+            </b-col>
+            <b-col cols="auto">
+              <b-overlay
+                :show="submitting"
+                rounded
+                opacity="0.6"
+                spinner-small
+                spinner-variant="primary"
+                class="d-inline-block"
+              >
+                <b-button form="area-form" variant="success" type="submit">
+                  Submit</b-button
+                >
+              </b-overlay>
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+      <b-container fluid>
+        <b-form @submit.prevent="createArea" id="area-form">
+          <b-row no-gutters>
+            <b-col md="6">
+              <b-form-group label="Name of Area:" label-for="input-1">
+                <b-row no-gutters>
+                  <b-col>
+                    <b-input-group>
+                      <b-form-input required v-model.trim="form.area">
+                      </b-form-input>
+                    </b-input-group>
+                  </b-col>
+                </b-row>
+              </b-form-group>
+            </b-col>
+            <b-col class="flex-nowrap">
+              <image-input
+                :edit="edit"
+                :oldImageURL="imageURL"
+                @changed="imageChanged"
+              />
+            </b-col>
+          </b-row>
+        </b-form>
         <b-row no-gutters>
-          <b-col md="6">
-            <b-form-group label="Name of Area:" label-for="input-1">
-              <b-row no-gutters>
-                <b-col>
-                  <b-input-group>
-                    <b-form-input required v-model.trim="form.area">
-                    </b-form-input>
-                  </b-input-group>
-                </b-col>
-              </b-row>
-            </b-form-group>
-          </b-col>
-          <b-col class="flex-nowrap">
-            <image-input
-              :edit="edit"
-              :oldImageURL="imageURL"
-              @changed="imageChanged"
-            />
+          <b-col class="pr-4">
+            <b-card no-body style="max-height: 500px">
+              <b-card-header style="background-color: #6c757d">
+                Locations
+              </b-card-header>
+              <add-location
+                :locations="locations"
+                :validation="validation.locations"
+                :loading="initLoad"
+              />
+            </b-card>
           </b-col>
         </b-row>
-      </b-form>
-      <b-row no-gutters>
-        <b-col class="pr-4">
-          <b-card no-body style="max-height: 500px">
-            <b-card-header style="background-color: #6c757d">
-              Locations
-            </b-card-header>
-            <add-location
-              :locations="locations"
-              :validation="validation.locations"
-              :loading="initLoad"
-            />
-          </b-card>
-        </b-col>
-      </b-row>
-      <b-row align-h="center" class="py-3">
-        <b-col cols="auto">
-          <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
-        </b-col>
-        <b-col cols="auto" v-if="edit">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button type="button" @click="deleteArea" variant="danger">
-              Delete</b-button
-            >
-          </b-overlay>
-        </b-col>
-        <b-col cols="auto">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button form="area-form" variant="success" type="submit">
-              Submit</b-button
-            >
-          </b-overlay>
-        </b-col>
-      </b-row>
-    </b-container>
+      </b-container>
+    </b-card>
   </b-overlay>
 </template>
 <script>

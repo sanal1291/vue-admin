@@ -1,5 +1,5 @@
 <template>
-  <b-card class="h-100 m-1">
+  <b-card class="h-100">
     <template #header>
       <div class="d-flex justify-content-between">
         <h5>Carousels</h5>
@@ -93,18 +93,17 @@
                       </p>
                     </b-row>
                     <b-row>
-                      <div class="table-responsive">
-                        <b-table
-                          :fields="
-                            selectedCarousel.isPackage
-                              ? packageFields
-                              : itemFields
-                          "
-                          :items="items"
-                          responsive
-                          small
-                        ></b-table>
-                      </div>
+                      <b-table
+                        :fields="
+                          selectedCarousel.isPackage
+                            ? packageFields
+                            : itemFields
+                        "
+                        :items="items"
+                        responsive
+                        small
+                      >
+                      </b-table>
                     </b-row>
                   </b-card-body>
                   <b-card-body v-else>

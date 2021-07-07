@@ -1,37 +1,64 @@
 <template>
-  <div>
-    <b-row no-gutters class="text-center">
-      <b-col md="6">
-        <h4 v-if="edit">Edit {{ selectedItem.name }}</h4>
+  <b-card class="h-100">
+    <template #header>
+      <div class="d-flex justify-content-between flex-wrap">
+        <h4 v-if="edit">Edit {{ form.name }}</h4>
         <h4 v-else>Create new Item Group.</h4>
-      </b-col>
-    </b-row>
-    <b-form @submit.prevent="createItem" class="p-3">
+        <b-row>
+          <b-col cols="auto">
+            <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
+          </b-col>
+          <b-col cols="auto" v-if="edit">
+            <b-overlay
+              :show="submitting"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-button type="button" @click="deletePack" variant="danger">
+                Delete</b-button
+              >
+            </b-overlay>
+          </b-col>
+          <b-col cols="auto">
+            <b-overlay
+              :show="submitting"
+              rounded
+              opacity="0.6"
+              spinner-small
+              spinner-variant="primary"
+              class="d-inline-block"
+            >
+              <b-button variant="success" type="submit" form="item-form">
+                Submit</b-button
+              >
+            </b-overlay>
+          </b-col>
+        </b-row>
+      </div>
+    </template>
+    <b-form @submit.prevent="createItem" id="item-form">
       <b-row>
         <b-col md="6">
           <b-form-group label="Name of Item Group:" label-for="input-1">
-            <b-row no-gutters>
-              <b-col>
-                <b-input-group prepend="EN">
-                  <b-form-input
-                    required
-                    placeholder="In english"
-                    v-model.trim="form.displayName['en']"
-                  >
-                  </b-form-input>
-                </b-input-group>
-              </b-col>
-              <b-col>
-                <b-input-group prepend="ML">
-                  <b-form-input
-                    required
-                    placeholder="In Malayalam"
-                    v-model.trim="form.displayName['ml']"
-                  >
-                  </b-form-input>
-                </b-input-group>
-              </b-col>
-            </b-row>
+            <b-input-group prepend="EN">
+              <b-form-input
+                required
+                placeholder="In english"
+                v-model.trim="form.displayName['en']"
+              >
+              </b-form-input>
+            </b-input-group>
+            <b-input-group prepend="ML" class="pt-3">
+              <b-form-input
+                required
+                placeholder="In Malayalam"
+                v-model.trim="form.displayName['ml']"
+              >
+              </b-form-input>
+            </b-input-group>
           </b-form-group>
           <b-form-group label="Select categories:" v-slot="{ ariaDescribedby }">
             <div class="text-danger" v-if="!validation.category">
@@ -65,7 +92,7 @@
         </b-col>
       </b-row>
       <b-row no-gutters>
-        <b-col lg="6" class="pr-2">
+        <b-col lg="6" class="pr-lg-2">
           <b-card no-body style="max-height: 500px">
             <b-card-header style="background-color: #6c757d">
               Items in this group
@@ -103,44 +130,12 @@
             </b-list-group>
           </b-card>
         </b-col>
-        <b-col lg="6">
+        <b-col lg="6" class="pt-2 pt-lg-0" style="max-height: 500px">
           <indi-item-select :selectedItems="items" @addedItem="addItem" />
         </b-col>
       </b-row>
-      <br />
-      <b-row align-h="center">
-        <b-col cols="auto">
-          <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
-        </b-col>
-        <b-col cols="auto" v-if="edit">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button type="button" @click="deletePack" variant="danger">
-              Delete</b-button
-            >
-          </b-overlay>
-        </b-col>
-        <b-col cols="auto">
-          <b-overlay
-            :show="submitting"
-            rounded
-            opacity="0.6"
-            spinner-small
-            spinner-variant="primary"
-            class="d-inline-block"
-          >
-            <b-button variant="success" type="submit"> Submit</b-button>
-          </b-overlay>
-        </b-col>
-      </b-row>
     </b-form>
-  </div>
+  </b-card>
 </template>
 
 
@@ -356,7 +351,7 @@ export default {
       this.selectedItem = item;
       if (this.edit) {
         this.form.id = this.selectedItem.id;
-        this.form.name = this.selectedItem.name;
+        this.form.name = this.selectedItem.displayName["en"];
         this.form.displayName = this.selectedItem.displayName;
         this.form.imageUrl = this.selectedItem.imageUrl;
         this.imageURL = this.selectedItem.imageUrl;

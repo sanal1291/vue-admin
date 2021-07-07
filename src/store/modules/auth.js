@@ -7,6 +7,7 @@ export default {
         user: '',
         busy: false,
         error: '',
+        redirect: null,
     },
     getters: {
     },
@@ -22,6 +23,9 @@ export default {
         },
         setError(state, val) {
             state.error = val;
+        },
+        setRedirect(state, val) {
+            state.redirect = val;
         }
     },
     actions: {
@@ -29,12 +33,13 @@ export default {
             commit('setError', '')
             commit('setBusy', true)
             auth.signInWithEmailAndPassword(form.email, form.password).then(user => {
+                commit('setRedirect', form.redirect)
             }, (error) => {
                 commit('setBusy', false)
                 commit('setError', "Email or password incorrect")
             })
         },
-        checkAdmin({ dispatch, commit }, uid) {
+        checkAdmin({ dispatch, commit, state }, uid) {
             adminCollection.doc(uid).get().then(() => {
                 commit('setBusy', false)
                 commit('setisAdmin')

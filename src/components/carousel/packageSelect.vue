@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body style="height: 500px">
+  <b-card no-body class="h-100">
     <b-card-header class="p-2" style="background-color: #6c757d">
       <div>
         <div>All packages</div>

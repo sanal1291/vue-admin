@@ -11,7 +11,7 @@
       <b-button variant="light" v-b-toggle.sidebar-backdrop>
         <b-icon icon="justify"></b-icon>
       </b-button>
-      <b-link to="/" style="height: 30px">
+      <b-link to="/" style="height: 30px" class="ml-2">
         <b-img src="@/assets/logo.png" class="d-inline-block align-top"></b-img>
       </b-link>
       <div class="lead ml-1">

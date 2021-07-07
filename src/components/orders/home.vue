@@ -1,15 +1,15 @@
 <template>
-  <b-card class="h-100 m-1">
+  <b-card class="h-100" no-body>
     <template #header>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <h5>Orders</h5>
-        <b-button :to="{ name: 'orderAdd', query: { edit: false } }"
+        <!-- <b-button :to="{ name: 'orderAdd', query: { edit: false } }"
           >Create</b-button
-        >
+        > -->
       </div>
     </template>
     <template #default>
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-column p-2">
         <b-form @submit.prevent="submit">
           <b-container class="p-0">
             <b-row no-gutters>

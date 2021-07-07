@@ -190,7 +190,7 @@ const routes = [
     },
     {
       name: "ItemGroupEdit",
-      path: '/itemGroups/edit',
+      path: '/itemgroups/edit',
       component: ItemGroupAdd,
     }],
     meta: {
@@ -259,7 +259,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
 
   if (requiresAuth && !auth.currentUser) {
-    next('')
+    next({ name: 'Home', query: { from: window.location.pathname } })
   } else {
     Store.state.sidebar.sidebar = false;
     next()
