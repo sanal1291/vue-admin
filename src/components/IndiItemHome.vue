@@ -121,6 +121,7 @@
                       <br />
                       <div>Price: {{ selectedIndiItem.price }}Rs</div>
                       <div>stock: {{ selectedIndiItem.stock_quantity }}</div>
+                      <div>{{ selectedIndiItem }}</div>
                     </b-card-body>
                     <b-card-body v-else>
                       Select a Item to see details.

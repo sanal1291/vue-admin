@@ -78,6 +78,9 @@
                           small
                         ></b-table>
                       </div>
+                      <p class="w-100">
+                        {{ groupItem }}
+                      </p>
                     </b-row>
                   </b-card-body>
                   <b-card-body v-else>

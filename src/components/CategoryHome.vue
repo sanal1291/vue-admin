@@ -71,6 +71,9 @@
                         <p class="text-center">
                           Items in {{ selectedCategory.name }}.
                         </p>
+                        <div class="w-100">
+                          {{ selectedCategory }}
+                        </div>
                       </b-row>
                     </b-card-body>
                     <b-card-body v-else>
