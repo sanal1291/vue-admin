@@ -163,7 +163,9 @@ export default {
       selectedItem: undefined,
       imageURL: "",
       imageData: null,
-      form: { displayName: {} },
+      form: {
+        displayName: {},
+      },
       items: [],
       submitting: false,
       categories: [],
@@ -207,6 +209,11 @@ export default {
       }
     },
     async createItem() {
+      // skip
+      // var test = 1;
+      // if (test > 0) {
+      //
+      // }
       console.log("create");
       // verification
       let needVerification = false;
@@ -273,11 +280,15 @@ export default {
     },
 
     createSearchArray(value) {
-      var arr = [];
+      console.log(value);
+      let arr = [];
       Object.values(value).forEach((name) => {
-        for (var i = 1; i <= name.length; i++) {
-          arr.push(name.trim().slice(0, i).toLowerCase());
-        }
+        let set = [name, ...name.split(" ")];
+        set.forEach((element) => {
+          for (var i = 1; i <= element.length; i++) {
+            arr.push(element.trim().slice(0, i).toLowerCase());
+          }
+        });
       });
       return arr;
     },
