@@ -209,6 +209,8 @@ export default {
               locality: item.locality,
               minAmount: item.minAmount,
               searchArray: searchArray,
+              delivery_charge: item.delivery_charge,
+              express_delivery_charge: item.express_delivery_charge,
             });
             break;
           case 2:
@@ -218,6 +220,8 @@ export default {
               locality: item.locality,
               minAmount: item.minAmount,
               searchArray: searchArray,
+              delivery_charge: item.delivery_charge,
+              express_delivery_charge: item.express_delivery_charge,
             });
             break;
           case 10:

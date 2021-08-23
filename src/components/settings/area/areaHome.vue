@@ -113,6 +113,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { locationCollection } from "../../../firebase";
 export default {
   data: function () {
     return {
@@ -122,6 +123,8 @@ export default {
         "index",
         { key: "locality", sortable: true },
         { key: "minAmount", label: "Minimum order price" },
+        { key: "delivery_charge", label: "Delivery charge" },
+        { key: "express_delivery_charge", label: "Express delivery charge" },
       ],
     };
   },
@@ -140,6 +143,13 @@ export default {
       this.$store.dispatch("getSettingsLocations", area);
     },
     frefresh() {
+      // console.log(this.locations);
+      // this.locations[this.selectedArea.id].forEach((element) => {
+      //   locationCollection.doc(element.id).update({
+      //     delivery_charge: 10,
+      //     express_delivery_charge: 20,
+      //   });
+      // });
       this.$store.dispatch("getSettingsLocations", {
         id: this.selectedArea.id,
         forced: true,

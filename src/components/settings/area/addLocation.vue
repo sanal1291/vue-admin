@@ -6,7 +6,6 @@
     opacity="0.6"
     spinner-variant="primary"
   >
-    {{ locations.length }}
     <div class="w-100 position-relative">
       <!-- <div
         v-if="locationPrompt"
@@ -51,6 +50,24 @@
             ></b-input>
             <div v-else>{{ data.item.minAmount }}</div>
           </template>
+          <template #cell(delivery_charge)="data">
+            <b-input
+              required
+              type="number"
+              v-model.number="singleLocation.delivery_charge"
+              v-if="singleLocationIndex == data.index"
+            ></b-input>
+            <div v-else>{{ data.item.delivery_charge }}</div>
+          </template>
+          <template #cell(express_delivery_charge)="data">
+            <b-input
+              required
+              type="number"
+              v-model.number="singleLocation.express_delivery_charge"
+              v-if="singleLocationIndex == data.index"
+            ></b-input>
+            <div v-else>{{ data.item.express_delivery_charge }}</div>
+          </template>
           <template #cell(actions)="data">
             <div
               class="d-flex align-content-center justify-content-between w-100"
@@ -84,7 +101,6 @@
 
 <script>
 import Vue from "vue";
-import addLocationPrompt from "./addLocationPrompt.vue";
 export default {
   // components: { addLocationPrompt },
   props: ["locations", "validation", "loading"],
@@ -96,6 +112,8 @@ export default {
         "index",
         { key: "locality", label: "Locality" },
         { key: "minAmount", label: "Min amount" },
+        { key: "delivery_charge", label: "Delivery Charge" },
+        { key: "express_delivery_charge", label: "Express delivery charge" },
         {
           key: "actions",
           label: "actions",
