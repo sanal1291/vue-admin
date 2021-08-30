@@ -18,7 +18,7 @@ export default {
         async getOrders({ commit, state, rootState }, query) {
             state.loading = true;
             state.orders = [];
-            var snap = orders.where('dateTime', '>=', query.fromDate).where('dateTime', '<', query.toDate).orderBy('dateTime')
+            var snap = orders.where('dateTime', '>=', query.fromDate).where('dateTime', '<', query.toDate).orderBy('dateTime', 'desc')
                 .onSnapshot(querySnapshot => {
                     var arr = [];
                     querySnapshot.forEach(item => {
@@ -27,7 +27,7 @@ export default {
                             ...{
                                 id: item.id,
                                 dateTimeF: `${("0" + time.getHours()).slice(-2)}:${("0" + time.getMinutes()).slice(-2)} 
-                                        /${("0" + time.getDate()).slice(-2)}-${("0" + (time.getMonth() + 1)).slice(-2)}-${time.getFullYear()}`,
+                                        || ${("0" + time.getDate()).slice(-2)}-${("0" + (time.getMonth() + 1)).slice(-2)}-${time.getFullYear()}`,
                             }, ...item.data()
                         })
 

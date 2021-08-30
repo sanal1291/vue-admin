@@ -1,13 +1,13 @@
 <template>
   <b-overlay :show="loading">
-    <b-link>
+    <div>
       <h6>User profile</h6>
       <ul>
         <li>id:{{ user.id }}</li>
         <li>Name:{{ user.fullname }}</li>
         <li>email/phone:{{ user.email }}</li>
       </ul>
-    </b-link>
+    </div>
   </b-overlay>
 </template>
 

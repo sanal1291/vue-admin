@@ -8,7 +8,11 @@
       </div>
       <div class="d-flex justify-content-between" v-else>
         <h5>{{ ordersList.length }}</h5>
-        <b-link :to="{ name: 'orderHome', params: { today: this.today } }"
+        <b-link
+          :to="{
+            name: 'orderHome',
+            params: { today: this.today },
+          }"
           >Goto orders <b-icon icon="arrow-right"></b-icon
         ></b-link>
       </div>

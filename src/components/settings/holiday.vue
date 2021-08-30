@@ -4,7 +4,7 @@
       <b-card class="h-100">
         <template #header>
           <div class="d-flex justify-content-between flex-wrap">
-            <h5>Edit details.</h5>
+            <h5>Next day holiday?</h5>
             <b-row>
               <b-col cols="auto">
                 <b-button :disabled="submitting" @click="cancel">
@@ -31,47 +31,23 @@
         <b-form @submit.prevent="submitDetails" id="about-form" class="p-3">
           <b-row>
             <b-col sm="12" md="8" lg="6">
-              <b-form-group label="Name:" label-for="input-2">
-                <b-form-input
-                  required
-                  v-model="form.name"
-                  id="input-2"
-                  placeholder="Name"
-                ></b-form-input>
+              <b-form-group label="Tomorrow Holiday:" label-for="input-2">
+                <b-form-checkbox
+                  v-model="form.checked"
+                  name="check-button"
+                  switch
+                >
+                  Switch Checkbox <b>(Holiday?: {{ form.checked }})</b>
+                </b-form-checkbox>
               </b-form-group>
-              <b-form-group label="Email:" label-for="input-2">
-                <b-form-input
-                  required
-                  v-model="form.email"
-                  id="input-2"
-                  placeholder="Email"
-                ></b-form-input>
-              </b-form-group>
-              <b-form-group label="Phone no:" label-for="input-2">
-                <b-form-input
-                  required
-                  v-model="form.phone"
-                  id="input-2"
-                  placeholder="Phone no"
-                ></b-form-input>
-              </b-form-group>
-              <b-form-group label="About:" label-for="input-2">
+              <b-form-group label="Reason:" label-for="input-2">
                 <b-form-textarea
                   required
-                  v-model="form.about"
+                  v-model="form.reason"
                   id="input-2"
                   placeholder="About"
                 ></b-form-textarea>
               </b-form-group>
-              <b-overlay
-                :show="submitting"
-                rounded
-                opacity="0.6"
-                spinner-small
-                spinner-variant="primary"
-                class="d-inline-block float-right"
-              >
-              </b-overlay>
             </b-col>
           </b-row>
         </b-form>
@@ -94,9 +70,8 @@ export default {
         items: true,
       },
       form: {
-        name: null,
-        phone: null,
-        email: null,
+        checked: false,
+        reason: null,
       },
       submitting: false,
     };
@@ -115,21 +90,22 @@ export default {
       this.$router.go(-1);
     },
     init() {
-      this.form.phone = this.adminDetails.phone;
-      this.form.email = this.adminDetails.email;
-      this.form.name = this.adminDetails.adminName;
-      this.form.about = this.adminDetails.about;
+      this.form.checked = this.adminDetails.holiday.tomorrow;
+      this.form.reason = this.adminDetails.holiday.reason;
     },
     async submitDetails() {
       this.submitting = true;
-      await db.collection("adminDetials").doc(this.adminDetails.id).update({
-        about: this.form.about,
-        adminName: this.form.name,
-        phone: this.form.phone,
-        email: this.form.email,
-      });
+      await db
+        .collection("adminDetials")
+        .doc(this.adminDetails.id)
+        .update({
+          holiday: {
+            tomorrow: this.form.checked,
+            reason: this.form.reason,
+          },
+        });
       this.$root.$bvToast.toast(`Update done`, {
-        title: "About",
+        title: "Holiday",
         autoHideDelay: 5000,
       });
 

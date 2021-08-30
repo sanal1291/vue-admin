@@ -2,7 +2,18 @@
   <b-card class="h-100" no-body>
     <template #header>
       <div class="d-flex justify-content-between align-items-center">
-        <h5>Orders</h5>
+        <div class="d-flex align-items-center">
+          <h5>Orders</h5>
+          <div class="pl-5" v-if="labelFromDate && labelToDate">
+            {{ labelFromDate.getDate() }}-{{ labelFromDate.getMonth() }}-{{
+              labelFromDate.getFullYear()
+            }}
+            to {{ labelToDate.getDate() }}-{{ labelToDate.getMonth() }}-{{
+              labelToDate.getFullYear()
+            }}
+          </div>
+        </div>
+        <div>orders:{{ orders.length }}</div>
         <!-- <b-button :to="{ name: 'orderAdd', query: { edit: false } }"
           >Create</b-button
         > -->
@@ -94,13 +105,20 @@
               </b-card>
             </template>
             <template #cell(actions)="row">
-              <b-button size="sm" @click="row.toggleDetails">
+              <!-- <b-button size="sm" @click="row.toggleDetails">
                 <b-icon
                   v-if="row.detailsShowing"
                   icon="chevron-bar-up"
                 ></b-icon>
                 <b-icon v-else icon="chevron-bar-down"></b-icon>
-              </b-button>
+              </b-button> -->
+
+              <b-button @click="info(row.item, $event.target)"
+                >Show details</b-button
+              >
+            </template>
+            <template #cell(shipping)="row">
+              <div>{{ row.item.shipping.expressDelivery }}</div>
             </template>
           </b-table>
           <b-pagination
@@ -113,6 +131,15 @@
           ></b-pagination>
         </div>
       </div>
+      <b-modal
+        size="xl"
+        :id="infoModal.id"
+        :title="infoModal.title"
+        ok-only
+        @hide="resetInfoModal"
+      >
+        <order-detail :order="infoModal.content" />
+      </b-modal>
     </template>
   </b-card>
 </template>
@@ -139,6 +166,8 @@ export default {
       minDate: null,
       queryChange: false,
       today: null,
+      labelFromDate: null,
+      labelToDate: null,
       // table data
       currentPage: 1,
       perPage: 15,
@@ -146,13 +175,19 @@ export default {
         "id",
         { key: "dateTimeF", label: "Time" },
         // { key: "orderKey", label: "Key" },
-        { key: "livestatus", label: "status" },
+        { key: "livestatus", label: "Payment" },
+        { key: "shipping", label: "Fast delivery" },
         { key: "totalCost", label: "Total" },
         "actions",
       ],
+      infoModal: {
+        id: "info-modal",
+        title: "",
+        content: "",
+      },
     };
   },
-  mounted() {
+  beforeMount() {
     const now = new Date();
     this.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     if (this.$route.params.today) {
@@ -162,10 +197,21 @@ export default {
     }
   },
   methods: {
+    info(item, button) {
+      this.infoModal.title = `Order details of ${item.id} `;
+      this.infoModal.content = item;
+      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
+    },
+    resetInfoModal() {
+      // this.infoModal.title = "";
+      // this.infoModal.content = "";
+    },
     submit() {
       this.queryChange = false;
       const date = new Date(this.toDate);
       date.setDate(date.getDate() + 1);
+      this.labelFromDate = this.fromDate;
+      this.labelToDate = this.toDate;
       this.$store.dispatch("getOrders", {
         fromDate: this.fromDate,
         toDate: date,

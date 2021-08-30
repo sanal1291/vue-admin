@@ -4,6 +4,7 @@
       <b-col
         class="p-2"
         cols="12"
+        sm="6"
         md="4"
         lg="3"
         v-for="(item, index) in paths"
@@ -39,6 +40,11 @@ export default {
         {
           path: { name: "settingsareaHome" },
           name: "Area",
+          icon: "map",
+        },
+        {
+          path: { name: "settingsHoliday" },
+          name: "Holiday",
           icon: "map",
         },
         {

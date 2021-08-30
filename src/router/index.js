@@ -25,7 +25,7 @@ import ItemGroupHome from '../components/ItemGroupHome'
 import ItemGroupAdd from '../components/ItemGroupAdd'
 import { orderAdd, ordersHome } from '../components/orders'
 import { carouselHome, carouselAdd } from '../components/carousel'
-import { settingsHome, popups, popupsAdd, aboutDetails, areaHome, areaAdd, area } from '../components/settings'
+import { settingsHome, popups, popupsAdd, aboutDetails, areaHome, areaAdd, area, holiday } from '../components/settings'
 import Store from '../store/index'
 
 
@@ -106,6 +106,11 @@ const routes = [
         path: "about",
         name: "settingsAbout",
         component: aboutDetails,
+      },
+      {
+        path: "holiday",
+        name: "settingsHoliday",
+        component: holiday,
       },
     ]
   },

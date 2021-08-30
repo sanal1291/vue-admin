@@ -7,6 +7,11 @@
             <b-row no-gutters>
               <b-col cols="12" sm="6" md="4" class="px-1">
                 <usercard :userId="order.userId" />
+                <div>shipping</div>
+                <ul>
+                  <li>Quick delivery: {{ order.shipping.expressDelivery }}</li>
+                  <li>Delivery charge: {{ order.shipping.deliveryCost }}</li>
+                </ul>
               </b-col>
               <b-col cols="12" sm="6" md="4" class="px-1">
                 <div>
@@ -31,7 +36,13 @@
               <b-col cols="12" sm="6" md="4" class="px-1">
                 <h6>status</h6>
                 <ul>
-                  <li>Total Cost: {{ order.totalCost }}</li>
+                  <li>
+                    Total Cost: {{ order.totalCost }} ({{
+                      itemsTotalCost +
+                      packagesTotalCost +
+                      order.shipping.deliveryCost
+                    }})
+                  </li>
                   <li>
                     Status :
                     <span
@@ -70,8 +81,7 @@
                     >
                       <b-button
                         @click="submitStatus"
-                        v-if="changed"
-                        :disabled="submitting"
+                        :disabled="submitting || !changed"
                         variant="success"
                         type="submit"
                       >
@@ -167,7 +177,7 @@ export default {
         { key: "itemName", label: "Package Name" },
         "items",
         { key: "quantity", label: "Quantity" },
-        { key: "total", label: "Total" },
+        { key: "price", label: "Total" },
       ],
       // end packages data
       options: [

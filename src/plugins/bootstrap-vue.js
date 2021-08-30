@@ -26,6 +26,7 @@ import {
     FormTextareaPlugin,
     SidebarPlugin,
     SkeletonPlugin,
+    ModalPlugin,
     // icons
     BIcon,
     BIconArrowLeft,
@@ -80,6 +81,7 @@ Vue.use(VBHoverPlugin)
 Vue.use(FormTextareaPlugin)
 Vue.use(SidebarPlugin)
 Vue.use(SkeletonPlugin)
+Vue.use(ModalPlugin)
 
 Vue.component('BIcon', BIcon)
 Vue.component('BIconPerson', BIconPerson)

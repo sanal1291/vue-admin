@@ -1,6 +1,7 @@
 import popups from './popups'
 import popupsAdd from './popupsAdd'
 import settingsHome from './settingsHome'
+import holiday from './holiday'
 import aboutDetails from './aboutDetails'
 import areaHome from './area/areaHome'
 import areaAdd from './area/areaAdd'
@@ -13,5 +14,6 @@ export {
     aboutDetails,
     areaHome,
     areaAdd,
-    area
+    area,
+    holiday,
 }
