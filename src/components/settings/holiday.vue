@@ -37,7 +37,16 @@
                   name="check-button"
                   switch
                 >
-                  Switch Checkbox <b>(Holiday?: {{ form.checked }})</b>
+                  {{ form.checked ? "holiday" : "working day" }}
+                </b-form-checkbox>
+              </b-form-group>
+              <b-form-group label="Today Holiday:" label-for="input-2">
+                <b-form-checkbox
+                  v-model="form.checked2"
+                  name="check-button"
+                  switch
+                >
+                  {{ form.checked2 ? "holiday" : "working day" }}
                 </b-form-checkbox>
               </b-form-group>
               <b-form-group label="Reason:" label-for="input-2">
@@ -65,12 +74,10 @@ import { db } from "../../firebase";
 export default {
   data: function () {
     return {
-      validation: {
-        img: true,
-        items: true,
-      },
+      validation: {},
       form: {
         checked: false,
+        checked2: false,
         reason: null,
       },
       submitting: false,
@@ -91,6 +98,7 @@ export default {
     },
     init() {
       this.form.checked = this.adminDetails.holiday.tomorrow;
+      this.form.checked2 = this.adminDetails.holiday.today;
       this.form.reason = this.adminDetails.holiday.reason;
     },
     async submitDetails() {
@@ -100,6 +108,7 @@ export default {
         .doc(this.adminDetails.id)
         .update({
           holiday: {
+            today: this.form.checked2,
             tomorrow: this.form.checked,
             reason: this.form.reason,
           },

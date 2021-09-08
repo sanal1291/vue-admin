@@ -74,9 +74,9 @@
                         ></b-table>
                       </div>
 
-                      <div class="w-100">
+                      <!-- <div class="w-100">
                         {{ selectedPackage }}
-                      </div>
+                      </div> -->
                     </b-row>
                   </b-card-body>
                   <b-card-body v-else>
