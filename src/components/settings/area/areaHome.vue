@@ -1,5 +1,5 @@
 <template>
-  <b-card class="h-100">
+  <b-card class="h-100" no-body>
     <template #header>
       <div class="d-flex justify-content-between">
         <h5>Areas</h5>
@@ -59,7 +59,7 @@
                       <b-button @click="frefresh">f refresh</b-button>
                       <div>
                         <div>
-                          <b-row>
+                          <b-row no-gutters>
                             <b-col cols="7">
                               Selected area :
                               <h5>{{ selectedArea.name }}</h5>
@@ -167,9 +167,5 @@ export default {
   max-height: 500px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-}
-.active {
-  background-color: #6c757d;
-  border-color: #6c757d;
 }
 </style>

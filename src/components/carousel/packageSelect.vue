@@ -26,15 +26,13 @@
         :key="item.id"
         class="py-1"
       >
-        <b-row align-v="center" align-h="between" class="m-0">
-          <b-col>
-            <b-row>
-              <div>
-                {{ item.displayNames["en"] }}
-              </div>
-            </b-row>
+        <b-row align-v="center" align-h="between" class="m-0" no-gutters>
+          <b-col cols="10">
+            <div>
+              {{ item.displayNames["en"] }}
+            </div>
           </b-col>
-          <b-col sm="1">
+          <b-col cols="2">
             <b-button size="sm" @click="addItem(item)">
               <b-icon icon="plus"></b-icon
             ></b-button>

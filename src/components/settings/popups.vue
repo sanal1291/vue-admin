@@ -30,6 +30,7 @@
                   <b-list-group-item
                     v-for="(item, index) in adminDetails.messages"
                     :key="index"
+                    hover
                   >
                     <div
                       class="d-flex justify-content-between align-items-center"

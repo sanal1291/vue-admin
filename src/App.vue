@@ -1,5 +1,9 @@
 <template>
-  <b-row no-gutters style="background-color: #dde4e7" class="flex-nowrap">
+  <b-row
+    no-gutters
+    style="background-color: #dde4e7; min-height: 100vh"
+    class="flex-nowrap"
+  >
     <ismobile />
     <router-view name="sidebar"></router-view>
     <b-col class="d-flex flex-column">

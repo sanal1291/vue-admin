@@ -3,9 +3,9 @@
     <b-overlay :show="loadingAdmin">
       <b-card class="h-100">
         <template #header>
-          <div class="d-flex justify-content-between flex-wrap">
+          <div class="between-center-flex-md">
             <h5>Edit details.</h5>
-            <b-row>
+            <b-row class="flex-nowrap">
               <b-col cols="auto">
                 <b-button :disabled="submitting" @click="cancel">
                   cancel

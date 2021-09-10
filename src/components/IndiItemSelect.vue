@@ -31,7 +31,7 @@
         class="py-1"
       >
         <b-row align-v="center" align-h="between" class="m-0">
-          <b-col>
+          <b-col cols="10">
             <b-row>
               <div>
                 {{ item.name }}
@@ -39,7 +39,7 @@
               <div class="pl-4">{{ item.price }} Rs</div>
             </b-row>
           </b-col>
-          <b-col sm="1">
+          <b-col cols="2">
             <b-button size="sm" @click="addItem(item)">
               <b-icon icon="plus"></b-icon
             ></b-button>
@@ -67,7 +67,7 @@
         class="py-1"
       >
         <b-row align-v="center" align-h="between" class="m-0">
-          <b-col>
+          <b-col cols="10">
             <b-row>
               <div>
                 {{ item.name }}
@@ -75,7 +75,7 @@
               <div class="pl-4">{{ item.price }} Rs</div>
             </b-row>
           </b-col>
-          <b-col sm="1">
+          <b-col cols="2">
             <b-button size="sm" @click="addItem(item)">
               <b-icon icon="plus"></b-icon
             ></b-button>

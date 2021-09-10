@@ -31,6 +31,8 @@
           <b-col md="5" class="pb-3">
             <b-list-group class="list-group" flush>
               <b-list-group-item
+                active-class="active"
+                :active="item === selectedPackage ? true : false"
                 v-for="item in packages"
                 :key="item.id"
                 button

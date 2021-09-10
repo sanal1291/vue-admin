@@ -71,7 +71,7 @@ export default {
   }
 }
 .expanded {
-  width: 150px;
+  width: 200px;
 }
 .shrinked {
   width: 55px;

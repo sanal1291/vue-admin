@@ -3,43 +3,52 @@
     <router-view></router-view>
     <b-card class="h-100">
       <template #header>
-        <div class="d-flex justify-content-between">
-          <h5>Indipendent Item</h5>
-          <div class="d-flex align-items-center">
-            <b-nav-form class="navbar-item py-1" @submit.prevent="searchFn">
-              <b-form-input
-                v-model.trim="searchValue"
-                size="sm"
-                class="mr-sm-2"
-                placeholder="Search"
+        <div class="between-center-flex-md">
+          <div>
+            <h5>Indipendent Items</h5>
+          </div>
+          <div class="flex-nowrap">
+            <div class="d-flex align-items-center float-right">
+              <b-form
+                class="navbar-item d-flex align-items-center"
+                @submit.prevent="searchFn"
               >
-              </b-form-input>
-              <b-button pill size="sm" class="my-2 my-sm-0" type="submit">
-                Search
-              </b-button>
-            </b-nav-form>
-            <div class="ml-2">
-              <b-button pill size="sm" :to="{ name: 'addIndiItem' }"
-                >Add</b-button
-              >
-            </div>
-            <div>
-              <b-button
-                pill
-                class="text-nowrap ml-2"
-                size="sm"
-                :disabled="selectedIndiItem == null ? true : false"
-                :to="{
-                  name: 'editIndiItem',
-                  query: {
-                    edit: true,
-                    indiItemId:
-                      selectedIndiItem != null ? selectedIndiItem.id : null,
-                  },
-                }"
-              >
-                Edit Indipendent Item
-              </b-button>
+                <b-form-input
+                  v-model.trim="searchValue"
+                  size="sm"
+                  class="mr-2"
+                  placeholder="Search"
+                >
+                </b-form-input>
+                <b-button pill size="sm" class="my-2 my-sm-0" type="submit">
+                  Search
+                </b-button>
+              </b-form>
+              <div class="d-flex flex-nowrap">
+                <div class="ml-2">
+                  <b-button pill size="sm" :to="{ name: 'addIndiItem' }"
+                    >Add</b-button
+                  >
+                </div>
+                <div>
+                  <b-button
+                    pill
+                    class="text-nowrap ml-2"
+                    size="sm"
+                    :disabled="selectedIndiItem == null ? true : false"
+                    :to="{
+                      name: 'editIndiItem',
+                      query: {
+                        edit: true,
+                        indiItemId:
+                          selectedIndiItem != null ? selectedIndiItem.id : null,
+                      },
+                    }"
+                  >
+                    Edit Indipendent Item
+                  </b-button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -54,6 +63,8 @@
                 flush
               >
                 <b-list-group-item
+                  active-class="active"
+                  :active="item === selectedIndiItem ? true : false"
                   v-for="item in indiItems"
                   :key="item.id"
                   button

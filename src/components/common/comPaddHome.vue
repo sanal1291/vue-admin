@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 pt-3 pb-2 h-100">
+  <div class="px-1 px-md-2 pt-2 pt-md-3 pb-2 h-100">
     <slot> </slot>
   </div>
 </template>

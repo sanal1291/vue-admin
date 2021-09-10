@@ -1,11 +1,11 @@
 <template>
   <b-card no-body class="p-2" id="order-content">
     <b-container fluid class="p-0">
-      <b-row no-gutters>
+      <b-row>
         <b-col cols="12">
-          <b-card no-body class="p-1">
-            <b-row no-gutters>
-              <b-col cols="12" sm="6" md="4" class="px-1">
+          <b-card class="p-1">
+            <b-row>
+              <b-col cols="12" sm="6" md="4">
                 <usercard :userId="order.userId" />
                 <div>shipping</div>
                 <ul>
@@ -13,7 +13,7 @@
                   <li>Delivery charge: {{ order.shipping.deliveryCost }}</li>
                 </ul>
               </b-col>
-              <b-col cols="12" sm="6" md="4" class="px-1">
+              <b-col cols="12" sm="6" md="4">
                 <div>
                   <h6>Delivery Address</h6>
                   <ul>
@@ -33,7 +33,7 @@
                   </ul>
                 </div>
               </b-col>
-              <b-col cols="12" sm="6" md="4" class="px-1">
+              <b-col cols="12" sm="6" md="4">
                 <h6>status</h6>
                 <ul>
                   <li>

@@ -21,8 +21,29 @@ img{
     height: 100%;
 }
 *{
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 body{
     min-width: 360px;
+    // min-height: 100vh
 }
+
+.active {
+    background-color: #6c757d !important; 
+    border-color: #6c757d;
+  }
+.between-center-flex-md{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@media only screen and (max-width: 768px) {
+    /* For mobile: */
+    .between-center-flex-md{
+        flex-direction: column;
+        display: flex;
+        justify-content: center;
+    }
+  }

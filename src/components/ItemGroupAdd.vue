@@ -1,10 +1,10 @@
 <template>
   <b-card class="h-100">
     <template #header>
-      <div class="d-flex justify-content-between flex-wrap">
+      <div class="between-center-flex-md">
         <h4 v-if="edit">Edit {{ form.name }}</h4>
         <h4 v-else>Create new Item Group.</h4>
-        <b-row>
+        <b-row class="flex-nowrap">
           <b-col cols="auto">
             <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
           </b-col>
@@ -104,7 +104,7 @@
                 class="py-1"
               >
                 <b-row align-v="center" align-h="between" class="m-0">
-                  <b-col>
+                  <b-col cols="10">
                     <b-row>
                       <div>
                         {{ item.name }}
@@ -112,7 +112,7 @@
                       <div class="pl-4">{{ item.price }}Rs</div>
                     </b-row>
                   </b-col>
-                  <b-col sm="1">
+                  <b-col cols="2">
                     <b-button size="sm" @click="deleteItem(item)">
                       <b-icon icon="trash"></b-icon
                     ></b-button>

@@ -1,10 +1,10 @@
 <template>
   <b-card class="h-100">
     <template #header>
-      <div class="d-flex justify-content-between flex-wrap">
+      <div class="between-center-flex-md">
         <h5 v-if="edit">Edit {{ form.name }}</h5>
         <h5 v-else>Create new carousel</h5>
-        <b-row>
+        <b-row class="flex-nowrap">
           <b-col cols="auto">
             <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
           </b-col>
@@ -96,7 +96,7 @@
         <b-col lg="6" class="pt-1" style="max-height: 400px">
           <b-card no-body>
             <b-card-header style="background-color: #6c757d">
-              Items in this group
+              Items in this carousel
             </b-card-header>
             <b-list-group v-if="items.length" flush style="overflow: auto">
               <b-list-group-item
@@ -104,13 +104,16 @@
                 :key="item.id"
                 class="py-1"
               >
-                <b-row align-v="center" align-h="between" class="m-0">
-                  <b-col>
-                    <b-row>
-                      <div>{{ item.name }}</div>
-                    </b-row>
+                <b-row
+                  align-v="center"
+                  align-h="between"
+                  class="m-0"
+                  no-gutters
+                >
+                  <b-col cols="10">
+                    <div>{{ item.name }}</div>
                   </b-col>
-                  <b-col sm="1">
+                  <b-col cols="2">
                     <b-button size="sm" @click="deleteItem(item)">
                       <b-icon icon="trash"></b-icon
                     ></b-button>

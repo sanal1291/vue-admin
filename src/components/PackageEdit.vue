@@ -1,13 +1,13 @@
 <template>
   <b-card class="h-100">
     <template #header>
-      <div class="d-flex justify-content-between flex-wrap">
+      <div class="between-center-flex-md">
         <div v-if="loading && !packages.length">loading</div>
         <div v-else-if="!loading">
           <h4 v-if="edit">Edit {{ selectedPackage.name }}</h4>
           <h4 v-else>Create new package.</h4>
         </div>
-        <b-row>
+        <b-row class="flex-nowrap">
           <b-col cols="auto">
             <b-button :disabled="submitting" @click="cancel"> cancel </b-button>
           </b-col>
@@ -112,7 +112,7 @@
         <b-col lg="6" class="pr-lg-2">
           <b-card no-body style="max-height: 500px">
             <b-card-header style="background-color: #6c757d">
-              Items in this group
+              Items in this package
             </b-card-header>
             <b-list-group v-if="items.length" flush style="overflow: auto">
               <b-list-group-item
@@ -120,14 +120,14 @@
                 :key="item.id"
                 class="py-1"
               >
-                <b-row align-v="center" align-h="between" class="m-0">
-                  <b-col>
-                    <b-row align-h="between">
+                <b-row no-gutters align-v="center" class="m-0 p-1">
+                  <b-col lg="6" sm="12">
+                    <div>
                       <div>{{ item.name }}</div>
                       <div class="pl-4">{{ item.price }}Rs</div>
-                    </b-row>
+                    </div>
                   </b-col>
-                  <b-col sm="auto">
+                  <b-col lg="4" cols="8" class="d-flex justify-content-center">
                     <b-form-input
                       class="w-50"
                       type="number"
@@ -137,7 +137,7 @@
                       @change="quantityChanged"
                     ></b-form-input>
                   </b-col>
-                  <b-col sm="1">
+                  <b-col lg="2" cols="4">
                     <b-button size="sm" @click="deleteItem(item)">
                       <b-icon icon="trash"></b-icon
                     ></b-button>

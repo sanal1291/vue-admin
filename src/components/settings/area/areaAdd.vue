@@ -1,11 +1,11 @@
 <template>
   <b-overlay>
-    <b-card class="h-100">
+    <b-card class="h-100" no-body>
       <template #header>
-        <div class="d-flex justify-content-between flex-wrap">
+        <div class="between-center-flex-md">
           <h5 v-if="edit">Edit {{ form.area }}</h5>
           <h5 v-else>Add a new Area.</h5>
-          <b-row>
+          <b-row class="flex-nowrap">
             <b-col cols="auto">
               <b-button :disabled="submitting" @click="cancel">
                 cancel
@@ -42,7 +42,7 @@
           </b-row>
         </div>
       </template>
-      <b-container fluid>
+      <b-container fluid class="py-2">
         <b-form @submit.prevent="createArea" id="area-form">
           <b-row no-gutters>
             <b-col md="6">
@@ -67,7 +67,7 @@
           </b-row>
         </b-form>
         <b-row no-gutters>
-          <b-col class="pr-4">
+          <b-col>
             <b-card no-body style="max-height: 500px">
               <b-card-header style="background-color: #6c757d">
                 Locations
