@@ -7,8 +7,16 @@
           <div>
             <h5>Indipendent Items</h5>
           </div>
-          <div class="flex-nowrap">
-            <div class="d-flex align-items-center float-right">
+          <div>
+            <div
+              class="
+                d-flex
+                align-items-center
+                justify-content-center
+                flex-wrap
+                float-right
+              "
+            >
               <b-form
                 class="navbar-item d-flex align-items-center"
                 @submit.prevent="searchFn"
@@ -93,6 +101,8 @@
                 flush
               >
                 <b-list-group-item
+                  active-class="active"
+                  :active="item === selectedIndiItem ? true : false"
                   v-for="item in searchItems"
                   :key="item.id"
                   button
@@ -172,7 +182,11 @@ export default {
   },
   methods: {
     viewDetails(id) {
-      this.selectedIndiItem = this.indiItems.find((item) => item.id == id);
+      if (this.search) {
+        this.selectedIndiItem = this.searchItems.find((item) => item.id == id);
+      } else {
+        this.selectedIndiItem = this.indiItems.find((item) => item.id == id);
+      }
     },
     searchFn() {
       if (this.searchValue.trim()) {
