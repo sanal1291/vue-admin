@@ -1,5 +1,5 @@
 <template>
-  <b-overlay>
+  <b-overlay class="h-100">
     <b-card class="h-100" no-body>
       <template #header>
         <div class="between-center-flex-md">

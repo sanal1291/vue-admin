@@ -1,6 +1,6 @@
 <template>
-  <div class="pt-2 px-2 h-100">
-    <b-overlay :show="loadingAdmin">
+  <div class="px-2 h-100">
+    <b-overlay :show="loadingAdmin" class="h-100">
       <b-card class="h-100">
         <template #header>
           <div class="between-center-flex-md">

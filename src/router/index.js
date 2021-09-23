@@ -13,9 +13,9 @@ import orders from '../views/orders'
 import Carousel from '../views/carousel'
 import Settings from '../views/Settings'
 // layouts
-// import Footer from '../layouts/Footer.vue'
-// import NavigationBar from '../layouts/NavigationBar.vue'
-// import Sidebar from '../layouts/Sidebar.vue'
+import Footer from '../layouts/Footernav.vue'
+import NavigationBar from '../layouts/NavigationBar.vue'
+import Sidebar from '../layouts/Sidebar.vue'
 // components
 import PackageHome from '../components/PackageHome'
 import PackageEdit from '../components/PackageEdit'
@@ -47,14 +47,14 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    components: { default: Dashboard, },
+    components: { default: Dashboard, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     }
   },
   {
     path: '/settings',
-    components: { default: Settings, },
+    components: { default: Settings, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true,
     },
@@ -117,7 +117,7 @@ const routes = [
   {
     path: '/category',
     name: 'Category',
-    components: { default: Category, },
+    components: { default: Category, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     children: [
       {
         path: '/category/add',
@@ -134,7 +134,7 @@ const routes = [
   },
   {
     path: '/package',
-    components: { default: Package, },
+    components: { default: Package, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     },
@@ -158,7 +158,7 @@ const routes = [
   },
   {
     path: '/carousel',
-    components: { default: Carousel, },
+    components: { default: Carousel, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     },
@@ -182,7 +182,7 @@ const routes = [
   },
   {
     path: '/itemgroups',
-    components: { default: ItemGroup, },
+    components: { default: ItemGroup, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     children: [{
       name: "ItemGroup",
       path: '',
@@ -205,7 +205,7 @@ const routes = [
   {
     path: '/indiItem',
     name: 'IndiItem',
-    components: { default: IndiItem, },
+    components: { default: IndiItem, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     children: [
       {
         path: '/indiItem/add',
@@ -222,7 +222,7 @@ const routes = [
   },
   {
     path: '/orders',
-    components: { default: orders, },
+    components: { default: orders, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     children: [
       {
         path: '',
@@ -247,7 +247,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    components: { default: About, },
+    components: { default: About, footer: Footer, header: NavigationBar, sidebar: Sidebar },
     meta: {
       requiresAuth: true
     }

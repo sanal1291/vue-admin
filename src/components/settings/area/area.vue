@@ -1,13 +1,13 @@
 <template>
-  <com-padd-home>
-    <router-view></router-view>
-  </com-padd-home>
+  <!-- <com-padd-home> -->
+  <router-view></router-view>
+  <!-- </com-padd-home> -->
 </template>
 
 <script>
 import comPaddHome from "../../common/comPaddHome.vue";
 export default {
-  components: { comPaddHome },
+  // components: { comPaddHome },
   mounted() {
     this.$store.dispatch("getSettingsAreas");
   },

@@ -5,11 +5,9 @@
     class="flex-nowrap"
   >
     <ismobile />
-    <!-- <router-view name="sidebar"></router-view> -->
-    <sidebar></sidebar>
+    <router-view name="sidebar"></router-view>
     <b-col class="d-flex flex-column">
-      <!-- <router-view name="header"></router-view> -->
-      <navigation-bar></navigation-bar>
+      <router-view name="header"></router-view>
       <div
         id="body-content"
         class="flex-fill position-relative overflow-hidden"
@@ -18,8 +16,7 @@
           <router-view class="route-child"></router-view>
         </transition>
       </div>
-      <!-- <router-view name="footer"></router-view> -->
-      <footernav></footernav>
+      <router-view name="footer"></router-view>
     </b-col>
   </b-row>
 </template>
@@ -33,7 +30,7 @@ export default {
   computed: {
     ...mapState({ redirect: (state) => state.auth.redirect }),
   },
-  components: { Ismobile, Sidebar, NavigationBar, Footernav },
+  components: { Ismobile },
 };
 </script>
 <style lang="scss">
