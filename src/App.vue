@@ -10,8 +10,13 @@
     <b-col class="d-flex flex-column">
       <!-- <router-view name="header"></router-view> -->
       <navigation-bar></navigation-bar>
-      <div id="body-content" class="flex-fill">
-        <router-view></router-view>
+      <div
+        id="body-content"
+        class="flex-fill position-relative overflow-hidden"
+      >
+        <transition name="route-ani">
+          <router-view class="route-child"></router-view>
+        </transition>
       </div>
       <!-- <router-view name="footer"></router-view> -->
       <footernav></footernav>
