@@ -36,7 +36,7 @@
                 <b-form-input
                   type="number"
                   required
-                  v-model="form.priority"
+                  v-model.number="form.priority"
                   id="input-2"
                   placeholder="Input priority"
                   value="2"

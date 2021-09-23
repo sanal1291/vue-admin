@@ -1,6 +1,8 @@
 <template>
   <com-padd-home>
-    <router-view></router-view>
+    <transition appear="slide-fade">
+      <router-view></router-view>
+    </transition>
   </com-padd-home>
 </template>
 
